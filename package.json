@@ -1,0 +1,36 @@
+{
+  "name": "tampermoneyscripts-vite",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build --mode production",
+    "dev": "tsc && vite build --mode development",
+    "watch": "node ./vite_config/watch.js",
+    "serve": "vite",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.1",
+    "terser": "^5.19.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.0",
+    "vite-plugin-banner": "^0.7.0"
+  },
+  "dependencies": {
+    "@rollup/plugin-replace": "^5.0.2",
+    "axios": "^1.4.0",
+    "chokidar": "^3.5.3",
+    "exceljs": "^4.3.0",
+    "fs-extra": "^11.1.1",
+    "selenium-webdriver": "^4.10.0"
+  },
+  "main": "vite.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
