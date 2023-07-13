@@ -8,8 +8,8 @@
 // @icon		https://eztest.org/favicon.ico
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @license		GPL
-// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/dist/assets/AutoAnswer.js
-// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/dist/assets/AutoAnswer.js
+// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/AutoAnswer.js
+// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/AutoAnswer.js
 // ==/UserScript==
 
 const questionList = [

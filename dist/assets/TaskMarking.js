@@ -8,8 +8,8 @@
 // @icon		https://lms.ouchn.cn/favicon.ico
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @license		GPL
-// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/dist/assets/TaskMarking.js
-// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/dist/assets/TaskMarking.js
+// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/TaskMarking.js
+// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/TaskMarking.js
 // ==/UserScript==
 
 let courseId;
