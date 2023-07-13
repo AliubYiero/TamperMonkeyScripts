@@ -1,7 +1,10 @@
 // @ts-ignore
 import path from 'path';
 
-export { UserInfo, formatter };
+export type {
+	UserInfo
+}
+export { formatter };
 
 type Grant =
 // 添加元素

@@ -2,24 +2,63 @@ import { defineConfig } from 'vite';
 /** @tutorial https://github.com/chengpeiquan/vite-plugin-banner/blob/main/README.zh-CN.md */
 import banner from 'vite-plugin-banner'
 import { formatter } from './lib/UserInfo/Formatter.js'
-import config from './Config/global.config.json'
-import replace from '@rollup/plugin-replace'
-import { resolve } from 'path'
 
-// 扁平化的projectInfo
-config.projectInfoFlat = {};
-// 从配置文件中获取所有入口文件（所有项目）
-const getEntries = () => {
-	const entries = {};
-	for ( let projectBelongName in config.projectInfo ) {
-		for ( let projectName in config.projectInfo[projectBelongName] ) {
-			config.projectInfoFlat[projectName] = { projectName, ...config.projectInfo[projectBelongName][projectName] };
-			entries[projectName] = resolve( 'src', projectBelongName, projectName, 'index.ts' );
+import replace from '@rollup/plugin-replace'
+import { join, resolve } from 'path'
+import fs from 'fs-extra'
+
+// 遍历目录
+function getDirectories( directory ) {
+	const files = fs.readdirSync( directory );
+	const directories = [];
+	
+	for ( const file of files ) {
+		const filePath = join( directory, file );
+		const stats = fs.statSync( filePath );
+		
+		if ( stats.isDirectory() ) {
+			directories.push( file );
 		}
 	}
-	return entries;
+	
+	return directories;
 }
-const entries = getEntries();
+
+// 从配置文件中获取所有入口文件（所有项目）
+const entries = {};
+const jsonFiles = {};
+
+function getPath( aimFileName, projectName, projectBelongName ) {
+	return resolve( 'src', projectBelongName, projectName, aimFileName );
+}
+
+( function getEntries() {
+	getDirectories( './src/RewardList' ).forEach( projectName => {
+		entries[projectName] = getPath( 'index.ts', projectName, 'RewardList' );
+		jsonFiles[projectName] = getPath( 'userinfo.json', projectName, 'RewardList' );
+	} )
+	getDirectories( './src/Self' ).forEach( projectName => {
+		entries[projectName] = getPath( 'index.ts', projectName, 'Self' );
+		jsonFiles[projectName] = getPath( 'userinfo.json', projectName, 'Self' );
+	} )
+} )();
+
+// 合并配置文件
+const mergedData = {};
+
+async function mergeJSONFiles() {
+	
+	for ( const projectName in jsonFiles ) {
+		const filePath = jsonFiles[projectName];
+		try {
+			mergedData[projectName] = await fs.readJson( resolve( filePath ) );
+		} catch ( err ) {
+			console.error( `Failed to read JSON file: ${ file }`, err );
+		}
+	}
+}
+
+await mergeJSONFiles();
 
 export default defineConfig( ( { mode } ) => {
 	const isProduction = mode === 'production';
@@ -47,7 +86,7 @@ export default defineConfig( ( { mode } ) => {
 						content: ( fileName ) => {
 							const projectName = fileName.match( /assets\/(.*?)\.js$/ )[1];
 							
-							return `${ formatter( config.projectInfoFlat[projectName], isProduction ) }\n`
+							return `${ formatter( mergedData[projectName], isProduction ) }\n`
 						},
 						verify: false,
 					} ),
