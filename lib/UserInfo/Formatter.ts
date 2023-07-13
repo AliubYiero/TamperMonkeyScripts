@@ -86,6 +86,9 @@ interface UserInfo {
 	 * */
 	license?: string,
 	
+	/** 项目名 */
+	projectName?: string,
+	
 	/** 是否引用自己（用于测试本地脚本）  */
 	isRequireSelf?: boolean,
 	
@@ -103,14 +106,19 @@ function formatter( config: UserInfo, isProduction: boolean = false ) {
 		TamperMonkeyConfig.license ||= 'GPL';
 		TamperMonkeyConfig.icon = `${ ( <string[]> TamperMonkeyConfig.match[ 0 ].match( /^.*?:\/\/.*?\// ) )[ 0 ] }favicon.ico`;
 		
+		// 更新链接
+		const updateUrl = `https://github.com/AliubYiero/TamperMonkeyScripts/dist/assets/${ TamperMonkeyConfig.projectName }.js`;
+		TamperMonkeyConfig.updateURL = updateUrl;
+		TamperMonkeyConfig.downloadUrl = updateUrl;
 		if ( !isProduction ) {
 			if ( !TamperMonkeyConfig.require ) {
 				TamperMonkeyConfig.require = [];
 			}
-			
 			TamperMonkeyConfig.require.push( 'file://' + path.resolve( 'dist', 'assets', config.name + '.js' ) )
 		}
-		TamperMonkeyConfig.isRequireSelf = undefined;
+		
+		TamperMonkeyConfig.projectName = void 0;
+		TamperMonkeyConfig.isRequireSelf = void 0;
 	}
 	
 	
