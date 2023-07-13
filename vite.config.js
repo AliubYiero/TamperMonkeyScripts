@@ -13,7 +13,7 @@ const getEntries = () => {
 	const entries = {};
 	for ( let projectBelongName in config.projectInfo ) {
 		for ( let projectName in config.projectInfo[projectBelongName] ) {
-			config.projectInfoFlat[projectName] = config.projectInfo[projectBelongName][projectName];
+			config.projectInfoFlat[projectName] = { projectName, ...config.projectInfo[projectBelongName][projectName] };
 			entries[projectName] = resolve( 'src', projectBelongName, projectName, 'index.ts' );
 		}
 	}
