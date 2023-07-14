@@ -32267,13 +32267,22 @@ const addStyle = ( cssString ) => {
 };
 
 class AddInfoElement {
-	constructor( correctAnswer ) {
+	constructor() {
 		__publicField( this, "timer" );
+		__publicField( this, "_container", document.createElement( "section" ) );
 		__publicField( this, "_answerShow" );
-		__publicField( this, "_correctAnswerElement" );
-		__publicField( this, "_correctAnswer" );
-		this._correctAnswer = correctAnswer;
-		this._correctAnswerElement = "";
+		__publicField( this, "_correctAnswerElement", "" );
+		this._container = document.createElement( "section" );
+		this._container.classList.add( "answer-show-container", "hide" );
+		document.body.append( this._container );
+	}
+	
+	get container() {
+		return this._container;
+	}
+	
+	set container( value ) {
+		this._container = value;
 	}
 	
 	get answerShow() {
@@ -32292,26 +32301,22 @@ class AddInfoElement {
 		this._correctAnswerElement = value;
 	}
 	
-	get correctAnswer() {
-		return this._correctAnswer;
-	}
-	
-	set correctAnswer( value ) {
-		this._correctAnswer = value;
-	}
-	
-	create() {
-		this._correctAnswer.forEach( ( content ) => {
+	create( correctAnswer ) {
+		this._correctAnswerElement = "";
+		correctAnswer.forEach( ( content ) => {
 			this._correctAnswerElement += `<p class="answer-show-content">${ content }</p>`;
 		} );
 		this._answerShow = document.createElement( "section" );
 		this._answerShow.classList.add( "answer-show", "answer-show__display" );
 		this._answerShow.innerHTML = this._correctAnswerElement;
-		document.body.append( this._answerShow );
+		while ( this._container.firstChild ) {
+			this._container.removeChild( this._container.firstChild );
+		}
+		this._container.append( this._answerShow );
 		this.destroy();
 	}
 	
-	destroy( ms = 3e3 ) {
+	destroy( ms = 2e3 ) {
 		this.timer = setTimeout( () => {
 			var _a, _b;
 			( _a = this._answerShow ) == null ? void 0 : _a.classList.remove( "answer-show__display" );
@@ -32325,11 +32330,74 @@ class AddInfoElement {
 		( _b = this._answerShow ) == null ? void 0 : _b.classList.add( "answer-show__hide" );
 		clearTimeout( this.timer );
 	}
+	
+	toggleContainer() {
+		this._container.classList.toggle( "hide" );
+	}
 }
 
+const createElement = ( elementConfig ) => {
+	const { tagName, className, id } = elementConfig;
+	const element = document.createElement( tagName );
+	if ( className && typeof className === "string" ) {
+		element.classList.add( className );
+	} else if ( className && Array.isArray( className ) ) {
+		element.classList.add( ...className );
+	}
+	if ( id ) {
+		element.id = id;
+	}
+	for ( let elementConfigKey in elementConfig ) {
+		if ( [ "tagName", "className", "id" ].indexOf( elementConfigKey ) !== -1 ) {
+			continue;
+		}
+		element.setAttribute( elementConfigKey, elementConfig[elementConfigKey] );
+	}
+	return element;
+};
+const addElementToDocument = ( element, cssString, fatherElement = document.body ) => {
+	fatherElement.append( element );
+	GM_addStyle( cssString );
+};
+const createToggleBtn = ( toggleElement ) => {
+	const btn = createElement( {
+		tagName: "btn",
+		class: "toggle-display-btn"
+	} );
+	const callback = ( e ) => {
+		e.preventDefault();
+		console.info( "切换显示" );
+		toggleElement.toggleContainer();
+	};
+	btn.addEventListener( "click", callback );
+	btn.addEventListener( "touchstart", callback );
+	const css = `
+	.toggle-display-btn {
+		width: 20px;
+		height: 20px;
+		border-radius: 10px;
+		border: 0;
+		outline: 0;
+		
+		box-shadow: 1px 1px rgba(0, 0, 0, 0.44);
+		
+		position: fixed;
+		bottom: 60px;
+		right: 20px;
+	}
+	@media screen and (min-width: 990px) {
+		.toggle-display-btn {
+			right: 300px;
+			bottom: 70px;
+		}
+	}
+	`;
+	addElementToDocument( btn, css );
+};
 ( () => {
 	console.info( "开始答题" );
 	addStyle( `
+.hide {display: none !important}
 .answer-show {
 width: 80%;position: fixed;
 top: 50px;
@@ -32342,10 +32410,10 @@ flex-basis: 100%;
 justify-content: center;
 }
 .answer-show__display {
-animation: slideIn 1s forwards;
+animation: slideIn 0.5s forwards;
 }
 .answer-show__hide {
-animation: slideOut 1s forwards;
+animation: slideOut 0.5s forwards;
 }
 @keyframes slideIn {
 0% {
@@ -32382,7 +32450,11 @@ color: indianred;
 		return Content1 === Content2 || Boolean( Content1.match( new RegExp( Content2 ) ) ) || Boolean( Content2.match( new RegExp( Content1 ) ) );
 	}
 	
-	let infoElement;
+	let infoContainer;
+	( function () {
+		infoContainer = new AddInfoElement();
+		createToggleBtn( infoContainer );
+	} )();
 	const getAnswer = () => {
 		const questionContent = getQuestionContent();
 		const optionList = getAnswerList();
@@ -32420,8 +32492,7 @@ color: indianred;
 		} else {
 			correctAnswer = [ "搜索不到问题" ];
 		}
-		infoElement = new AddInfoElement( correctAnswer );
-		infoElement.create();
+		infoContainer.create( correctAnswer );
 	};
 	const loadObserver = new MutationObserver( () => {
 		var _a;
@@ -32444,7 +32515,7 @@ color: indianred;
 	const nextQuestionObserver = new MutationObserver( () => {
 		console.info( "切换试题" );
 		console.info( "获取问题答案" );
-		infoElement.clear();
+		infoContainer.clear();
 		getAnswer();
 	} );
 } )();

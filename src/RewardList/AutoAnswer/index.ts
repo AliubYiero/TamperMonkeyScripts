@@ -11,12 +11,14 @@ import questionList from './assets/Qustion.json';
 import { getAnswerList, getQuestionContent } from './Qustion/Qustion'
 import { addStyle } from '../../../lib/GM_Lib/AddStyle'
 import { AddInfoElement } from './Info/ShowInfo'
+import { createToggleBtn } from './Info/ToggleBtn'
 
 
 ( () => {
 	console.info( '开始答题' );
 	
 	addStyle( `
+.hide {display: none !important}
 .answer-show {
 width: 80%;position: fixed;
 top: 50px;
@@ -29,10 +31,10 @@ flex-basis: 100%;
 justify-content: center;
 }
 .answer-show__display {
-animation: slideIn 1s forwards;
+animation: slideIn 0.5s forwards;
 }
 .answer-show__hide {
-animation: slideOut 1s forwards;
+animation: slideOut 0.5s forwards;
 }
 @keyframes slideIn {
 0% {
@@ -75,7 +77,18 @@ color: indianred;
 			Boolean( Content2.match( new RegExp( Content1 ) ) );
 	}
 	
-	let infoElement: AddInfoElement;
+	
+	// 初始化UI容器
+	let infoContainer: AddInfoElement
+	( function () {
+		// 初始化答案UI容器
+		infoContainer = new AddInfoElement();
+		
+		// 创建切换按钮
+		createToggleBtn( infoContainer );
+	} )();
+	
+	// 获取问题答案
 	const getAnswer = () => {
 		// 问题文本
 		const questionContent = getQuestionContent();
@@ -135,8 +148,9 @@ color: indianred;
 		} else {
 			correctAnswer = [ '搜索不到问题' ];
 		}
-		infoElement = new AddInfoElement( correctAnswer );
-		infoElement.create();
+		
+		// 创建答案文本UI
+		infoContainer.create( correctAnswer );
 	}
 	
 	const loadObserver = new MutationObserver( () => {
@@ -166,7 +180,7 @@ color: indianred;
 	const nextQuestionObserver = new MutationObserver( () => {
 		console.info( '切换试题' );
 		console.info( '获取问题答案' );
-		infoElement.clear();
+		infoContainer.clear();
 		getAnswer();
 	} );
 	
