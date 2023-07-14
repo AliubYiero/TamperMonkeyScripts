@@ -5,7 +5,6 @@
 // @version		1.3.0
 // @match		https://eztest.org/exam/session/*
 // @grant		GM_addStyle
-// @require		file://D:\Code\TamperMoneyScripts-vite\dist\assets\AutoAnswer.js
 // @icon		https://eztest.org/favicon.ico
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @license		GPL
@@ -32254,7 +32253,6 @@ const questionList = [
 ];
 const getQuestionContent = () => {
 	const content = document.querySelector( "[richtext]" ).innerText;
-	console.log( `获取问题： ${ content }` );
 	return content;
 };
 const getAnswerList = () => {
@@ -32262,7 +32260,6 @@ const getAnswerList = () => {
 	document.querySelectorAll( ".option.ng-star-inserted" ).forEach( ( element ) => {
 		answerList.push( element.innerText );
 	} );
-	console.log( "获取选项：", answerList );
 	return answerList;
 };
 const addStyle = ( cssString ) => {
@@ -32450,7 +32447,6 @@ color: indianred;
 		const signList = /[，。！？、；：「」“”《》（）\(\)\s]/g;
 		Content1 = Content1.replace( signList, "" );
 		Content2 = Content2.replace( signList, "" );
-		console.log( "EqualQuestion: ", Content1 + " | " + Content2 );
 		return Content1 === Content2 || Boolean( Content1.match( new RegExp( Content2 ) ) ) || Boolean( Content2.match( new RegExp( Content1 ) ) );
 	}
 	
@@ -32482,12 +32478,9 @@ color: indianred;
 			} );
 			for ( let j = 0; j < optionList.length; j++ ) {
 				const option = optionList[j].trim();
-				console.log( "正在确定正确选项", option );
-				console.log( answer, option );
 				answer = answer.filter( ( content ) => {
 					if ( matchContentsWithoutSign( content, option ) ) {
 						let answerInfo = `获取正确答案[${ optionNumberList[j] }]: ${ option }`;
-						console.log( answerInfo );
 						correctAnswer.push( answerInfo );
 					}
 					return content;
