@@ -1,0 +1,19 @@
+{
+	"name": "TaskMarking",
+	"description": "自动打分",
+	"author": "Yiero",
+	"version": "2.0.0",
+	"match": [
+		"https://lms.ouchn.cn/exam/*"
+	],
+	"grant": [
+		""
+	],
+	"require": [
+		"https://cdn.bootcdn.net/ajax/libs/axios/1.3.6/axios.min.js"
+	],
+	"resource": [
+		""
+	],
+	"icon": ""
+}
