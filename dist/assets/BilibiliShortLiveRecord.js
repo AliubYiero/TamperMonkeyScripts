@@ -6,7 +6,6 @@
 // @match		https://live.bilibili.com/*
 // @grant		GM_addStyle
 // @require		https://cdn.bootcdn.net/ajax/libs/axios/1.3.6/axios.min.js
-// @require		file://D:\Code\TamperMoneyScripts-vite\dist\assets\BilibiliShortLiveRecord.js
 // @icon		https://live.bilibili.com/favicon.ico
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @license		GPL
@@ -36,7 +35,9 @@ class Info {
 	}
 	
 	log( ...msg ) {
-		console.log( ...this.contentInfo( ...msg ) );
+		/* @__PURE__ */
+		( () => {
+		} )( ...this.contentInfo( ...msg ) );
 	}
 	
 	info( ...msg ) {

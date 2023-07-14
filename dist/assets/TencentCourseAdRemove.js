@@ -5,7 +5,6 @@
 // @version		1.0.0
 // @match		https://ke.qq.com/course/*
 // @grant		GM_addStyle
-// @require		file://D:\Code\TamperMoneyScripts-vite\dist\assets\TencentCourseAdRemove.js
 // @icon		https://ke.qq.com/favicon.ico
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @license		GPL
@@ -22,8 +21,6 @@ function ElementMutationObserverAlways( fatherElementSelector, aimElementSelecto
 		if ( aimElement ) {
 			if ( callback ) {
 				callback();
-			} else {
-				console.log( e );
 			}
 		}
 	} );
