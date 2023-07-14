@@ -10,7 +10,7 @@
 import questionList from './assets/Qustion.json';
 import { getAnswerList, getQuestionContent } from './Qustion/Qustion'
 import { addStyle } from '../../../lib/GM_Lib/AddStyle'
-import { addInfo } from './Info/ShowInfo'
+import { AddInfoElement } from './Info/ShowInfo'
 
 
 ( () => {
@@ -64,15 +64,18 @@ color: indianred;
 	
 	
 	/** 去除符号比对文本 */
-	function matchQuestionsEqualWithoutSign( questionContent1: string, questionContent2: string ): boolean {
-		const signList = /[，。！？、；：「」“”《》（）\s]/g;
-		questionContent1 = questionContent1.replace( signList, '' );
-		questionContent2 = questionContent2.replace( signList, '' );
+	function matchContentsWithoutSign( Content1: string, Content2: string ): boolean | RegExpMatchArray | null {
+		const signList = /[，。！？、；：「」“”《》（）\(\)\s]/g;
+		Content1 = Content1.replace( signList, '' );
+		Content2 = Content2.replace( signList, '' );
 		
-		console.log( 'EqualQuestion: ', questionContent1, questionContent2 );
-		return questionContent1 === questionContent2;
+		console.log( 'EqualQuestion: ', Content1 + ' | ' + Content2 );
+		return Content1 === Content2 ||
+			Boolean( Content1.match( new RegExp( Content2 ) ) ) ||
+			Boolean( Content2.match( new RegExp( Content1 ) ) );
 	}
 	
+	let infoElement: AddInfoElement;
 	const getAnswer = () => {
 		// 问题文本
 		const questionContent = getQuestionContent();
@@ -94,7 +97,7 @@ color: indianred;
 			// const nextQuestionContent = question.replace( /^.*[）)]/, '' );
 			// console.log( 'prev', prevQuestionContent );
 			// console.log( 'next', nextQuestionContent );
-			if ( matchQuestionsEqualWithoutSign( questionContent, question ) ) {
+			if ( matchContentsWithoutSign( questionContent, question ) ) {
 				console.info( `获取到问题: ${ questionContent }` );
 				getQuestion = true;
 				localQuestion = questionList[ i ];
@@ -104,7 +107,8 @@ color: indianred;
 		}
 		
 		const optionNumberList = [ 'A', 'B', 'C', 'D' ];
-		let correctAnswer = [];
+		let correctAnswer: string[] = [];
+		
 		if ( getQuestion ) {
 			let { answer } = localQuestion;
 			answer.filter( content => {
@@ -115,11 +119,14 @@ color: indianred;
 				const option = optionList[ j ].trim();
 				console.log( '正在确定正确选项', option );
 				console.log( answer, option );
-				if ( answer.indexOf( option ) !== -1 ) {
-					let answerInfo = `获取正确答案[${ optionNumberList[ j ] }]: ${ option }`;
-					console.log( answerInfo );
-					correctAnswer.push( answerInfo );
-				}
+				answer = answer.filter( content => {
+					if ( matchContentsWithoutSign( content, option ) ) {
+						let answerInfo = `获取正确答案[${ optionNumberList[ j ] }]: ${ option }`;
+						console.log( answerInfo );
+						correctAnswer.push( answerInfo );
+					}
+					return content;
+				} )
 			}
 			
 			if ( correctAnswer.length < 1 ) {
@@ -128,7 +135,8 @@ color: indianred;
 		} else {
 			correctAnswer = [ '搜索不到问题' ];
 		}
-		addInfo( correctAnswer );
+		infoElement = new AddInfoElement( correctAnswer );
+		infoElement.create();
 	}
 	
 	const loadObserver = new MutationObserver( () => {
@@ -158,6 +166,7 @@ color: indianred;
 	const nextQuestionObserver = new MutationObserver( () => {
 		console.info( '切换试题' );
 		console.info( '获取问题答案' );
+		infoElement.clear();
 		getAnswer();
 	} );
 	
