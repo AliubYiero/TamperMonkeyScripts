@@ -5,13 +5,25 @@
 // @version		1.1.0
 // @match		https://eztest.org/exam/session/*
 // @grant		GM_addStyle
+// @require		file://D:\Code\TamperMoneyScripts-vite\dist\assets\AutoAnswer.js
 // @icon		https://eztest.org/favicon.ico
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @license		GPL
-// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/AutoAnswer.js
-// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/AutoAnswer.js
+// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/undefined.js
+// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/undefined.js
 // ==/UserScript==
 
+var __defProp = Object.defineProperty;
+var __defNormalProp = ( obj, key, value ) => key in obj ? __defProp( obj, key, {
+	enumerable: true,
+	configurable: true,
+	writable: true,
+	value
+} ) : obj[key] = value;
+var __publicField = ( obj, key, value ) => {
+	__defNormalProp( obj, typeof key !== "symbol" ? key + "" : key, value );
+	return value;
+};
 const questionList = [
 	{
 		question: "党的二十大主题是：高举中国特色社会主义伟大旗帜，全面贯彻新时代中国特色社会主义思想，弘扬伟大建党精神，自信自强、守正创新，（）、勇毅前行，为全面建设社会主义现代化国家、全面推进中华民族伟大复兴而团结奋斗。",
@@ -32242,6 +32254,7 @@ const questionList = [
 ];
 const getQuestionContent = () => {
 	const content = document.querySelector( "[richtext]" ).innerText;
+	console.log( `获取问题： ${ content }` );
 	return content;
 };
 const getAnswerList = () => {
@@ -32249,25 +32262,72 @@ const getAnswerList = () => {
 	document.querySelectorAll( ".option.ng-star-inserted" ).forEach( ( element ) => {
 		answerList.push( element.innerText );
 	} );
+	console.log( "获取选项：", answerList );
 	return answerList;
 };
 const addStyle = ( cssString ) => {
 	GM_addStyle( cssString );
 };
 
-function addInfo( correctAnswer ) {
-	let correctAnswerElement = "";
-	correctAnswer.forEach( ( content ) => {
-		correctAnswerElement += `<p class="answer-show-content">${ content }</p>`;
-	} );
-	const answerShow = document.createElement( "section" );
-	answerShow.classList.add( "answer-show", "answer-show__display" );
-	answerShow.innerHTML = correctAnswerElement;
-	document.body.append( answerShow );
-	setTimeout( () => {
-		answerShow.classList.remove( "answer-show__display" );
-		answerShow.classList.add( "answer-show__hide" );
-	}, 3e3 );
+class AddInfoElement {
+	constructor( correctAnswer ) {
+		__publicField( this, "timer" );
+		__publicField( this, "_answerShow" );
+		__publicField( this, "_correctAnswerElement" );
+		__publicField( this, "_correctAnswer" );
+		this._correctAnswer = correctAnswer;
+		this._correctAnswerElement = "";
+	}
+	
+	get answerShow() {
+		return this._answerShow;
+	}
+	
+	set answerShow( value ) {
+		this._answerShow = value;
+	}
+	
+	get correctAnswerElement() {
+		return this._correctAnswerElement;
+	}
+	
+	set correctAnswerElement( value ) {
+		this._correctAnswerElement = value;
+	}
+	
+	get correctAnswer() {
+		return this._correctAnswer;
+	}
+	
+	set correctAnswer( value ) {
+		this._correctAnswer = value;
+	}
+	
+	create() {
+		this._correctAnswer.forEach( ( content ) => {
+			this._correctAnswerElement += `<p class="answer-show-content">${ content }</p>`;
+		} );
+		this._answerShow = document.createElement( "section" );
+		this._answerShow.classList.add( "answer-show", "answer-show__display" );
+		this._answerShow.innerHTML = this._correctAnswerElement;
+		document.body.append( this._answerShow );
+		this.destroy();
+	}
+	
+	destroy( ms = 3e3 ) {
+		this.timer = setTimeout( () => {
+			var _a, _b;
+			( _a = this._answerShow ) == null ? void 0 : _a.classList.remove( "answer-show__display" );
+			( _b = this._answerShow ) == null ? void 0 : _b.classList.add( "answer-show__hide" );
+		}, ms );
+	}
+	
+	clear() {
+		var _a, _b;
+		( _a = this._answerShow ) == null ? void 0 : _a.classList.remove( "answer-show__display" );
+		( _b = this._answerShow ) == null ? void 0 : _b.classList.add( "answer-show__hide" );
+		clearTimeout( this.timer );
+	}
 }
 
 ( () => {
@@ -32318,13 +32378,15 @@ margin: 5px;
 color: indianred;
 }` );
 	
-	function matchQuestionsEqualWithoutSign( questionContent1, questionContent2 ) {
-		const signList = /[，。！？、；：「」“”《》（）\s]/g;
-		questionContent1 = questionContent1.replace( signList, "" );
-		questionContent2 = questionContent2.replace( signList, "" );
-		return questionContent1 === questionContent2;
+	function matchContentsWithoutSign( Content1, Content2 ) {
+		const signList = /[，。！？、；：「」“”《》（）\(\)\s]/g;
+		Content1 = Content1.replace( signList, "" );
+		Content2 = Content2.replace( signList, "" );
+		console.log( "EqualQuestion: ", Content1 + " | " + Content2 );
+		return Content1 === Content2 || Boolean( Content1.match( new RegExp( Content2 ) ) ) || Boolean( Content2.match( new RegExp( Content1 ) ) );
 	}
 	
+	let infoElement;
 	const getAnswer = () => {
 		const questionContent = getQuestionContent();
 		const optionList = getAnswerList();
@@ -32332,7 +32394,7 @@ color: indianred;
 		let localQuestion = { question: "", answer: [] };
 		for ( let i = 0; i < questionList.length; i++ ) {
 			const { question } = questionList[i];
-			if ( matchQuestionsEqualWithoutSign( questionContent, question ) ) {
+			if ( matchContentsWithoutSign( questionContent, question ) ) {
 				console.info( `获取到问题: ${ questionContent }` );
 				getQuestion = true;
 				localQuestion = questionList[i];
@@ -32348,10 +32410,16 @@ color: indianred;
 			} );
 			for ( let j = 0; j < optionList.length; j++ ) {
 				const option = optionList[j].trim();
-				if ( answer.indexOf( option ) !== -1 ) {
-					let answerInfo = `获取正确答案[${ optionNumberList[j] }]: ${ option }`;
-					correctAnswer.push( answerInfo );
-				}
+				console.log( "正在确定正确选项", option );
+				console.log( answer, option );
+				answer = answer.filter( ( content ) => {
+					if ( matchContentsWithoutSign( content, option ) ) {
+						let answerInfo = `获取正确答案[${ optionNumberList[j] }]: ${ option }`;
+						console.log( answerInfo );
+						correctAnswer.push( answerInfo );
+					}
+					return content;
+				} );
 			}
 			if ( correctAnswer.length < 1 ) {
 				correctAnswer = [ "搜索不到答案" ];
@@ -32359,7 +32427,8 @@ color: indianred;
 		} else {
 			correctAnswer = [ "搜索不到问题" ];
 		}
-		addInfo( correctAnswer );
+		infoElement = new AddInfoElement( correctAnswer );
+		infoElement.create();
 	};
 	const loadObserver = new MutationObserver( () => {
 		var _a;
@@ -32382,6 +32451,7 @@ color: indianred;
 	const nextQuestionObserver = new MutationObserver( () => {
 		console.info( "切换试题" );
 		console.info( "获取问题答案" );
+		infoElement.clear();
 		getAnswer();
 	} );
 } )();

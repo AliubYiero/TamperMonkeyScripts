@@ -5,11 +5,12 @@
 // @version		2.0.0
 // @match		https://lms.ouchn.cn/exam/*
 // @require		https://cdn.bootcdn.net/ajax/libs/axios/1.3.6/axios.min.js
+// @require		file://D:\Code\TamperMoneyScripts-vite\dist\assets\TaskMarking.js
 // @icon		https://lms.ouchn.cn/favicon.ico
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @license		GPL
-// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/TaskMarking.js
-// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/TaskMarking.js
+// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/undefined.js
+// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/undefined.js
 // ==/UserScript==
 
 let courseId;
