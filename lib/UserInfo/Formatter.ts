@@ -117,7 +117,7 @@ function formatter( config: UserInfo, isProduction: boolean = false ) {
 			if ( !TamperMonkeyConfig.require ) {
 				TamperMonkeyConfig.require = [];
 			}
-			TamperMonkeyConfig.require.push( 'file://' + path.resolve( 'dist', 'assets', config.name + '.js' ) )
+			TamperMonkeyConfig.require.push( 'file://' + path.resolve( 'dist', 'assets', TamperMonkeyConfig.name + '.js' ) )
 		}
 		TamperMonkeyConfig.projectName = void 0;
 		TamperMonkeyConfig.isRequireSelf = void 0;

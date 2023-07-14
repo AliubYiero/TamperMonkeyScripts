@@ -8,8 +8,8 @@
 // @icon		https://ke.qq.com/favicon.ico
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @license		GPL
-// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/undefined.js
-// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/undefined.js
+// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/TencentCourseAdRemove.js
+// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/TencentCourseAdRemove.js
 // ==/UserScript==
 
 import { S as Sleep } from "./TaskMarking.js";

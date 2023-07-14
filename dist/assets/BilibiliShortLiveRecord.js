@@ -9,8 +9,8 @@
 // @icon		https://live.bilibili.com/favicon.ico
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @license		GPL
-// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/undefined.js
-// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/undefined.js
+// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/BilibiliShortLiveRecord.js
+// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/BilibiliShortLiveRecord.js
 // ==/UserScript==
 
 var __defProp = Object.defineProperty;

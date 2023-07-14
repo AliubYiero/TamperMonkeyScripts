@@ -52,6 +52,7 @@ async function mergeJSONFiles() {
 		const filePath = jsonFiles[projectName];
 		try {
 			mergedData[projectName] = await fs.readJson( resolve( filePath ) );
+			mergedData[projectName].projectName = projectName;
 		} catch ( err ) {
 			console.error( `Failed to read JSON file: ${ file }`, err );
 		}
