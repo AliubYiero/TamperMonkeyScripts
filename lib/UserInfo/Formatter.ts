@@ -110,7 +110,7 @@ function formatter( config: UserInfo, isProduction: boolean = false ) {
 		TamperMonkeyConfig.icon = `${ ( <string[]> TamperMonkeyConfig.match[ 0 ].match( /^.*?:\/\/.*?\// ) )[ 0 ] }favicon.ico`;
 		
 		// 更新链接
-		const updateUrl = `https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/${ TamperMonkeyConfig.projectName }.js`;
+		const updateUrl = `https://raw.githubusercontent.com/AliubYiero/TamperMonkeyScripts/master/dist/assets/${ TamperMonkeyConfig.projectName }.js`;
 		TamperMonkeyConfig.updateURL = updateUrl;
 		TamperMonkeyConfig.downloadUrl = updateUrl;
 		if ( !isProduction ) {
