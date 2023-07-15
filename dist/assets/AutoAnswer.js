@@ -8,8 +8,8 @@
 // @icon		https://eztest.org/favicon.ico
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @license		GPL
-// @updateURL		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/AutoAnswer.js
-// @downloadUrl		https://github.com/AliubYiero/TamperMonkeyScripts/blob/master/dist/assets/AutoAnswer.js
+// @updateURL		https://raw.githubusercontent.com/AliubYiero/TamperMonkeyScripts/master/dist/assets/AutoAnswer.js
+// @downloadUrl		https://raw.githubusercontent.com/AliubYiero/TamperMonkeyScripts/master/dist/assets/AutoAnswer.js
 // ==/UserScript==
 
 var __defProp = Object.defineProperty;
