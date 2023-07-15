@@ -6,7 +6,7 @@
  * @version beta1.0.0
  * */
 
-import { addElementToDocument, createElement } from '../../../../lib/GM_Lib/AddElementToDocument'
+import { addElementToDocument, createElement } from '../../../../lib/GM_Lib/AddElement'
 import { AddInfoElement } from './ShowInfo'
 
 export {
