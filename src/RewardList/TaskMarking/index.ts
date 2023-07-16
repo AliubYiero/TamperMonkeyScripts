@@ -1,6 +1,6 @@
 import { giveScore } from './src/api_giveScore';
 import { getRandomMath } from './src/Score'
-import { FreshListenerHash } from '../../../lib/Listener/FreshListener'
+import { FreshListenerHash } from '../../../lib/Listener/Page/FreshListener'
 import { goNextExam } from './src/Submit'
 import { Sleep } from '../../../lib/Base/Sleep'
 
