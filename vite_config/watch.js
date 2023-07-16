@@ -21,14 +21,13 @@ directoryPaths.forEach( ( directoryPath ) => {
 	
 	// 监听到文件更改时执行打包命令
 	watcher.on( 'change', () => {
-		console.log( 'Detected file change. Building...' );
+		console.log( '监听到文件更改，开始执行打包任务...' );
 		exec( buildCommand, ( error, stdout, stderr ) => {
 			if ( error ) {
 				console.error( `Error: ${ error.message }` );
 			} else {
 				console.log( stdout );
-				console.error( stderr );
-				console.log( 'Build complete.' );
+				console.info( '文件打包完成.' );
 			}
 		} );
 	} );
@@ -36,5 +35,5 @@ directoryPaths.forEach( ( directoryPath ) => {
 	// 将监视器实例添加到数组中
 	watchers.push( watcher );
 	
-	console.log( `Watching files in ${ directoryPath }...` );
+	console.info( `正在监听 ${ directoryPath } 目录下的文件更改...` );
 } );

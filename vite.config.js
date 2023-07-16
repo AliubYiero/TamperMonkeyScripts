@@ -1,83 +1,44 @@
 import { defineConfig } from 'vite';
 /** @tutorial https://github.com/chengpeiquan/vite-plugin-banner/blob/main/README.zh-CN.md */
 import banner from 'vite-plugin-banner'
-import { formatter } from './lib/UserInfo/Formatter.js'
 
 import replace from '@rollup/plugin-replace'
-import { join, resolve } from 'path'
-import fs from 'fs-extra'
-
-// 遍历目录
-function getDirectories( directory ) {
-	const files = fs.readdirSync( directory );
-	const directories = [];
-	
-	for ( const file of files ) {
-		const filePath = join( directory, file );
-		const stats = fs.statSync( filePath );
-		
-		if ( stats.isDirectory() ) {
-			directories.push( file );
-		}
-	}
-	
-	return directories;
-}
-
-// 从配置文件中获取所有入口文件（所有项目）
-const entries = {};
-const jsonFiles = {};
-
-function getPath( aimFileName, projectName, projectBelongName ) {
-	return resolve( 'src', projectBelongName, projectName, aimFileName );
-}
-
-( function getEntries() {
-	getDirectories( './src/RewardList' ).forEach( projectName => {
-		entries[projectName] = getPath( 'index.ts', projectName, 'RewardList' );
-		jsonFiles[projectName] = getPath( 'userinfo.json', projectName, 'RewardList' );
-	} )
-	getDirectories( './src/Self' ).forEach( projectName => {
-		entries[projectName] = getPath( 'index.ts', projectName, 'Self' );
-		jsonFiles[projectName] = getPath( 'userinfo.json', projectName, 'Self' );
-	} )
-} )();
-
-// 合并配置文件
-const mergedData = {};
-
-async function mergeJSONFiles() {
-	
-	for ( const projectName in jsonFiles ) {
-		const filePath = jsonFiles[projectName];
-		try {
-			mergedData[projectName] = await fs.readJson( resolve( filePath ) );
-			mergedData[projectName].projectName = projectName;
-		} catch ( err ) {
-			console.error( `Failed to read JSON file: ${ file }`, err );
-		}
-	}
-}
-
-await mergeJSONFiles();
+import { basename, dirname, resolve } from 'path'
+import { getEntities, getEntries, userInfoFormat } from './Plugins/GetEntities.ts'
 
 export default defineConfig( ( { mode } ) => {
+	// 获取构建方式信息
 	const isProduction = mode === 'production';
 	
+	// 获取项目实体对象数组
+	const entities = getEntities( resolve( 'src' ) );
+	console.info( '正在获取项目信息...' );
+	
+	// 无文件修改，抛出异常
+	if ( entities.length === 0 ) {
+		console.error( '没有文件修改，无法获取文件' );
+		throw new Error( '没有文件修改，无法重新文件' );
+	}
+	
+	// 获取修改后项目入口文件
+	const entries = getEntries( entities );
+	
+	console.info( '开始打包文件...' );
+	// 返回vite配置对象
 	return {
 		build: {
 			rollupOptions: {
 				input: entries,
 				output: {
-					entryFileNames: `assets/[name].js`,
-					chunkFileNames: 'assets/[name].chunk.js',
+					entryFileNames: `[name].js`,
 					format: 'es',
 					globals: [],
 					manualChunks( id ) {
-						for ( let entryKey in entries ) {
-							// 把项目文件夹里面的文件都打包到一个文件中
-							if ( id.includes( entryKey ) ) {
-								return entryKey
+						// 把项目文件夹里面的文件都打包到一个文件中
+						for ( const entity of entities ) {
+							const projectName = basename( dirname( id ) );
+							if ( projectName === entity.projectName ) {
+								return projectName;
 							}
 						}
 					}
@@ -85,9 +46,12 @@ export default defineConfig( ( { mode } ) => {
 				plugins: [
 					banner( {
 						content: ( fileName ) => {
-							const projectName = fileName.match( /assets\/(.*?)\.js$/ )[1];
-							
-							return `${ formatter( mergedData[projectName], isProduction ) }\n`
+							const projectName = basename( fileName, '.js' );
+							for ( let entity of entities ) {
+								if ( entity.projectName === projectName ) {
+									return `${ userInfoFormat( entity.userInfoConfig, projectName, isProduction ) }\n`
+								}
+							}
 						},
 						verify: false,
 					} ),
@@ -100,11 +64,12 @@ export default defineConfig( ( { mode } ) => {
 						delimiters: [ '', '' ],
 					} )
 				],
-				// external: isProduction ? [ 'axios' ] : [],
 				external: [ 'axios' ],
-				
 			},
+			// 关闭压缩和混淆代码
 			minify: false,
+			// 不清空打包目录
+			emptyOutDir: false,
 		},
 	}
 } );
