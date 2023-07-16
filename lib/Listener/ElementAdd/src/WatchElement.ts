@@ -14,8 +14,6 @@ export {
 /** 监视元素出现 */
 function watchElementOnce( aimQuerySelector: string, callback: Function = () => {
 } ) {
-	
-	
 	const elementObserver = new MutationObserver( ( e ) => {
 		e.forEach( ( mutationRecord ) => {
 			const aimElement = ( <HTMLElement> mutationRecord.target )?.querySelector( aimQuerySelector );

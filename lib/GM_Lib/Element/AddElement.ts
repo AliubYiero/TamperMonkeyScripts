@@ -13,7 +13,7 @@ export {
 
 /** 创建HTMLElement元素 */
 const createElement = ( elementConfig: ElementAttribute ) => {
-	const { tagName, className, id } = elementConfig;
+	const { tagName, className, id, innerHTML, innerText } = elementConfig;
 	const element = document.createElement( tagName ) as HTMLElement;
 	
 	// 写入类名
@@ -29,9 +29,19 @@ const createElement = ( elementConfig: ElementAttribute ) => {
 		element.id = id;
 	}
 	
+	// 写入子元素
+	if ( innerHTML ) {
+		element.innerHTML = innerHTML;
+	}
+	
+	// 写入文本
+	if ( innerText ) {
+		element.innerText = innerText;
+	}
+	
 	// 写入其他属性
 	for ( let elementConfigKey in elementConfig ) {
-		if ( [ 'tagName', 'className', 'id' ].indexOf( elementConfigKey ) !== -1 ) {
+		if ( [ 'tagName', 'className', 'id', 'innerHTML', 'innerText' ].indexOf( elementConfigKey ) !== -1 ) {
 			continue;
 		}
 		
@@ -61,6 +71,9 @@ interface ElementAttribute {
 	
 	// id名
 	id?: string
+	innerHTML?: string
+	
+	innerText?: string
 	
 	[ propName: string ]: any
 }
