@@ -9,6 +9,7 @@ import { Info } from '../../../../lib/Base/Info'
 ( () => {
 	const info = new Info( 'BiliBiliVideoNote-Subsidiary' );
 	
+	// 笔记开启按钮
 	let NoteOpenButton: HTMLElement;
 	
 	// 检测页面是否出现目标元素
@@ -26,14 +27,14 @@ import { Info } from '../../../../lib/Base/Info'
 		} )
 	} )
 	
-	
-	// 初始化prompt对象
-	function bindHotkeyCallback( value: string ) {
-		info.warn( `按键 ${ value } 已绑定为全局快捷键` )
+	// 热键绑定函数
+	const bindNoteOpenHotkey = ( value: string ) => {
+		info.warn( `按键 [${ value }] 已绑定为全局快捷键` )
 		GMStorage.set( 'hotkey', value );
-		NoteOpenButton.click();
+		bindHotkey( value, document, NoteOpenButton.click )
 	}
 	
+	// 初始化prompt对象
 	const promptBtn: Function = prompt(
 		'设置开启视频笔记快捷键：',
 		( element: HTMLElement ) => {
@@ -45,7 +46,7 @@ import { Info } from '../../../../lib/Base/Info'
 			
 			// 读取热键配置，并添加到快捷键绑定中
 			input.value = hotkey;
-			bindHotkeyCallback( input.value );
+			bindNoteOpenHotkey( input.value );
 			
 			// 读取快捷键输入
 			element.addEventListener( 'keydown', ( e: KeyboardEvent ) => {
@@ -77,9 +78,7 @@ import { Info } from '../../../../lib/Base/Info'
 		// @ts-ignore
 		( element: HTMLElement, value: string ) => {
 			// 绑定用户按键到全局
-			bindHotkey( value, document, () => {
-				bindHotkeyCallback( value );
-			} )
+			bindNoteOpenHotkey( value );
 		}
 	)
 	// 当点击菜单按钮时，打开prompt对象

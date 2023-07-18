@@ -2,7 +2,7 @@
 // @name		附属 - 哔哩哔哩视频笔记按钮隐藏
 // @author		Yiero
 // @description		哔哩哔哩视频笔记按钮隐藏. 本脚本是[哔哩哔哩视频笔记]的附属脚本，只用于将其开启笔记
-// @version		1.0.3
+// @version		1.0.4
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @icon		https://www.bilibili.com/favicon.ico
 // @match		https://www.bilibili.com/video/*
@@ -372,20 +372,18 @@ class Info {
 			e.click();
 		} );
 	} );
-	
-	function bindHotkeyCallback( value ) {
-		info.warn( `按键 ${ value } 已绑定为全局快捷键` );
+	const bindNoteOpenHotkey = ( value ) => {
+		info.warn( `按键 [${ value }] 已绑定为全局快捷键` );
 		GMStorage.set( "hotkey", value );
-		NoteOpenButton.click();
-	}
-	
+		bindHotkey( value, document, NoteOpenButton.click );
+	};
 	const promptBtn = prompt(
 		"设置开启视频笔记快捷键：",
 		( element ) => {
 			const hotkey = GMStorage.get( "hotkey", "" );
 			const input = element.querySelector( "input" );
 			input.value = hotkey;
-			bindHotkeyCallback( input.value );
+			bindNoteOpenHotkey( input.value );
 			element.addEventListener( "keydown", ( e ) => {
 				e.preventDefault();
 				let hotkeyString = "";
@@ -406,9 +404,7 @@ class Info {
 		},
 		// @ts-ignore
 		( element, value ) => {
-			bindHotkey( value, document, () => {
-				bindHotkeyCallback( value );
-			} );
+			bindNoteOpenHotkey( value );
 		}
 	);
 	registerMenu( "配置快捷键", () => {
