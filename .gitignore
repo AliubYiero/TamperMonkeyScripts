@@ -1,4 +1,6 @@
 # Logs
+index.html
+/Config/timestamp.json
 logs
 *.log
 npm-debug.log*
