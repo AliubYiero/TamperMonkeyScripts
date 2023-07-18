@@ -2,10 +2,11 @@
 // @name		附属 - 哔哩哔哩视频笔记按钮隐藏
 // @author		Yiero
 // @description		哔哩哔哩视频笔记按钮隐藏. 本脚本是[哔哩哔哩视频笔记]的附属脚本，只用于将其开启笔记
-// @version		1.0.0
+// @version		1.0.1
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @icon		https://www.bilibili.com/favicon.ico
 // @match		https://www.bilibili.com/video/*
+// @match		https://www.bilibili.com/bangumi/*
 // @license		GPL
 // @grant		GM_addStyle
 // @grant		GM_registerMenuCommand
@@ -157,10 +158,10 @@ class GMStorage {
 	}
 }
 
-function Prompt( title, elementCallback, confirmCallback ) {
+function prompt( title, mountedCallback, confirmCallback ) {
 	const element = createElement( {
 		tagName: "section",
-		className: "custom-prompt__container",
+		className: [ "custom-prompt__container", "hide" ],
 		innerHTML: `
 		<header>
 			<h3 class="custom-prompt__title">${ title }</h3>
@@ -173,22 +174,6 @@ function Prompt( title, elementCallback, confirmCallback ) {
 			<button>取消</button>
 		</footer>
 		`
-	} );
-	elementCallback( element );
-	const confirmBtn = element.querySelector( ".custom-prompt__confirm-btn > button:first-of-type" );
-	const userInputContainer = element.querySelector( ".custom-prompt__input" );
-	confirmBtn.addEventListener( "click", () => {
-		confirmCallback( element, userInputContainer.value );
-		element.remove();
-	} );
-	const cancelBtn = element.querySelector( ".custom-prompt__confirm-btn > button:last-of-type" );
-	cancelBtn.addEventListener( "click", () => {
-		element.remove();
-	} );
-	document.addEventListener( "click", ( e ) => {
-		if ( element && !element.contains( e.target ) ) {
-			element.remove();
-		}
 	} );
 	const cssString = `
 	.custom-prompt__container {
@@ -239,8 +224,38 @@ function Prompt( title, elementCallback, confirmCallback ) {
 		border: 2px cornflowerblue solid;
 		color: cornflowerblue;
 	}
+	
+	.custom-prompt__container.hide {
+		display: none;
+	}
 	`;
+	const htmlElements = {
+		confirmBtn: element.querySelector( ".custom-prompt__confirm-btn > button:first-of-type" ),
+		cancelBtn: element.querySelector( ".custom-prompt__confirm-btn > button:last-of-type" ),
+		userInputContainer: element.querySelector( ".custom-prompt__input" )
+	};
+	mountedCallback( element );
+	htmlElements.confirmBtn.addEventListener( "click", () => {
+		confirmCallback( element, htmlElements.userInputContainer.value );
+		hide();
+	} );
+	htmlElements.cancelBtn.addEventListener( "click", hide );
+	document.addEventListener( "click", ( e ) => {
+		if ( element && !element.contains( e.target ) ) {
+			hide();
+		}
+	} );
 	addElementToDocument( element, cssString );
+	
+	function hide() {
+		element.classList.add( "hide" );
+	}
+	
+	function show() {
+		element.classList.remove( "hide" );
+	}
+	
+	return show;
 }
 
 const stringToCapitalizeCase = ( word ) => {
@@ -357,41 +372,42 @@ class Info {
 			e.click();
 		} );
 	} );
-	registerMenu( "配置快捷键", () => {
-		Prompt(
-			"设置开启视频笔记快捷键：",
-			( element ) => {
-				const hotkey = GMStorage.get( "hotkey", "" );
-				const input = element.querySelector( "input" );
-				input.value = hotkey;
-				element.addEventListener( "keydown", ( e ) => {
-					e.preventDefault();
-					let hotkeyString = "";
-					if ( e.ctrlKey ) {
-						hotkeyString += "Ctrl + ";
-					}
-					if ( e.altKey ) {
-						hotkeyString += "Alt + ";
-					}
-					if ( e.shiftKey ) {
-						hotkeyString += "Shift + ";
-					}
-					if ( [ "Control", "Alt", "Shift" ].indexOf( e.key ) === -1 ) {
-						hotkeyString += e.key.toUpperCase();
-					}
-					input.value = hotkeyString;
-				} );
-			},
-			// @ts-ignore
-			( element, value ) => {
-				bindHotkey( value, document, callback );
-				
-				function callback() {
-					info.warn( `按键 ${ value } 已绑定为全局快捷键` );
-					GMStorage.set( "hotkey", value );
-					NoteOpenButton.click();
+	const promptBtn = prompt(
+		"设置开启视频笔记快捷键：",
+		( element ) => {
+			const hotkey = GMStorage.get( "hotkey", "" );
+			const input = element.querySelector( "input" );
+			input.value = hotkey;
+			element.addEventListener( "keydown", ( e ) => {
+				e.preventDefault();
+				let hotkeyString = "";
+				if ( e.ctrlKey ) {
+					hotkeyString += "Ctrl + ";
 				}
+				if ( e.altKey ) {
+					hotkeyString += "Alt + ";
+				}
+				if ( e.shiftKey ) {
+					hotkeyString += "Shift + ";
+				}
+				if ( [ "Control", "Alt", "Shift" ].indexOf( e.key ) === -1 ) {
+					hotkeyString += e.key.toUpperCase();
+				}
+				input.value = hotkeyString;
+			} );
+		},
+		// @ts-ignore
+		( element, value ) => {
+			bindHotkey( value, document, callback );
+			
+			function callback() {
+				info.warn( `按键 ${ value } 已绑定为全局快捷键` );
+				GMStorage.set( "hotkey", value );
+				NoteOpenButton.click();
 			}
-		);
+		}
+	);
+	registerMenu( "配置快捷键", () => {
+		promptBtn();
 	} );
 } )();
