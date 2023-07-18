@@ -2,7 +2,7 @@
 // @name		附属 - 哔哩哔哩视频笔记按钮隐藏
 // @author		Yiero
 // @description		哔哩哔哩视频笔记按钮隐藏. 本脚本是[哔哩哔哩视频笔记]的附属脚本，只用于将其开启笔记
-// @version		1.0.1
+// @version		1.0.2
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @icon		https://www.bilibili.com/favicon.ico
 // @match		https://www.bilibili.com/video/*
