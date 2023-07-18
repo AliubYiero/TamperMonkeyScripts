@@ -46,17 +46,17 @@ class GMStorage implements GM_Storage {
 	}
 	
 	/** 获取值 */
-	static get( key: string ): any {
+	static get( key: string, defaultValue: any = null ): any {
 		// @ts-ignore
-		return GM_getValue( key, null );
+		return GM_getValue( key, defaultValue );
 	}
 	
 	/** 批量获取值 */
-	static getList( keys: string[] ): any[] {
+	static getList( keys: string[], defaultValue: any = null ): any[] {
 		const values: any[] = [];
 		keys.forEach( ( key: string ) => {
 			// @ts-ignore
-			values.push( this.get( key ) );
+			values.push( this.get( key, defaultValue ) );
 		} )
 		return values;
 	}
