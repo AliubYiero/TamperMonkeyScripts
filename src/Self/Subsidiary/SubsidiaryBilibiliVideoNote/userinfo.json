@@ -1,0 +1,22 @@
+{
+	"name": "附属 - 哔哩哔哩视频笔记按钮隐藏",
+	"description": "哔哩哔哩视频笔记按钮隐藏. 本脚本是[哔哩哔哩视频笔记]的附属脚本，只用于将其开启笔记",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://www.bilibili.com/video/*"
+	],
+	"grant": [
+		"style",
+		"menu",
+		"storage"
+	],
+	"require": [
+	],
+	"resource": [
+		""
+	],
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}
