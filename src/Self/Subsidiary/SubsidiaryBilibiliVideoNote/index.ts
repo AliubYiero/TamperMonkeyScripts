@@ -1,7 +1,7 @@
 /* entry */
 import { ElementMutationObserverOnce } from '../../../../lib/Listener/ElementAdd'
 import { addHideClass, GMStorage, registerMenu } from '../../../../lib/GM_Lib'
-import { Prompt } from '../../../../Component'
+import { prompt } from '../../../../Component'
 import { bindHotkey } from '../../../../lib/Listener/Event'
 import { Info } from '../../../../lib/Base/Info'
 
@@ -26,55 +26,60 @@ import { Info } from '../../../../lib/Base/Info'
 		} )
 	} )
 	
-	registerMenu( '配置快捷键', () => {
-		Prompt(
-			'设置开启视频笔记快捷键：',
-			( element: HTMLElement ) => {
-				// 读取默认快捷键配置
-				const hotkey: string = GMStorage.get( 'hotkey', '' );
+	
+	// 初始化prompt对象
+	const promptBtn: Function = prompt(
+		'设置开启视频笔记快捷键：',
+		( element: HTMLElement ) => {
+			// 读取默认快捷键配置
+			const hotkey: string = GMStorage.get( 'hotkey', '' );
+			
+			// 写入默认快捷键配置
+			const input = element.querySelector( 'input' ) as HTMLInputElement;
+			input.value = hotkey;
+			
+			// 读取快捷键输入
+			element.addEventListener( 'keydown', ( e: KeyboardEvent ) => {
+				// 阻止默认输入
+				e.preventDefault();
 				
-				// 写入默认快捷键配置
-				const input = element.querySelector( 'input' ) as HTMLInputElement;
-				input.value = hotkey;
-				
-				// 读取快捷键输入
-				element.addEventListener( 'keydown', ( e: KeyboardEvent ) => {
-					// 阻止默认输入
-					e.preventDefault();
-					
-					// 监控键盘输入
-					let hotkeyString = '';
-					if ( e.ctrlKey ) {
-						hotkeyString += 'Ctrl + ';
-					}
-					
-					if ( e.altKey ) {
-						hotkeyString += 'Alt + ';
-					}
-					
-					if ( e.shiftKey ) {
-						hotkeyString += 'Shift + ';
-					}
-					
-					if ( [ 'Control', 'Alt', 'Shift' ].indexOf( e.key ) === -1 ) {
-						hotkeyString += e.key.toUpperCase();
-					}
-					
-					// 将键盘输入输出到input框中
-					input.value = hotkeyString;
-				} )
-			},
-			// @ts-ignore
-			( element: HTMLElement, value: string ) => {
-				// 绑定用户按键到全局
-				bindHotkey( value, document, callback )
-				
-				function callback() {
-					info.warn( `按键 ${ value } 已绑定为全局快捷键` )
-					GMStorage.set( 'hotkey', value );
-					NoteOpenButton.click();
+				// 监控键盘输入
+				let hotkeyString = '';
+				if ( e.ctrlKey ) {
+					hotkeyString += 'Ctrl + ';
 				}
+				
+				if ( e.altKey ) {
+					hotkeyString += 'Alt + ';
+				}
+				
+				if ( e.shiftKey ) {
+					hotkeyString += 'Shift + ';
+				}
+				
+				if ( [ 'Control', 'Alt', 'Shift' ].indexOf( e.key ) === -1 ) {
+					hotkeyString += e.key.toUpperCase();
+				}
+				
+				// 将键盘输入输出到input框中
+				input.value = hotkeyString;
 			} )
+		},
+		// @ts-ignore
+		( element: HTMLElement, value: string ) => {
+			// 绑定用户按键到全局
+			bindHotkey( value, document, callback )
+			
+			function callback() {
+				info.warn( `按键 ${ value } 已绑定为全局快捷键` )
+				GMStorage.set( 'hotkey', value );
+				NoteOpenButton.click();
+			}
+		}
+	)
+	// 当点击菜单按钮时，打开prompt对象
+	registerMenu( '配置快捷键', () => {
+		promptBtn();
 	} )
 	
 } )();
