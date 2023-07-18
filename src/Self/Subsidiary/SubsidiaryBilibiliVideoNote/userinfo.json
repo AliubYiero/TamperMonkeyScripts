@@ -4,7 +4,8 @@
 	"author": "Yiero",
 	"version": "1.0.0",
 	"match": [
-		"https://www.bilibili.com/video/*"
+		"https://www.bilibili.com/video/*",
+		"https://www.bilibili.com/bangumi/*"
 	],
 	"grant": [
 		"style",
