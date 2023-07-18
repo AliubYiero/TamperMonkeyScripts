@@ -28,6 +28,12 @@ import { Info } from '../../../../lib/Base/Info'
 	
 	
 	// 初始化prompt对象
+	function bindHotkeyCallback( value: string ) {
+		info.warn( `按键 ${ value } 已绑定为全局快捷键` )
+		GMStorage.set( 'hotkey', value );
+		NoteOpenButton.click();
+	}
+	
 	const promptBtn: Function = prompt(
 		'设置开启视频笔记快捷键：',
 		( element: HTMLElement ) => {
@@ -36,7 +42,10 @@ import { Info } from '../../../../lib/Base/Info'
 			
 			// 写入默认快捷键配置
 			const input = element.querySelector( 'input' ) as HTMLInputElement;
+			
+			// 读取热键配置，并添加到快捷键绑定中
 			input.value = hotkey;
+			bindHotkeyCallback( input.value );
 			
 			// 读取快捷键输入
 			element.addEventListener( 'keydown', ( e: KeyboardEvent ) => {
@@ -63,18 +72,14 @@ import { Info } from '../../../../lib/Base/Info'
 				
 				// 将键盘输入输出到input框中
 				input.value = hotkeyString;
-			} )
+			} );
 		},
 		// @ts-ignore
 		( element: HTMLElement, value: string ) => {
 			// 绑定用户按键到全局
-			bindHotkey( value, document, callback )
-			
-			function callback() {
-				info.warn( `按键 ${ value } 已绑定为全局快捷键` )
-				GMStorage.set( 'hotkey', value );
-				NoteOpenButton.click();
-			}
+			bindHotkey( value, document, () => {
+				bindHotkeyCallback( value );
+			} )
 		}
 	)
 	// 当点击菜单按钮时，打开prompt对象
