@@ -9,9 +9,9 @@
 
 import questionList from './assets/Qustion.json';
 import { getAnswerList, getQuestionContent } from './Qustion/Qustion'
-import { addStyle } from '../../../lib/GM_Lib/Element/AddStyle'
 import { AddInfoElement } from './Info/ShowInfo'
 import { createToggleBtn } from './Info/ToggleBtn'
+import { addStyle } from '../../../../lib/GM_Lib'
 
 
 ( () => {

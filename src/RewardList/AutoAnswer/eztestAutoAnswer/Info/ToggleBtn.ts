@@ -6,8 +6,8 @@
  * @version beta1.0.0
  * */
 
-import { addElementToDocument, createElement } from '../../../../lib/GM_Lib/Element/AddElement'
 import { AddInfoElement } from './ShowInfo'
+import { addElementToDocument, createElement } from '../../../../../lib/GM_Lib'
 
 export {
 	createToggleBtn
