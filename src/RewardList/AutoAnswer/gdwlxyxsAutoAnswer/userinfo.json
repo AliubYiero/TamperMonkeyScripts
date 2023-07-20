@@ -1,0 +1,21 @@
+{
+	"name": "gdwlxyxsAutoAnswer",
+	"description": "gdwlxyxsAutoAnswer自动答题",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://exam.beeouc.com/client/*"
+	],
+	"grant": [
+		"style"
+	],
+	"require": [
+		""
+	],
+	"resource": [
+		""
+	],
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}
