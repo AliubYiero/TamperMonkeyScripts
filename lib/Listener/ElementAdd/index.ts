@@ -6,5 +6,6 @@
  * @version beta1.0.0
  * */
 
+export * from './src/getElement';
 export * from './src/WatchElement';
 export * from './src/ElementMutationObserver';
