@@ -6,6 +6,6 @@
  * @version beta1.0.0
  * */
 
-export * from './Input/Read';
-export * from './Input/ReadStat';
-export * from './Output/WriteJson';
+export * from './Input/Read.js';
+export * from './Input/ReadStat.js';
+export * from './Output/WriteJson.js';

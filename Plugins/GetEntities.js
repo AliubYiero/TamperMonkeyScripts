@@ -6,48 +6,85 @@
  * @version beta1.0.0
  * */
 
-import { getFileChangeTime, readFileInDir, readJson, writeJson } from './Fs'
-import { basename, dirname, join, relative, resolve } from 'path'
-import { deepEqual } from '../lib/Object/deepEqual.js'
+import { getFileChangeTime, readFileInDir, readJson, writeJson } from './Fs/index.js'
 
-export type {
-	UserInfo
-}
+import { basename, dirname, join, relative, resolve } from 'path'
+
 export {
+	getAllProjectPath,
 	userInfoFormat,
+	switchEntities,
 	getEntities,
 	getEntries,
 }
 
+function deepEqual( obj1, obj2 ) {
+	if ( typeof obj1 !== 'object' || typeof obj2 !== 'object' ) {
+		return obj1 === obj2; // 基本类型直接比较
+	}
+	
+	const keys1 = Object.keys( obj1 );
+	const keys2 = Object.keys( obj2 );
+	
+	if ( keys1.length !== keys2.length ) {
+		return false; // 属性数量不同，直接返回 false
+	}
+	
+	for ( let key of keys1 ) {
+		if ( !deepEqual( obj1[key], obj2[key] ) ) {
+			return false; // 属性值不同，直接返回 false
+		}
+	}
+	
+	return true; // 所有属性值都相同，返回 true
+}
 
 /**
- * 获取项目实体信息
+ * 获取所有项目的绝对值地址
  * @param {string} srcPath src的绝对路径
- * @return {Entity[]} 项目实体对象数组
+ * @return {string[]} 项目的路径数组
  * */
-const getEntities = ( srcPath: string ): Entity[] => {
-	const entities = [];
-	
-	// 获取所有项目的绝对路径(获取`index.ts`文件的上一层路径)
+function getAllProjectPath( srcPath ) {
 	const projectPathList = [];
 	readFileInDir( srcPath ).forEach( file => {
 		if ( basename( file ) === 'index.ts' ) {
 			projectPathList.push( dirname( file ) );
 		}
 	} );
+	return projectPathList;
+}
+
+/**
+ * 获取项目实体信息，并根据时间戳信息，判断是否将其引入到输出中
+ * @param {string} srcPath src的绝对路径
+ * @return {entity[]} 时间戳更改过的项目的项目实体对象数组
+ * */
+const getEntities = ( srcPath ) => {
+	const entities = [];
+	
+	// 获取所有项目的绝对路径(获取`index.ts`文件的上一层路径)
+	const projectPathList = getAllProjectPath( srcPath );
 	
 	// 获取上次时间戳信息
 	const timestampConfigPath = resolve( 'Config', 'timestamp' );
 	const prevTimestamp = readJson( timestampConfigPath );
-	const thisTimestamp = {};
 	
 	// 获取所有项目的名字和绝对路径
-	projectPathList.forEach( projectPath => {
+	for ( const projectPath of projectPathList ) {
 		// 获取项目名
 		const projectName = basename( projectPath );
 		
 		// 注册项目对象
-		const entity: Entity = {};
+		/** @type {{
+		 *  projectName: string,
+		 *  absolutePath: string,
+		 *  entryPath: string,
+		 *  timestamp: Object,
+		 *  prevTimestamp: Object,
+		 *  userInfoConfig: UserInfo,
+		 * }} entity
+		 * */
+		const entity = {};
 		
 		// 获取项目名
 		entity.projectName = projectName;
@@ -63,51 +100,66 @@ const getEntities = ( srcPath: string ): Entity[] => {
 		readFileInDir( projectPath ).forEach( file => {
 			const timestamp = getFileChangeTime( file );
 			const filePath = relative( projectPath, file );
-			entity.timestamp[ filePath ] = timestamp;
+			entity.timestamp[filePath] = timestamp;
 		} )
-		thisTimestamp[ projectName ] = entity.timestamp;
+		entity.prevTimestamp = prevTimestamp[projectName];
 		
 		// 获取所有项目的配置信息
 		entity.userInfoConfig = readJson( join( projectPath, 'userinfo' ) )
 		
 		// 根据时间戳是否变动写入项目
-		if ( !deepEqual( entity.timestamp, prevTimestamp[ projectName ] ) ) {
+		if ( !deepEqual( entity.timestamp, entity.prevTimestamp ) ) {
 			entities.push( entity );
 		}
-	} )
-	
-	// 写入时间戳
-	writeJson( timestampConfigPath, thisTimestamp );
+	}
 	
 	// 返回项目实体对象数组
 	return entities;
 }
 
 /**
+ * 获取所有实体的时间戳
+ * @param {Entity[]} entities
+ * */
+function getPrevTimestamp( entities ) {
+	const prevTimestampList = {};
+	entities.forEach( entity => {
+		prevTimestampList[entity.projectName] = entity.prevTimestamp;
+	} )
+	return prevTimestampList;
+}
+
+/**
+ * 从实体对象数组中，选择一个实体对象
+ * */
+const switchEntities = ( function () {
+	const timestampConfigPath = resolve( 'Config', 'timestamp' );
+	const prevTimestamp = readJson( timestampConfigPath );
+	let switchEntityCounter = 0;
+	return function ( entities ) {
+		const entity = entities[switchEntityCounter++] || {}
+		prevTimestamp[entity.projectName] = entity.timestamp;
+		// 写入时间戳
+		writeJson( timestampConfigPath, prevTimestamp );
+		return [ entity ];
+	}
+} )();
+
+/**
  * 获取项目入口对象集
  * */
-const getEntries = ( entities: Entity[] ) => {
+const getEntries = ( entities ) => {
 	const entries = {};
 	entities.forEach( entity => {
-		entries[ entity.projectName ] = entity.entryPath;
+		entries[entity.projectName] = entity.entryPath;
 	} )
 	return entries;
 }
 
-
-interface Entity {
-	projectName?: string,
-	absolutePath?: string,
-	entryPath?: string,
-	timestamp?: { [ filePath: string ]: number },
-	userInfoConfig?: UserInfo
-}
-
-
-function userInfoFormat( config: UserInfo, projectName: string, isProduction: boolean = false ) {
+function userInfoFormat( config, projectName, isProduction = false ) {
 	// 配置初始icon
-	const match = config.match[ 0 ]?.match( /^.*?:\/\/.*?\// );
-	config.icon = match ? `${ match[ 0 ] }favicon.ico` : '';
+	const match = config.match[0]?.match( /^.*?:\/\/.*?\// );
+	config.icon = match ? `${ match[0] }favicon.ico` : '';
 	
 	// 配置require依赖
 	if ( !isProduction ) {
@@ -116,7 +168,7 @@ function userInfoFormat( config: UserInfo, projectName: string, isProduction: bo
 	}
 	
 	// 配置GM函数依赖
-	if ( config.grant[ 0 ] ) {
+	if ( config.grant[0] ) {
 		// 声明添加的函数
 		const newGrants = [];
 		
@@ -131,7 +183,8 @@ function userInfoFormat( config: UserInfo, projectName: string, isProduction: bo
 		config.grant.forEach( ( grant ) => {
 			if ( extraGrantMap.has( grant.toLowerCase() ) ) {
 				newGrants.push( ...extraGrantMap.get( grant.toLowerCase() ) );
-			} else {
+			}
+			else {
 				newGrants.push( grant );
 			}
 		} )
@@ -140,7 +193,7 @@ function userInfoFormat( config: UserInfo, projectName: string, isProduction: bo
 	}
 	
 	// 配置其他默认值
-	const configMap: UserInfo = {
+	const configMap = {
 		name: config.name || '',
 		author: config.author || 'Yiero',
 		description: config.description || '',
@@ -159,7 +212,7 @@ function userInfoFormat( config: UserInfo, projectName: string, isProduction: bo
 	const userScriptConfig = [ '// ==UserScript==' ];
 	
 	for ( const key in configMap ) {
-		const value = configMap[ key ];
+		const value = configMap[key];
 		
 		if ( Array.isArray( value ) ) {
 			for ( const val of value ) {
@@ -167,7 +220,8 @@ function userInfoFormat( config: UserInfo, projectName: string, isProduction: bo
 					userScriptConfig.push( `// @${ key }\t\t${ val }` );
 				}
 			}
-		} else if ( value ) {
+		}
+		else if ( value ) {
 			userScriptConfig.push( `// @${ key }\t\t${ value }` );
 		}
 	}
@@ -175,97 +229,4 @@ function userInfoFormat( config: UserInfo, projectName: string, isProduction: bo
 	userScriptConfig.push( '// ==/UserScript==' );
 	
 	return userScriptConfig.join( '\n' );
-}
-
-type Grant =
-// 添加元素
-	'GM_addElement' |
-	'GM_addStyle' |
-	'GM_download' |
-	'GM_getResourceText' |
-	'GM_getResourceURL' |
-	// 信息输出
-	'GM_info' |
-	'GM_log' |
-	'GM_notification' |
-	
-	'GM_openInTab' |
-	'GM_registerMenuCommand' |
-	'GM_unregisterMenuCommand' |
-	'GM_setClipboard' |
-	'GM_getTab' |
-	'GM_saveTab' |
-	'GM_getTabs' |
-	// 油猴储存
-	'GM_setValue' |
-	'GM_getValue' |
-	'GM_deleteValue' |
-	'GM_listValues' |
-	
-	'GM_addValueChangeListener' |
-	'GM_removeValueChangeListener' |
-	
-	'GM_xmlhttpRequest' |
-	'GM_webRequest' |
-	
-	'GM_cookie.list' |
-	'GM_cookie.set' |
-	'GM_cookie.delete'
-	;
-
-/** 所有油猴配置信息 */
-interface UserInfo {
-	/** 脚本名 */
-	name: string,
-	
-	/**
-	 * 作者
-	 * @default Yiero
-	 * */
-	author?: string,
-	
-	/** 脚本描述 */
-	description: string,
-	
-	/** 版本号 */
-	version: string,
-	
-	/** 捕获网站 */
-	match: string[],
-	
-	/** 引入油猴函数 */
-	grant?: Grant[],
-	
-	/** 引入外部js库 */
-	require?: string[],
-	
-	/** 引入外部静态资源 */
-	resource?: string[],
-	
-	/**
-	 * 油猴脚本显示图标
-	 * @default
-	 * */
-	icon?: string,
-	
-	/**
-	 * 脚本命名空间
-	 * @default https://github.com/AliubYiero/TemperScripts
-	 * */
-	namespace?: string,
-	
-	/**
-	 * 许可证
-	 * @default GPL
-	 * */
-	license?: string,
-	
-	
-	/** 远程更新链接 */
-	updateUrl?: string,
-	downloadUrl?: string,
-	
-	
-	/* 添加索引签名 */
-	[ key: string ]: any;
 }
