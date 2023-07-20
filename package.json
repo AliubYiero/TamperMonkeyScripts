@@ -5,7 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"build": "tsc && vite build --mode production",
-		"dev": "tsc && vite build --mode development",
+		"dev:origin": "tsc && vite build --mode development",
+		"dev": "node ./vite_config/dev.js",
 		"watch": "node ./vite_config/watch.js",
 		"serve": "vite",
 		"preview": "vite preview"

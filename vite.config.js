@@ -4,7 +4,7 @@ import banner from 'vite-plugin-banner'
 
 import replace from '@rollup/plugin-replace'
 import { basename, dirname, resolve } from 'path'
-import { getEntities, getEntries, userInfoFormat } from './Plugins/GetEntities.ts'
+import { getEntities, getEntries, switchEntities, userInfoFormat } from './Plugins/GetEntities.js'
 
 export default defineConfig( ( { mode } ) => {
 	// 获取构建方式信息
@@ -21,7 +21,7 @@ export default defineConfig( ( { mode } ) => {
 	}
 	
 	// 获取修改后项目入口文件
-	const entries = getEntries( entities );
+	const entries = getEntries( switchEntities( entities ) );
 	
 	console.info( '开始打包文件...' );
 	// 返回vite配置对象
@@ -31,6 +31,7 @@ export default defineConfig( ( { mode } ) => {
 				input: entries,
 				output: {
 					entryFileNames: `[name].js`,
+					chunkFileNames: `[name].chunk.js`,
 					format: 'es',
 					globals: [],
 					manualChunks( id ) {

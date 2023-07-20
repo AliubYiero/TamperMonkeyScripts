@@ -6,74 +6,454 @@
 	<title>Vite + TS</title>
 	
 	<style>
-		#app {
-			color: rebeccapurple;
-		}
-		
-		.custom-prompt__container {
-			width: 400px;
-			height: 125px;
-			background: #f8f8f8;
-			border-radius: 15px;
-			box-sizing: border-box;
-			padding: 20px;
-			
-			box-shadow: 2px 2px #a6a6a6;
+		.question-input-container {
+			width: 75%;
+			height: 100vh;
+			margin: 0 auto;
 			
 			display: flex;
-			justify-content: center;
-			flex-flow: column;
 			
+			gap: 10px;
+		}
+		
+		.storage-library {
 			position: fixed;
-			top: 10px;
-			left: 50%;
-			transform: translateX(-50%);
+			left: 20px;
+			width: 10%;
+			padding-top: 20px;
 		}
 		
-		h3.custom-prompt__title {
-			margin: 10px -0px;
-		}
-		
-		input.custom-prompt__input {
+		.storage-library > button {
 			width: 100%;
-			border: #a6a6a6 2px solid;
+			background: #ffffff;
+			height: 30px;
+			line-height: 30px;
+			border: 1px solid #000;
+			text-align: center;
 			border-radius: 5px;
-			box-sizing: border-box;
-			padding: 5px 10px;
 		}
 		
-		.custom-prompt__confirm-btn {
-			margin-top: 10px;
-			align-self: flex-end;
-		}
-		
-		.custom-prompt__confirm-btn > button {
-			padding: 3px;
-			border-radius: 5px;
+		.question-input--input-container, .question-input--parse-container {
+			flex: 1;
 			border: 2px #a6a6a6 solid;
+			border-radius: 20px;
+			
+			box-sizing: border-box;
+			padding: 50px;
+			
+			
 		}
 		
-		.custom-prompt__confirm-btn > button:hover {
-			border: 2px cornflowerblue solid;
-			color: cornflowerblue;
+		.question-input--input, .question-input--parse {
+			width: 100%;
+			height: 100%;
+			line-height: 20px;
+			
+			outline: none;
+			resize: none;
+		}
+		
+		.question-input--parse {
+			height: calc(100% - 25px);
+		}
+		
+		.question-storage-name--parse {
+			outline: none;
+		}
+		
+		.question-input--parse-container {
+		
 		}
 	</style>
 </head>
 
 <body>
-<section class="custom-prompt__container">
-	<header>
-		<h3 class="custom-prompt__title">输入快捷键：</h3>
-	</header>
-	<main>
-		<input class="custom-prompt__input" type="text">
-	</main>
-	<footer class="custom-prompt__confirm-btn">
-		<button>确认</button>
-		<button>取消</button>
-	</footer>
-</section>
+<main class="question-input-container">
+	<section class="storage-library"></section>
+	<label class="question-input--input-container">
+		<textarea class="question-input--input" style="resize: none;"></textarea>
+		<button class="clear-btn">清空</button>
+	</label>
+	<label class="question-input--parse-container">
+		<input class="question-storage-name--parse" type="text">
+		<textarea class="question-input--parse" disabled></textarea>
+		<button class="download-btn">下载Json</button>
+		<button class="save-btn">储存到本地仓库中</button>
+		<button class="load-btn">读取本地仓库</button>
+	</label>
+</main>
+
 <script>
+	const domList = {
+		main: document.querySelector( '.question-input-container' ),
+		storageLibrary: document.querySelector( '.storage-library' ),
+		input: document.querySelector( '.question-input--input' ),
+		output: document.querySelector( '.question-input--parse' ),
+		storageName: document.querySelector( '.question-storage-name--parse' ),
+		downloadBtn: document.querySelector( '.download-btn' ),
+		saveBtn: document.querySelector( '.save-btn' ),
+		loadBtn: document.querySelector( '.load-btn' ),
+		clearBtn: document.querySelector( '.clear-btn' ),
+	}
+	
+	domList.storageName.value = 'questions';
+	
+	( function getStorageLibraryList() {
+		let storageLibraryString = '';
+		for ( let i = 0; i < localStorage.length; i++ ) {
+			storageLibraryString += `<button>${ localStorage.key( i ) }</button>`;
+		}
+		domList.storageLibrary.innerHTML = storageLibraryString;
+		domList.storageLibrary.addEventListener( 'click', e => {
+			e.preventDefault();
+			if ( e.target.tagName !== 'BUTTON' ) {
+				return;
+			}
+			domList.storageName.value = e.target.innerText;
+		} )
+	} )();
+	
+	domList.input.addEventListener( 'change', ( e ) => {
+		const questionObj = parseQuestion( e.target.value );
+		domList.output.value = JSON.stringify( questionObj, null, 4 );
+	} )
+	
+	domList.downloadBtn.addEventListener( 'click', ( e ) => {
+		e.preventDefault();
+		downloadText( domList.output.value, domList.storageName.value );
+	} )
+	
+	domList.clearBtn.addEventListener( 'click', ( e ) => {
+		e.preventDefault();
+		domList.input.value = '';
+	} )
+	
+	domList.loadBtn.addEventListener( 'click', ( e ) => {
+		e.preventDefault();
+		domList.output.value = JSON.stringify( JSON.parse( localStorage.getItem( domList.storageName.value ) ), null, 4 );
+	} )
+	
+	domList.saveBtn.addEventListener( 'click', ( e ) => {
+		e.preventDefault();
+		
+		function saveJson( object ) {
+			const questions = JSON.parse( localStorage.getItem( domList.storageName.value ) ) || [];
+			object = [ ...object, ...questions ];
+			const ObjString = JSON.stringify( object );
+			localStorage.setItem( domList.storageName.value, ObjString );
+		}
+		
+		saveJson( parseQuestion( domList.input.value ) );
+	} )
+	
+	/**
+	 * {
+	 *     question: string,
+	 *     answers: string[],
+	 * }
+	 * */
+	function parseQuestion( questionString ) {
+		
+		const status = {
+			isQuestion: false,
+			isOption: false,
+			isAnswer: false,
+		};
+		
+		// 问题对象数组
+		let questionList = [];
+		
+		/**
+		 * 获取格式化后的问题对象
+		 * {
+		 *     question: string,
+		 *     answers: string[]
+		 * }
+		 * */
+		function questionStringSplit() {
+			// 包含文本状态的字符串
+			const lineStringList = [];
+			
+			/** 解析每一行文本的状态值 */
+			( function parseStringStatus() {
+				/**
+				 * 以行为区分，遍历每一行字符串
+				 * 获取字符串的状态值（问题 | 带答案的问题 | 选项 | 答案）
+				 * */
+				
+				delete questionString.split( '\n' ).map( str => {
+					if ( !str ||
+							str.match( /^[一二三四五六七八九十][、.．]/ ) ||
+							str.match( /^解析/ ) ||
+							str.match( /^(单选|多选|判断|简答|问答|论述)/g )
+					) {
+						return;
+					}
+					
+					checkStatus( str );
+					const questionContentObj = {
+						...status,
+						value: str
+					}
+					lineStringList.push( questionContentObj );
+				} )
+			} )();
+			
+			/**
+			 * 根据文本状态值，创建问题对象
+			 * 不对问题内容做处理，只对文本进行分类
+			 * */
+			( function getQuestionObjList() {
+				
+				let prevStatus = { isQuestion: false };
+				lineStringList.forEach( content => {
+					if (
+							content.isQuestion && !prevStatus.isQuestion
+					) {
+						questionList.push( {
+							question: '',
+							options: [],
+							answers: [],
+						} );
+					}
+					prevStatus = content;
+					
+					let localQuestion = questionList[questionList.length - 1];
+					
+					if ( content.isQuestion ) {
+						localQuestion.question += `${ content.value }`;
+					}
+					else if ( content.isOption ) {
+						localQuestion.options.push( ...content.value.split( /\s(?=[ABCDEFG][、.．])/ ) );
+					}
+					else if ( content.isAnswer ) {
+						localQuestion.answers.push( content.value );
+					}
+					console.log( content );
+					
+				} )
+				// questionList.map( a => console.log( a ) )
+			} )();
+			
+			/**
+			 * 对问题对象进行解析，将其内容处理为能够解析的版本
+			 * {
+			 *     question: 去除题号
+			 *     answers: 选项变成文本；合并简答题答案
+			 * }
+			 * */
+			( function parseQuestionObj() {
+				questionList = questionList.map( content => {
+					let { question, answers, options } = content;
+					
+					/**
+					 * 解析答案题号，去除编号
+					 * @param {string} questionContent
+					 * */
+					function parseQuestionContent( questionContent ) {
+						console.log( isContainAnswer( questionContent ), questionContent );
+						if ( isContainAnswer( questionContent ) ) {
+							const reg = /[(（]\s*([ABCDEFG]+)\s*[)）]/;
+							// 将题目中包含的答案更新到answers数组中
+							answers = [ questionContent.match( reg )[1] ];
+							questionContent = questionContent.replace( reg, '（  ）' );
+						}
+						return questionContent.replace( /^\d+[、.．]/, '' ).trim();
+					}
+					
+					/**
+					 * 解析答案文本（一般是选择题的字母编号），对应成选项文本
+					 * @param {string[]} answers
+					 * @param {string[]} options
+					 * @return string[]
+					 * */
+					function parseAnswer( answers, options ) {
+						// 创建一个字母对应表
+						const letterObj = {
+							'A': 0,
+							'B': 1,
+							'C': 2,
+							'D': 3,
+							'E': 4,
+							'F': 5,
+							'G': 6,
+						}
+						let reAnswers = [];
+						answers.forEach( answerContent => {
+							// 1. 去除正确答案文本
+							// 2. 去除多选题的分割符号
+							answerContent = answerContent.replace( /^正?确?答案[：:]/, '' ).replace( /[;,]/g, '' ).trim();
+							console.log( answerContent );
+							if ( !answerContent ) {
+								return;
+							}
+							// 简答题答案
+							if ( !answerContent.match( /^[ABCDEFG]*$/g ) ) {
+								reAnswers.push( answerContent );
+							}
+							// 选择题答案
+							else {
+								answerContent = answerContent.split( '' ).map( content => {
+									console.log( content, options[letterObj[content]], options );
+									return options[letterObj[content]].replace( /^[ABCDEFG][、.．]/, '' ).trim();
+								} );
+								reAnswers.push( ...answerContent );
+							}
+						} )
+						
+						// 判断是否为简答题
+						if ( parseOptions( options, reAnswers ) ) {
+							reAnswers = [ reAnswers.join( '\n' ) ];
+						}
+						
+						return reAnswers;
+					}
+					
+					/**
+					 * 根据选项判断当前题目是否为问答题/简答题
+					 * @param {string[]} options
+					 * @param {string[]} answers 辅助判断的答案数组
+					 * */
+					function parseOptions( options, answers ) {
+						// 判断当前题目为问答题
+						// 答案不是判断题的答案，并且没有获取到选项
+						return options.length < 1 && [ '正确', '对', '错误', '错' ].indexOf( answers[0] ) === -1;
+						
+					}
+					
+					const reQuestionContent = parseQuestionContent( question ).trim();
+					const reAnswers = parseAnswer( answers, options );
+					const reOptions = parseOptions( options, reAnswers );
+					return {
+						question: reQuestionContent,
+						answers: reAnswers,
+						isFAQ: reOptions,
+					}
+				} )
+				console.log( questionList );
+			} )();
+		}
+		
+		questionStringSplit();
+		return questionList;
+		
+		/**
+		 * 根据传入字符串，更新当前遍历到的文本所处状态
+		 * 如果没有更新状态，那个继承之前的状态
+		 * 没有返回值，更新全局的status对象状态
+		 * 状态：题目、选项、答案
+		 * @param {string} content 逐行的内容文本
+		 * */
+		function checkStatus( content ) {
+			/**
+			 * 更新选项状态为哪个状态
+			 * @param {'question' | 'option' | 'answer'} statusString
+			 * */
+			function refreshStatus( statusString ) {
+				status.isQuestion = false;
+				status.isOption = false;
+				status.isAnswer = false;
+				switch ( statusString ) {
+					case 'question':
+						status.isQuestion = true;
+						break;
+					case 'option':
+						status.isOption = true;
+						break;
+					case 'answer':
+						status.isAnswer = true;
+						break;
+				}
+			}
+			
+			if ( isQuestionContent( content ) ) {
+				refreshStatus( 'question' );
+			}
+			else if ( isAnswer( content ) ) {
+				refreshStatus( 'answer' );
+			}
+			else if ( isOptionContent( content ) ) {
+				refreshStatus( 'option' );
+			}
+		}
+		
+		/** 判断：文本是否为问题文本 */
+		function isQuestionContent( content ) {
+			return !!content.trim().match( /^\d+[、.．]/g );
+		}
+		
+		/** 判断：问题文本是否包含答案 */
+		function isContainAnswer( content ) {
+			const match = content.match( /\((.*?)\)|（(.*?)）/ );
+			console.log( match );
+			if ( match && match[1] ) {
+				if ( !match[1].trim() ) {
+					return false;
+				}
+				return !!match[1].trim().match( /^\s*[ABCDEFG]*\s*$/ );
+			}
+			else if ( match && match[2] ) {
+				if ( !match[2].trim() ) {
+					return false;
+				}
+				return !!match[2].trim().match( /^\s*[ABCDEFG]*\s*$/ );
+			}
+			return false;
+		}
+		
+		/** 判断：文本是否为选项文本 */
+		function isOptionContent( content ) {
+			return !!content.trim().match( /^[ABCDEFG][、.．]/g );
+		}
+		
+		/** 判断：文本是否为答案文本 */
+		function isAnswer( content ) {
+			return !!content.trim().match( /^正?确?答案[:：]/g );
+		}
+		
+	}
+	
+	function downloadText( content, fileName = 'Question.json' ) {
+		const blob = new Blob( [ content ], { type: 'application/json' } );
+		const link = document.createElement( 'a' );
+		link.href = URL.createObjectURL( blob );
+		link.download = fileName;
+		link.style.display = 'none';
+		document.body.appendChild( link );
+		link.click();
+		document.body.removeChild( link );
+	}
+
+</script>
+
+<script>
+	// 	domList.input.value = `
+	// 26.MCS-51单片机的复位信号是（  ）有效。
+	// A、下降沿
+	// B、上升沿
+	// C、低电平
+	// D、高电平
+	// 正确答案：D
+	// 27.以下选项中第（ AB ）项不是80C51单片机的基本配置。
+	// A．定时/计数器T2
+	// B．128B片内RAM
+	// C．4KB片内ROM
+	// D．全双工异步串行口
+	// 23.ARES模块的主要功能是（  ）
+	// A．电路原理图设计与仿真 B. 高级布线和编辑 C. 图像处理&
+	// D.C51源程序调试
+	// 正确答案：AB
+	// 29.在51单片机的下列特殊功能寄存器中，具有16位字长的是（  ）。
+	// 正确答案：正确
+	// 1、什么是单片机？
+	// 单片机与通用微机相比有何特点？
+	// 正确答案：单片机是在一块半导体硅片上集成了计算机基本功能部件的微型计算机。
+	// 两者的比较：(1) 通用微机的CPU主要面向数据处理，其发展主要围绕数据处理功能、计算速度和精度的提高。
+	// 单片机主要面向控制，数据类型、计算速度和精度都相对低一些；
+	// (2) 通用微机中存储器组织结构主要针对增大存储容量和CPU对数据的存取速度。单片机中存储器的组织结构比较简单，寻址空间一般都为64 KB；
+	// (3) 通用微机中I/O接口主要面向标准外设（如显示器、键盘、鼠标、打印机等）。单片机的I/O接口是面向用户的特定电路，需要用户掌握接口电路设计技术。
+	// `;
+	// 	domList.input.dispatchEvent( ( new Event( 'change' ) ) );
 
 </script>
 </body>
