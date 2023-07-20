@@ -1,0 +1,22 @@
+{
+	"name": "bossyunAutoAnswer",
+	"description": "bossyunAutoAnswer自动答题",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://bx.bossyun.com/bx/study/exam*",
+		"https://bx.bossyun.com/bx/study/examine*"
+	],
+	"grant": [
+		"style"
+	],
+	"require": [
+		""
+	],
+	"resource": [
+		""
+	],
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}
