@@ -2,11 +2,10 @@
 // @name		gdwlxyxsAutoAnswer
 // @author		Yiero
 // @description		gdwlxyxsAutoAnswer自动答题
-// @version		1.0.1
+// @version		1.0.2
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @icon		https://exam.beeouc.com/favicon.ico
 // @match		https://exam.beeouc.com/client/*
-// @require		file://D:\Code\TamperMoneyScripts-vite\dist\gdwlxyxsAutoAnswer.js
 // @license		GPL
 // @grant		GM_addStyle
 // @updateUrl		https://raw.githubusercontent.com/AliubYiero/TamperMonkeyScripts/master/dist/gdwlxyxsAutoAnswer.js
@@ -17,10 +16,6 @@ function matchContentsWithoutSign( Content1, Content2 ) {
 	const signList = /[，。！？、；：÷×「」“”《》．（）_—.\-=+`~@#$%…&*<>/;'"{}\[\]()\s]/g;
 	Content1 = Content1.replace( signList, "" ).trim();
 	Content2 = Content2.replace( signList, "" ).trim();
-	console.log( `[MatchContent]
-[${ Content1 }]
-||
-${ Content2 }` );
 	return Content1 === Content2 || Boolean( Content1.match( new RegExp( Content2 ) ) ) || Boolean( Content2.match( new RegExp( Content1 ) ) );
 }
 
@@ -28,10 +23,6 @@ function matchContentsWithoutLetter( answerContent, optionContent ) {
 	const signList = /^[ABCDEFG][.．、]/g;
 	answerContent = answerContent.replace( signList, "" ).trim();
 	optionContent = optionContent.replace( signList, "" ).trim();
-	console.log( `[MatchContent]
-[${ answerContent }]
-||
-${ optionContent }` );
 	return answerContent === optionContent;
 }
 
@@ -1861,11 +1852,8 @@ const addElementToDocument = ( element, cssString, fatherElement = document.body
 		const optionNumberList = [ "A", "B", "C", "D", "E", "F", "G" ];
 		for ( let j = 0; j < questionOptions.length; j++ ) {
 			const option = questionOptions[j].trim();
-			console.log( "正在确定正确选项", option );
-			console.log( answers, option );
 			answers = answers.filter( ( content ) => {
 				if ( !content ) {
-					console.log( "没有答案" );
 					correctAnswer.push( "" );
 				}
 				else if ( matchContentsWithoutLetter( content, option ) ) {
@@ -1954,7 +1942,6 @@ const addElementToDocument = ( element, cssString, fatherElement = document.body
 	const addPageObserver = function () {
 		const typeDom = document.querySelector( ".question-page" );
 		pageObserver = new MutationObserver( () => {
-			console.log( "页面更新" );
 			getQuestionLoop();
 		} );
 		return function () {
@@ -1976,12 +1963,8 @@ const addElementToDocument = ( element, cssString, fatherElement = document.body
 				const optionDomList = getChildQuestionOptionsDom( childQuestionsDom );
 				const questionOptions = getQuestionOptions( optionDomList );
 				const localQuestion = getQuestionFromLibrary( questionContent );
-				console.log( "获取问题文本：", questionContent );
-				console.log( "获取选项：", questionOptions );
-				console.log( "获取当前问题题库：", localQuestion );
 				if ( localQuestion ) {
 					const answer = getAnswer( localQuestion, questionOptions );
-					console.log( "获取当前问题的答案：", answer );
 					if ( answer[0] ) {
 						await clickAnswer( optionDomList, answer );
 					}
@@ -1993,12 +1976,8 @@ const addElementToDocument = ( element, cssString, fatherElement = document.body
 			const optionDomList = getQuestionOptionsDom();
 			const questionOptions = getQuestionOptions( optionDomList );
 			const localQuestion = getQuestionFromLibrary( questionContent );
-			console.log( "获取问题文本：", questionContent );
-			console.log( "获取选项：", questionOptions );
-			console.log( "获取当前问题题库：", localQuestion );
 			if ( localQuestion ) {
 				const answer = getAnswer( localQuestion, questionOptions );
-				console.log( "获取当前问题的答案：", answer );
 				if ( answer[0] ) {
 					await clickAnswer( optionDomList, answer );
 				}
@@ -2007,7 +1986,6 @@ const addElementToDocument = ( element, cssString, fatherElement = document.body
 		await Sleep.time( 1 );
 		if ( domList.nextBtn ) {
 			nextQuestion( domList.nextBtn );
-			console.log( "切换下一题" );
 		}
 	}
 	
