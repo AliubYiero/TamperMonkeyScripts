@@ -6,7 +6,6 @@
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @icon		https://t.bilibili.com/favicon.ico
 // @match		https://t.bilibili.com/*
-// @require		file://D:\Code\TamperMoneyScripts-vite\dist\HideDynamic.js
 // @license		GPL
 // @grant		GM_registerMenuCommand
 // @grant		GM_unregisterMenuCommand
@@ -97,7 +96,9 @@ class Info {
 	}
 	
 	log( ...msg ) {
-		console.log( ...this.contentInfo( ...msg ) );
+		/* @__PURE__ */
+		( () => {
+		} )( ...this.contentInfo( ...msg ) );
 	}
 	
 	info( ...msg ) {
@@ -121,33 +122,9 @@ class Info {
 	const print = new Info( "BiliBiliHideDynamic" );
 	addStyle( `.hide {display: none !important}` );
 	const bandList = {
-		videoUpList: [
-			"钱默吟",
-			"四娃万岁",
-			"孙兴华zz",
-			"品诺美食开课啦",
-			"未明子",
-			"巴老师的小号",
-			"唯有入梦"
-		],
-		dynamicUpList: [
-			"小fa朵实验室",
-			"孙兴华zz",
-			"AstrolabeGames",
-			"烨梵天",
-			"吃貨小飞飞",
-			"生命中国",
-			"卦者那啥子靈風",
-			"oeasy",
-			"万象灵依",
-			"奥莉安娜的微笑",
-			"吾爱破解论坛",
-			"纯全三色对对和",
-			"鬼嶋さよ咕噜",
-			"蓝毒-浅滩律动",
-			"唯有入梦"
-		],
-		liveUpList: [ "Virsaladze", "尊驾何人", "加班第一帅", "卦者那啥子靈風" ]
+		dynamicUpList: [],
+		liveUpList: [],
+		videoUpList: []
 	};
 	
 	function bandDyn( dynItem, thisBandList ) {
