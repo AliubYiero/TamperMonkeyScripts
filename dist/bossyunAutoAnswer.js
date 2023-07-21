@@ -2,7 +2,7 @@
 // @name		bossyunAutoAnswer
 // @author		Yiero
 // @description		bossyunAutoAnswer自动答题
-// @version		1.0.1
+// @version		1.0.2
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @icon		https://bx.bossyun.com/favicon.ico
 // @match		https://bx.bossyun.com/bx/*
@@ -8134,13 +8134,6 @@ const questionList = [
 		isFAQ: false
 	},
 	{
-		question: "",
-		answers: [
-			"通过增加投入，改变自己的相对报酬"
-		],
-		isFAQ: false
-	},
-	{
 		question: "（）能够监督各种管理信息真实、正确、合理、合法，推动各项内部控制制度的健全适用和有效实施，从而维护组织财产的安全，促成管理目标的实现。",
 		answers: [
 			"内部审计"
@@ -12670,13 +12663,6 @@ const questionList = [
 		isFAQ: false
 	},
 	{
-		question: "",
-		answers: [
-			"yet; already"
-		],
-		isFAQ: false
-	},
-	{
 		question: "The  ______ was busy this morning.",
 		answers: [
 			"traffic"
@@ -12761,13 +12747,6 @@ const questionList = [
 		isFAQ: false
 	},
 	{
-		question: "",
-		answers: [
-			"somewhere"
-		],
-		isFAQ: false
-	},
-	{
 		question: "She is carrying a  ______  baby.",
 		answers: [
 			"two-year-old"
@@ -12792,13 +12771,6 @@ const questionList = [
 		question: "He likes eating ______.",
 		answers: [
 			"sandwiches"
-		],
-		isFAQ: false
-	},
-	{
-		question: "",
-		answers: [
-			"yet; already"
 		],
 		isFAQ: false
 	},
@@ -12859,23 +12831,9 @@ const questionList = [
 		isFAQ: false
 	},
 	{
-		question: "",
-		answers: [
-			"much faster than"
-		],
-		isFAQ: false
-	},
-	{
 		question: "The people there are suffering from air ______.",
 		answers: [
 			"pollution"
-		],
-		isFAQ: false
-	},
-	{
-		question: "",
-		answers: [
-			"hardly ever"
 		],
 		isFAQ: false
 	},
@@ -18263,13 +18221,6 @@ const questionList = [
 		isFAQ: false
 	},
 	{
-		question: "",
-		answers: [
-			"3,4,5"
-		],
-		isFAQ: false
-	},
-	{
 		question: "函数内容如下所示，若调用以下选项，则调用哪个选项时会报错？（ ）  def show_text(text): for temp in text: print(temp)",
 		answers: [
 			"show_text(3.14)"
@@ -19108,13 +19059,6 @@ const questionList = [
 		question: "请检索银行当前 1 年定期和 5 年定期存款利率。假定现存入 10000 元钱，存款到期后立即 将利息与本金一起再存入。请编写程序计算按每次存 1 年和按照每次存 5 年，共存 20 年两 种存款方式的得款总额。",
 		answers: [
 			'profit1 = 0.0195 profit5 = 0.04125 capital = 10000 for i in range(21):  capital += capital*profit1 print("方案 1：20 年后本金、利息总和为：%.2f"%(capital)) capital = 10000 for i in range(4):  capital += capital*profit5*5 print("方案 2：20 年后本金、利息总和为：%.2f"%(capital))'
-		],
-		isFAQ: true
-	},
-	{
-		question: "",
-		answers: [
-			"for i in ls: print i"
 		],
 		isFAQ: true
 	},
