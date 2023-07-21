@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Prompt</title>
+    <style>
+      .custom-prompt__container {
+      	width: 400px;
+      	height: 125px;
+      	background: #f8f8f8;
+      	border-radius: 15px;
+      	box-sizing: border-box;
+      	padding: 20px;
+      
+      	box-shadow: 2px 2px #a6a6a6;
+      
+      	display: flex;
+      	justify-content: center;
+      	flex-flow: column;
+      
+      	position: fixed;
+      	top: 10px;
+      	left: 50%;
+      	transform: translateX(-50%);
+      	z-index: 10002;
+      }
+      
+      h3.custom-prompt__title {
+      	margin: 10px -0px;
+      }
+      
+      input.custom-prompt__input {
+      	width: 100%;
+      	border: #a6a6a6 2px solid;
+      	border-radius: 5px;
+      	box-sizing: border-box;
+      	padding: 5px 10px;
+      }
+      
+      .custom-prompt__confirm-btn {
+      	margin-top: 10px;
+      	align-self: flex-end;
+      }
+      
+      .custom-prompt__confirm-btn > button {
+      	padding: 3px;
+      	border-radius: 5px;
+      	border: 2px #a6a6a6 solid;
+      }
+      
+      .custom-prompt__confirm-btn > button:hover {
+      	border: 2px cornflowerblue solid;
+      	color: cornflowerblue;
+      }
+      
+      .custom-prompt__container.hide {
+      	display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="custom-prompt__container">
+      <header>
+        <h3 class="custom-prompt__title"></h3>
+      </header>
+      <main>
+        <input class="custom-prompt__input">
+      </main>
+      <footer class="custom-prompt__confirm-btn">
+        <button>确认</button>
+        <button>取消</button>
+      </footer>
+    </section>
+  </body>
+</html>
