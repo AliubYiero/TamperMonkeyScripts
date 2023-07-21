@@ -2,7 +2,7 @@
 // @name		gdwlxyxsAutoAnswer
 // @author		Yiero
 // @description		gdwlxyxsAutoAnswer自动答题
-// @version		1.0.0
+// @version		1.0.1
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @icon		https://exam.beeouc.com/favicon.ico
 // @match		https://exam.beeouc.com/client/*
