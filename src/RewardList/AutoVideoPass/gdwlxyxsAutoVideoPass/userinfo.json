@@ -1,0 +1,21 @@
+{
+	"name": "gdwlxyxsAutoVideoPass",
+	"description": "自动秒过视频",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://gdwlxyxs.ytccr.com/*"
+	],
+	"grant": [
+		""
+	],
+	"require": [
+		""
+	],
+	"resource": [
+		""
+	],
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}

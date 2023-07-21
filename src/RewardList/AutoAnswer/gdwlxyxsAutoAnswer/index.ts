@@ -238,7 +238,7 @@ import { addElementToDocument, createElement } from '../../../../lib/GM_Lib'
 				}
 			} ) )
 		}
-		// 单问题
+		// 单问题 
 		else {
 			const questionContent = getQuestionContent();
 			const optionDomList = getQuestionOptionsDom();
