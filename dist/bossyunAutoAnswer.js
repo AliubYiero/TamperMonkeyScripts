@@ -2,11 +2,10 @@
 // @name		bossyunAutoAnswer
 // @author		Yiero
 // @description		bossyunAutoAnswer自动答题
-// @version		1.0.0
+// @version		1.0.1
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @icon		https://bx.bossyun.com/favicon.ico
-// @match		https://bx.bossyun.com/bx/study/exam*
-// @match		https://bx.bossyun.com/bx/study/examine*
+// @match		https://bx.bossyun.com/bx/*
 // @license		GPL
 // @grant		GM_addStyle
 // @updateUrl		https://raw.githubusercontent.com/AliubYiero/TamperMonkeyScripts/master/dist/bossyunAutoAnswer.js
@@ -22869,6 +22868,14 @@ function getElement( parent, selector, timeout = 0 ) {
 }
 
 ( async () => {
+	await new Promise( ( resolve ) => {
+		setInterval( () => {
+			console.info( "Load Exam Page" );
+			if ( document.querySelector( ".page-examine .ant-breadcrumb" ) ) {
+				resolve( resolve );
+			}
+		}, 1e3 );
+	} );
 	await getElement( document.body, ".question-list-wrap" );
 	await Sleep.time( 1 );
 	let domList = {};

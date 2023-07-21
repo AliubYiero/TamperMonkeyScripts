@@ -27,9 +27,18 @@
 import { matchContentsWithoutLetter, matchContentsWithoutSign } from '../gdwlxyxsAutoAnswer/src/matchContents'
 import questionList from './assets/questions.json';
 import { Sleep } from '../../../../lib/Base/Sleep'
-import { getElement } from '../../../../lib/Listener/ElementAdd'
+import { getElement } from '../../../../lib/Listener/ElementAdd';
 
 ( async () => {
+	await new Promise( resolve => {
+		setInterval( () => {
+			console.info( 'Load Exam Page' );
+			if ( document.querySelector( '.page-examine .ant-breadcrumb' ) ) {
+				resolve( resolve );
+			}
+		}, 1000 );
+	} )
+	
 	await getElement( document.body, '.question-list-wrap' );
 	await Sleep.time( 1 );
 	
