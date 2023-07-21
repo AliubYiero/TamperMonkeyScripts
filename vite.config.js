@@ -5,6 +5,7 @@ import banner from 'vite-plugin-banner'
 import replace from '@rollup/plugin-replace'
 import { basename, dirname, resolve } from 'path'
 import { getEntities, getEntries, switchEntities, userInfoFormat } from './Plugins/GetEntities.js'
+import pugPlugin from 'vite-plugin-pug'
 
 export default defineConfig( ( { mode } ) => {
 	// 获取构建方式信息
@@ -45,6 +46,7 @@ export default defineConfig( ( { mode } ) => {
 					}
 				},
 				plugins: [
+					pugPlugin(),
 					banner( {
 						content: ( fileName ) => {
 							const projectName = basename( fileName, '.js' );
@@ -63,7 +65,7 @@ export default defineConfig( ( { mode } ) => {
 							'console.log': '(() => {})',
 						} : { 'import axios from "axios";': '', },
 						delimiters: [ '', '' ],
-					} )
+					} ),
 				],
 				external: [ 'axios' ],
 			},

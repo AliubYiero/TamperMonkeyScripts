@@ -38,6 +38,7 @@ function useCommand( buildCommand ) {
 				return 'ok';
 			},
 			err => {
+				console.error( err );
 				console.error( '[Error] 没有文件修改，无法获取文件...' );
 				isLast = true;
 				return 'last';
