@@ -1,0 +1,147 @@
+doctype html
+html(lang="zh")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
+		title Prompt
+
+		style.
+			.custom-prompt__container {
+				width: 400px;
+				height: 220px;
+				background: #f8f8f8;
+				border-radius: 15px;
+				box-sizing: border-box;
+				padding: 20px;
+
+				box-shadow: 2px 2px #a6a6a6;
+
+				display: flex;
+				justify-content: center;
+				flex-flow: column;
+				gap: 10px;
+
+				position: fixed;
+				top: 10px;
+				left: 50%;
+				transform: translateX(-50%);
+				z-index: 10002;
+			}
+
+			.custom-prompt__title {
+				text-align: center;
+				margin: 10px -0px;
+			}
+
+			main.custom-prompt__main {
+				display: flex;
+				flex-flow: column;
+				gap: 10px;
+			}
+
+			label.custom-prompt__label {
+				display: flex;
+				place-content: center flex-end;
+				align-items: center;
+				gap: 20px;
+				color: #a6a6a6;
+			}
+
+			input.custom-prompt__input {
+				width: 50%;
+				border: #a6a6a6 2px solid;
+				border-radius: 5px;
+				box-sizing: border-box;
+				padding: 5px 10px;
+			}
+
+			.custom-prompt__confirm-btn-container {
+				align-self: flex-end;
+			}
+
+			.custom-prompt__confirm-btn {
+				padding: 3px;
+				border-radius: 5px;
+				border: 2px #a6a6a6 solid;
+			}
+
+			.custom-prompt__confirm-btn:hover {
+				border: 2px cornflowerblue solid;
+				color: cornflowerblue;
+			}
+
+			.footer-confirm-btn {
+				margin-right: 10px;
+			}
+
+			.custom-prompt__container.hide {
+				display: none;
+			}
+
+			.custom-prompt__list-display {
+				position: absolute;
+				top: 0;
+				right: -300px;
+				width: 250px;
+				min-height: 50px;
+
+				border-radius: 10px;
+				background: #f8f8f8;
+
+				border: 1px solid #a6a6a6;
+
+				text-overflow: clip;
+				overflow: hidden;
+			}
+
+			.custom-prompt__live-container, .custom-prompt__dynamic-container, .custom-prompt__video-container {
+				height: 150px;
+
+				overflow: auto;
+
+				box-sizing: border-box;
+				padding: 22px 10px 10px 10px;
+
+			}
+
+			.custom-prompt__list-display > section::-webkit-scrollbar {
+				display: none;
+			}
+
+			h4.custom-prompt__title {
+				width: 100%;
+				position: absolute;
+				background: #f8f8f8;
+				left: 50%;
+				transform: translate(-50%, -32px);
+			}
+
+			.custom-prompt__list-display hr {
+				margin: 0;
+			}
+
+	body
+		section.custom-prompt__container
+			header
+				h3.custom-prompt__title 添加屏蔽列表
+			main.custom-prompt__main
+				- bandListName = ['侧边直播栏', '全部动态', '视频']
+				each name in bandListName
+					label.custom-prompt__label=name
+						input.custom-prompt__input
+						button.custom-prompt__confirm-btn 添加
+			aside.custom-prompt__list-display
+				section.custom-prompt__live-container
+					h4.custom-prompt__title 侧边直播栏屏蔽列表
+					label.custom-prompt__label
+						input.custom-prompt__input(disabled)
+						button.custom-prompt__delete-btn 删除
+				hr
+				section.custom-prompt__dynamic-container
+					h4.custom-prompt__title 全部动态屏蔽列表
+				hr
+				section.custom-prompt__video-container
+					h4.custom-prompt__title 视频屏蔽列表
+			footer.custom-prompt__confirm-btn-container
+				button.custom-prompt__confirm-btn.footer-confirm-btn 确认
+				button.custom-prompt__confirm-btn 取消

@@ -1,0 +1,22 @@
+{
+	"name": "HideDynamic",
+	"description": "bilibili动态隐藏。根据关键字、Up名屏蔽动态。",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://t.bilibili.com/*"
+	],
+	"grant": [
+		"menu",
+		"style"
+	],
+	"require": [
+		""
+	],
+	"resource": [
+		""
+	],
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}
