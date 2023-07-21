@@ -16,7 +16,7 @@ function matchContentsWithoutSign( Content1: string, Content2: string ): boolean
 	Content1 = Content1.replace( signList, '' ).trim();
 	Content2 = Content2.replace( signList, '' ).trim();
 	
-	console.log( `[MatchContent]\n[${ Content1 }]\n||\n${ Content2 }` );
+	// console.log( `[MatchContent]\n[${ Content1 }]\n||\n${ Content2 }` );
 	return Content1 === Content2 ||
 		Boolean( Content1.match( new RegExp( Content2 ) ) ) ||
 		Boolean( Content2.match( new RegExp( Content1 ) ) );
@@ -28,6 +28,6 @@ function matchContentsWithoutLetter( answerContent: string, optionContent: strin
 	answerContent = answerContent.replace( signList, '' ).trim();
 	optionContent = optionContent.replace( signList, '' ).trim();
 	
-	console.log( `[MatchContent]\n[${ answerContent }]\n||\n${ optionContent }` );
+	// console.log( `[MatchContent]\n[${ answerContent }]\n||\n${ optionContent }` );
 	return answerContent === optionContent
 }

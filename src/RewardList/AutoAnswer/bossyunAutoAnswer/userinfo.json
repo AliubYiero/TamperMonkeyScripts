@@ -2,7 +2,7 @@
 	"name": "bossyunAutoAnswer",
 	"description": "bossyunAutoAnswer自动答题",
 	"author": "Yiero",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"match": [
 		"https://bx.bossyun.com/bx/*"
 	],
