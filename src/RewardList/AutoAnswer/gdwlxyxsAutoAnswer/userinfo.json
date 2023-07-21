@@ -2,7 +2,7 @@
 	"name": "gdwlxyxsAutoAnswer",
 	"description": "gdwlxyxsAutoAnswer自动答题",
 	"author": "Yiero",
-	"version": "1.0.0",
+	"version": "1.0.2",
 	"match": [
 		"https://exam.beeouc.com/client/*"
 	],

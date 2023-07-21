@@ -216,7 +216,7 @@ import { addElementToDocument, createElement } from '../../../../lib/GM_Lib'
 		
 		const childQuestionsDomList = getChildQuestionsDom();
 		// 多问题
-		if ( childQuestionsDomList ) {
+		if ( childQuestionsDomList[ 0 ] ) {
 			childQuestionsDomList.forEach( ( async ( childQuestionsDom ) => {
 				const questionContent = getChildQuestionContent( ( <HTMLElement> childQuestionsDom ) );
 				const optionDomList = getChildQuestionOptionsDom( ( <HTMLElement> childQuestionsDom ) );
@@ -263,7 +263,6 @@ import { addElementToDocument, createElement } from '../../../../lib/GM_Lib'
 		await Sleep.time( 1 );
 		
 		if ( domList.nextBtn ) {
-			
 			nextQuestion( domList.nextBtn );
 			console.log( '切换下一题' );
 		}
