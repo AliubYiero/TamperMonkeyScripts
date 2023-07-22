@@ -10,6 +10,9 @@ import { importLayui } from '../../../../../lib/Layui'
 import { addElementToDocument, createElement } from '../../../../../lib/GM_Lib'
 import { Sleep } from '../../../../../lib/Base/Sleep'
 
+export type {
+	BandData
+}
 export {
 	ConfigUI
 }
@@ -62,7 +65,8 @@ class Data {
 	
 	/** 更新其中一个对象 */
 	update( newObj: BandData ) {
-		this.set( this.limitValue( newObj ) );
+		const limitData = this.limitValue( newObj );
+		( <Map<string, BandData>> this.data ).set( newObj.id, limitData );
 		this.setToLocalStorage();
 	}
 	
@@ -93,6 +97,7 @@ class Data {
 	
 	/** 将data设置到localStorage中 */
 	setToLocalStorage( value: Map<string, BandData> = ( <Map<string, BandData>> this.data ) ) {
+		console.log( this.data )
 		localStorage.setItem( 'bandList', JSON.stringify( this.mapToArray( value ) ) );
 	}
 	
@@ -127,12 +132,19 @@ class Data {
 class UiEvent {
 	data: Data
 	treeTable: any
+	domList: { main: HTMLElement | undefined }
 	
 	constructor( data: Data ) {
 		this.data = data;
 		
 		// @ts-ignore
 		this.treeTable = layui.treeTable;
+		
+		// 获取容器Dom
+		this.domList = {
+			main: void 0,
+		}
+		this.getMainDom();
 	}
 	
 	/** 添加数据 */
@@ -193,6 +205,38 @@ class UiEvent {
 		this.data.change( e.data, e.oldValue );
 		this.treeTable.reloadData( 'table-bili-band-config' );
 	}
+	
+	/** 展示UI界面 */
+	show() {
+		if ( !this.domList.main ) {
+			this.getMainDom();
+		}
+		const mainContainer = this.domList.main as HTMLElement;
+		// 关闭隐藏
+		if ( mainContainer.style.display === 'none' ) {
+			mainContainer.style.display = 'block';
+		}
+		
+		// 隐藏渐隐动画，添加渐入动画
+		mainContainer.classList.remove( 'layui-anim-fadeout' );
+		mainContainer.classList.add( 'layui-anim-fadein' );
+	}
+	
+	/** 隐藏UI界面 */
+	hide() {
+		if ( !this.domList.main ) {
+			this.getMainDom();
+		}
+		
+		const mainContainer = this.domList.main as HTMLElement;
+		// 隐藏渐隐动画，添加渐入动画
+		mainContainer.classList.remove( 'layui-anim-fadein' );
+		mainContainer.classList.add( 'layui-anim-fadeout' );
+	}
+	
+	getMainDom() {
+		this.domList.main = document.querySelector( '.bili-band-config-container' ) as HTMLElement;
+	}
 }
 
 // 配置UI界面类
@@ -217,6 +261,16 @@ class ConfigUI {
 				this.createContainer();
 				// 填充容器，绑定事件
 				this.createElementEvent();
+				
+				// 向外暴露出show事件
+				this.show = () => {
+					this.uiEvent.show();
+				}
+				
+				// 向外暴露出show事件
+				this.hide = () => {
+					this.uiEvent.hide();
+				}
 			}
 		)
 		
@@ -227,7 +281,7 @@ class ConfigUI {
 		const container = createElement( {
 			tagName: 'main',
 			className: [ 'bili-band-config-container', 'layui-anim' ],
-			style: ' position: fixed; top: 0; left: 50%; transform: translateX(-50%);background: #ffffff; z-index: 10003;width: 710px',
+			style: 'display:none; position: fixed; top: 0; left: 50%; transform: translateX(-50%);background: #ffffff; z-index: 10003;width: 710px',
 			innerHTML: `<table class="layui-anim-fadeout" id="ID-table-bili-band-config" lay-filter="show"></table>`
 		} )
 		
@@ -308,6 +362,9 @@ class ConfigUI {
 				<button type="button" class="layui-btn layui-btn-sm" lay-event="add">
 					Add
 				</button>
+				<button type="button" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="close">
+					Close
+				</button>
 			</div>`,
 				width: 710,
 				defaultToolbar: ''
@@ -381,14 +438,32 @@ class ConfigUI {
 			treeTable.on( 'pagebar(show)', ( e: { [ propName: string ]: any } ) => {
 				const { event } = e;
 				
-				if ( event !== 'add' ) {
+				if ( [ 'add', 'close' ].indexOf( event ) === -1 ) {
 					return;
 				}
 				
-				this.uiEvent.add();
+				if ( event === 'add' ) {
+					this.uiEvent.add();
+					return;
+				}
+				
+				if ( event === 'close' ) {
+					this.uiEvent.hide();
+				}
 			} );
 			
 		} )
 	}
+	
+	// 向外暴露出show事件
+	// 初始化声明show函数，具体内容会在构造函数定义
+	show() {
+	}
+	
+	// 向外暴露出hide事件
+	// 初始化声明hide函数，具体内容会在构造函数定义
+	hide() {
+	}
+	
 	
 }

@@ -1,133 +1,141 @@
 /* entry */
 import { getElement } from '../../../../lib/Listener/ElementAdd'
-import { addStyle } from '../../../../lib/GM_Lib'
-import { BandList } from './src/LoadBandList'
+import { addStyle, registerMenu } from '../../../../lib/GM_Lib'
 import { Info } from '../../../../lib/Base/Info'
-import { ConfigUI } from './src/ConfigUI'
+import { BandData, ConfigUI } from './src/ConfigUI'
 import { Sleep } from '../../../../lib/Base/Sleep'
+
+interface ObserverSelectorList {
+	waitLoadElementSelector: string;
+	observeElementSelector: string;
+	
+	upNameSelector: string;
+	
+	filterToken?: string;
+	tabsItemListSelector?: string;
+}
+
+type BandType = 'dynamic' | 'video' | 'live';
 
 ( async () => {
 	const print = new Info( 'BiliBiliHideDynamic' );
 	
 	addStyle( `.hide {display: none !important}` )
 	
-	// 写入屏蔽列表
-	// const bandList: BandList = getBandList();
-	const bandList: BandList = {
-		videoUpList: [
-			'钱默吟', '四娃万岁', '孙兴华zz', '品诺美食开课啦', '未明子', '巴老师的小号', '唯有入梦' ],
-		dynamicUpList: [
-			'小fa朵实验室', '孙兴华zz', 'AstrolabeGames', '烨梵天', '吃貨小飞飞',
-			'生命中国', '卦者那啥子靈風', 'oeasy', '万象灵依', '奥莉安娜的微笑', '吾爱破解论坛',
-			'纯全三色对对和', '鬼嶋さよ咕噜', '蓝毒-浅滩律动', '唯有入梦'
-		],
-		liveUpList: [ 'Virsaladze', '尊驾何人', '加班第一帅', '卦者那啥子靈風' ]
-	}
 	
 	print.info( '引入UI' );
-	new ConfigUI();
+	const configUI = new ConfigUI();
 	
 	await Sleep.windowLoad();
+	console.log( configUI.data );
 	
-	// 根据屏蔽列表屏蔽动态
-	function bandDyn( dynItem: HTMLElement, thisBandList: string[] ) {
-		const upName = ( <HTMLElement> dynItem.querySelector( '.bili-dyn-title__text' ) )?.innerText;
-		
-		// 可能存在空白动态，跳过空白动态
-		if ( !upName ) {
-			return;
+	// 观察动态是否出现
+	class Observer {
+		constructor() {
 		}
 		
-		if ( thisBandList.indexOf( upName ) !== -1 ) {
-			dynItem.classList.add( 'hide' );
-		}
-	}
-	
-	/**
-	 * 根据屏蔽列表屏蔽侧边直播
-	 * */
-	function bandLive( liveLinkItem: HTMLElement ) {
-		const upName = ( <HTMLElement> liveLinkItem.querySelector( '.be-live-list-item-user' ) ).innerText;
-		
-		if ( bandList.liveUpList.indexOf( upName ) !== -1 ) {
-			liveLinkItem.classList.add( 'hide' );
-		}
-	}
-	
-	/**
-	 * 获取当前所处的动态卡片编号，并根据动态卡片编号，返回不同的屏蔽列表
-	 * */
-	function getLocalDynamicTab() {
-		// 判断当前处于哪个动态卡片区
-		let tabsItemIndex: number = 0;
-		const tabsItemList = document.querySelectorAll( '.bili-dyn-list-tabs__item' ) as NodeList;
-		for ( let i = 0; i < tabsItemList.length; i++ ) {
-			const tabsItem = tabsItemList[ i ] as HTMLElement;
+		async observe( observerSelectorList: ObserverSelectorList, callback: Function ) {
+			await getElement( document.body, observerSelectorList.waitLoadElementSelector );
+			const observer = new MutationObserver( ( e ) => {
+				e.forEach( ( record ) => {
+					const item = record.addedNodes[ 0 ] as HTMLElement;
+					// 不是新增动态，退出访问
+					if ( !item || !item?.classList?.contains( observerSelectorList.filterToken || '' ) ) {
+						return;
+					}
+					
+					// 写入屏蔽规则
+					callback( item );
+				} )
+			} );
 			
-			if ( tabsItem.classList.contains( 'active' ) ) {
-				tabsItemIndex = i;
+			observer.observe( <HTMLElement> document.querySelector( observerSelectorList.observeElementSelector ), {
+				childList: true,
+			} )
+		}
+	}
+	
+	
+	class BandEvent {
+		bandList: Map<string, BandData>
+		bandTypeList: [ 'dynamic', 'video' ] = [ 'dynamic', 'video' ];
+		
+		constructor( bandList: Map<string, BandData> ) {
+			this.bandList = bandList;
+		}
+		
+		/** 判断当前动态的Up主是否在屏蔽列表中，如果是则隐藏 */
+		band( item: HTMLElement, upNameSelector: string, bandType: BandType ) {
+			const upName = ( <HTMLElement> item.querySelector( upNameSelector ) )?.innerText;
+			
+			let bandTypeKey: { dynamic: 'isBandDynamic'; video: 'isBandVideo'; live: 'isBandLive' }
+			bandTypeKey = {
+				dynamic: 'isBandDynamic',
+				video: 'isBandVideo',
+				live: 'isBandLive',
+			}
+			if ( this.bandList.has( upName ) && ( <BandData> this.bandList.get( upName ) )[ bandTypeKey[ bandType ] ] ) {
+				item.classList.add( 'hide' );
 			}
 		}
-		// 根据所处的动态卡片区，执行不同的屏蔽列表
-		let thisBandList: string[] = [];
-		switch ( tabsItemIndex ) {
-			case 0:
-				print.info( '切换动态屏蔽列表' )
-				thisBandList = bandList.dynamicUpList;
-				break;
-			case 1:
-				print.info( '切换视频屏蔽列表' );
-				thisBandList = bandList.videoUpList;
-				break;
+		
+		/**
+		 * 获取当前所处的动态卡片编号，并根据动态卡片编号，返回不同的BandType
+		 * */
+		judgeBandType( tabsItemListSelector: string ) {
+			// 判断当前处于哪个动态卡片区
+			let tabsItemIndex: number = 0;
+			const tabsItemList = document.querySelectorAll( tabsItemListSelector ) as NodeList;
+			for ( let i = 0; i < tabsItemList.length; i++ ) {
+				const tabsItem = tabsItemList[ i ] as HTMLElement;
+				
+				if ( tabsItem.classList.contains( 'active' ) ) {
+					tabsItemIndex = i;
+					break;
+				}
+			}
+			
+			// 根据所处的动态卡片区，返回不同的BandType
+			return this.bandTypeList[ tabsItemIndex ] as BandType;
 		}
-		return thisBandList;
+		
 	}
 	
 	// 观察者，观察动态的载入情况
-	await getElement( document.body, '.bili-dyn-list' );
-	( function observeDynamic() {
-		const observer = new MutationObserver( ( e ) => {
-			
-			// 获取当前的动态卡片屏蔽列表
-			const thisBandList = getLocalDynamicTab();
-			
-			e.forEach( ( record ) => {
-				const dynItem = record.addedNodes[ 0 ] as HTMLElement;
-				// 不是新增动态，退出访问
-				if ( !dynItem ) {
-					return;
-				}
-				
-				// 写入屏蔽规则
-				bandDyn( dynItem, thisBandList );
-			} )
-		} );
-		
-		observer.observe( <HTMLElement> document.querySelector( '.bili-dyn-list__items' ), {
-			childList: true,
-		} )
-	} )();
+	let domSelector: {
+		dynamic: ObserverSelectorList
+		live: ObserverSelectorList
+	} = {
+		dynamic: {
+			waitLoadElementSelector: '.bili-dyn-list',
+			observeElementSelector: '.bili-dyn-list__items',
+			upNameSelector: '.bili-dyn-title__text',
+			tabsItemListSelector: '.bili-dyn-list-tabs__item',
+		},
+		live: {
+			waitLoadElementSelector: '.be-live-list-content',
+			observeElementSelector: '.be-live-list-content',
+			filterToken: 'be-live-list-item',
+			upNameSelector: '.be-live-list-item-user',
+		}
+	}
+	const observer = new Observer();
+	const bandEvent = new BandEvent( <Map<string, BandData>> configUI.data.data );
+	// 观察动态的载入情况
+	await observer.observe( domSelector.dynamic, ( item: HTMLElement ) => {
+		const bandType = bandEvent.judgeBandType( <string> domSelector.dynamic.tabsItemListSelector );
+		bandEvent.band( item, domSelector.dynamic.upNameSelector, bandType );
+	} );
 	
 	// 观察者，观察直播的载入情况
-	await getElement( document.body, '.be-live-list-content' );
-	( function observeLive() {
-		const observer = new MutationObserver( ( e ) => {
-			e.forEach( ( record ) => {
-				const liveItem = record.addedNodes[ 0 ] as HTMLElement;
-				// 不是新增动态，退出访问
-				if ( !liveItem || !liveItem?.classList?.contains( 'be-live-list-item' ) ) {
-					return;
-				}
-				
-				// 写入屏蔽规则
-				bandLive( liveItem );
-			} )
-		} );
-		
-		observer.observe( <HTMLElement> document.querySelector( '.be-live-list-content' ), {
-			childList: true,
-		} )
-	} )();
+	await observer.observe( domSelector.live, ( item: HTMLElement ) => {
+		bandEvent.band( item, domSelector.live.upNameSelector, 'live' );
+	} );
 	
+	
+	// 绑定配置开启菜单（油猴菜单）
+	registerMenu( '添加屏蔽', () => {
+		configUI.show();
+	} )
 	
 } )();
