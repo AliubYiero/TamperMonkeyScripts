@@ -218,7 +218,7 @@ class UiEvent {
 		}
 		
 		// 隐藏渐隐动画，添加渐入动画
-		mainContainer.classList.remove( 'layui-anim-fadeout' );
+		mainContainer.classList.remove( 'layui-anim-fadeout', 'hide' );
 		mainContainer.classList.add( 'layui-anim-fadein' );
 	}
 	
@@ -231,7 +231,7 @@ class UiEvent {
 		const mainContainer = this.domList.main as HTMLElement;
 		// 隐藏渐隐动画，添加渐入动画
 		mainContainer.classList.remove( 'layui-anim-fadein' );
-		mainContainer.classList.add( 'layui-anim-fadeout' );
+		mainContainer.classList.add( 'layui-anim-fadeout', 'hide' );
 	}
 	
 	getMainDom() {
