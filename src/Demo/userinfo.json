@@ -12,11 +12,10 @@
 		"menu"
 	],
 	"require": [
-		""
 	],
-	"resource": [
-		""
-	],
+	"resource": {
+		"css": "https://cdn.staticfile.org/layui/2.8.11/css/layui.min.css"
+	},
 	"icon": "",
 	"namespace": "",
 	"license": ""

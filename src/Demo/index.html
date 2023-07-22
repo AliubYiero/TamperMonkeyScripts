@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+	      name="viewport">
+	<meta content="ie=edge" http-equiv="X-UA-Compatible">
+	<title>Document</title>
+	<script src="https://cdn.staticfile.org/layui/2.8.11/layui.min.js"></script>
+	<link href="https://cdn.staticfile.org/layui/2.8.11/css/layui.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<button>11111</button>
+<main class="bili-band-config-container layui-anim"
+      style="display: none; position: fixed; left: 50%; transform: translateX(-50%);">
+	<table class=" layui-anim-fadeout" id="ID-table-bili-band-config" lay-filter="show"></table>
+</main>
+
+<script>
+	const testData = [
+		{
+			id: '川同学不穿童鞋',
+			isBandDynamic: true,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王留',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: false,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+		{
+			id: '王五',
+			isBandDynamic: false,
+			isBandVideo: true,
+			isBandLive: true,
+		},
+	];
+	
+	class Data {
+		/** @type {Map<string, {id: string, isBandLive: boolean, isBandDynamic: boolean, isBandVideo: boolean}>} */
+		data
+		
+		/** @param {array} newData */
+		constructor( newData ) {
+			if ( newData ) {
+				this.setToLocalStorage( this.arrayToMap( newData ) );
+			}
+			
+			this.getFromLocalStorage();
+		}
+		
+		/** 防止多余数据提交到data中，进行重新赋值 */
+		limitValue( obj ) {
+			const { id, isBandLive, isBandDynamic, isBandVideo } = obj;
+			return {
+				id,
+				isBandLive: isBandLive || false,
+				isBandDynamic: isBandDynamic || false,
+				isBandVideo: isBandVideo || false
+			}
+		}
+		
+		/** 添加一个对象 */
+		set( newObj ) {
+			if ( this.data.has( newObj.id ) ) {
+				return;
+			}
+			
+			const limitData = this.limitValue( newObj );
+			this.data.set( newObj.id, limitData );
+			this.setToLocalStorage();
+			return limitData;
+		}
+		
+		/** 更新其中一个对象 */
+		update( newObj ) {
+			this.set( this.limitValue( newObj ) );
+			this.setToLocalStorage();
+		}
+		
+		/** 删除其中一个对象 */
+		delete( newObjOrId ) {
+			if ( typeof newObjOrId === 'string' ) {
+				this.data.delete( newObjOrId );
+			}
+			else {
+				this.data.delete( newObjOrId.id );
+			}
+			this.setToLocalStorage();
+		}
+		
+		/** 改变其中一个对象的键（删除原对象，建立新对象） */
+		change( newObj, oldObjOrId ) {
+			// 删除原对象
+			this.delete( oldObjOrId );
+			// 新增对象
+			this.set( this.limitValue( newObj ) );
+			this.setToLocalStorage();
+		}
+		
+		/** 从localStorage中获取data */
+		getFromLocalStorage() {
+			this.originData = JSON.parse( localStorage.getItem( 'bandList' ) );
+			this.data = this.arrayToMap( this.originData );
+		}
+		
+		/** 将data设置到localStorage中 */
+		setToLocalStorage( value ) {
+			localStorage.setItem( 'bandList', JSON.stringify( this.mapToArray( value || this.data ) ) );
+		}
+		
+		/**
+		 * 数组转Map
+		 * @param {{id: string, [propName: string]: any}[]} array
+		 * @return {Map}
+		 * */
+		arrayToMap( array ) {
+			const map = new Map();
+			array.forEach( value => {
+				map.set( value.id, value );
+			} )
+			return map;
+		}
+		
+		/**
+		 * Map转数组
+		 * @param {Map} map
+		 * @return {any[]}
+		 * */
+		mapToArray( map ) {
+			const array = [];
+			for ( let value of map.values() ) {
+				array.push( value );
+			}
+			return array;
+		}
+	}
+	
+	const data = new Data( testData );
+	
+	/**
+	 * [
+	 * {
+	 *     id: string,              // up主名称
+	 *     isBandLive: boolean,     // 是否屏蔽当前Up主的直播显示
+	 *     isBandDynamic: boolean,  // 是否屏蔽当前Up主的动态显示
+	 *     isBandVideo: boolean,     // 是否屏蔽当前Up主的视频显示
+	 * }
+	 * ]
+	 * */
+	layui.use( 'table', () => {
+		const { treeTable, form } = layui;
+		
+		class UiEvent {
+			constructor() {
+			
+			}
+			
+			/** 添加数据 */
+			add() {
+				// 弹出输入界面
+				layer.prompt( { title: '输入要屏蔽Up主名' }, ( res, index ) => {
+					layer.close( index );
+					
+					if ( !res.trim() ) {
+						return;
+					}
+					
+					const newData = data.set( { id: res } );
+					console.log( data );
+					treeTable.addNodes( 'table-bili-band-config', {
+						index: 0,
+						data: newData,
+					} );
+					treeTable.reloadData( 'table-bili-band-config' );
+				} );
+			}
+			
+			/**
+			 * 删除当前行数据
+			 * @param {Object} e layui数据对象
+			 * */
+			delete( e ) {
+				data.delete( e.data );
+				e.del();
+				treeTable.reloadData( 'table-bili-band-config' );
+			}
+			
+			/** 更新当前行的数据
+			 * @param {Object} originData
+			 * @param {'dynamic' | 'video' | 'live'} type
+			 * @param {number} index
+			 * */
+			update( originData, type, index ) {
+				let newData = { ...originData };
+				switch ( type ) {
+					case 'dynamic':
+						newData.isBandDynamic = !originData.isBandDynamic;
+						break;
+					case 'video':
+						newData.isBandVideo = !originData.isBandVideo;
+						break;
+					case 'live':
+						newData.isBandLive = !originData.isBandLive;
+						break;
+				}
+				treeTable.updateNode( 'table-bili-band-config', index, newData );
+				data.update( newData );
+			}
+			
+			/** 改变Up主名称（因为需要改变键值，所以不能直接更新） */
+			change( e ) {
+				data.change( e.data, e.oldValue );
+				treeTable.reloadData( 'table-bili-band-config' );
+			}
+		}
+		
+		const uiEvent = new UiEvent();
+		
+		treeTable.render( {
+			elem: '#ID-table-bili-band-config',
+			id: 'table-bili-band-config',
+			cols: [ [
+				{
+					field: 'index',
+					title: '编号',
+					type: 'numbers',
+					width: 60,
+				},
+				{
+					field: 'id',
+					title: 'UP主',
+					width: 200,
+					sort: true,
+					align: 'center',
+					edit: true
+				},
+				{
+					field: 'dynamic',
+					title: '动态卡片',
+					width: 110,
+					sort: true,
+					align: 'center',
+					
+					templet: ( d ) => `<input type="checkbox" lay-skin="switch" lay-filter="toggleDynamicStatus" ${ d.isBandDynamic ? 'checked' : '' }/>`
+				},
+				{
+					field: 'video',
+					title: '视频卡片',
+					width: 110,
+					sort: true,
+					align: 'center',
+					templet: ( d ) => `<input type="checkbox" lay-skin="switch" lay-filter="toggleVideoStatus" ${ d.isBandVideo ? 'checked' : '' }/>`
+				},
+				{
+					field: 'live',
+					title: '直播卡片',
+					width: 110,
+					sort: true,
+					align: 'center',
+					templet: ( d ) => `<input type="checkbox" lay-skin="switch" lay-filter="toggleLiveStatus" ${ d.isBandLive ? 'checked' : '' }/>`
+				},
+				{
+					field: 'delete',
+					title: '操作',
+					width: 110,
+					sort: false,
+					align: 'center',
+					fixed: 'right',
+					templet: ( d ) => `<button type="button" class="layui-btn layui-btn-sm layui-btn-danger layui-btn-radius" lay-event="delete">Delete</button>`
+				}
+			] ],
+			data: data.originData,
+			size: 'lg',
+			skin: 'line',
+			page: {
+				layout: [ 'prev', 'page', 'next', 'count', 'skip' ],
+			},
+			pagebar: `
+			<div>
+				<button type="button" class="layui-btn layui-btn-sm" lay-event="add">
+					<i class="layui-icon layui-icon-add-1"></i>
+				</button>
+			</div>`,
+			width: 710,
+			defaultToolbar: ''
+		} )
+		
+		// 删除当前行
+		treeTable.on( 'tool(show)', ( e ) => {
+			const { index } = e;
+			console.log( '删除当前行', index, e.data );
+			uiEvent.delete( e );
+		} )
+		
+		// 更新Up主名称
+		treeTable.on( 'edit(show)', ( e ) => {
+			console.log( e );
+			uiEvent.change( e );
+		} )
+		
+		class Checkbox {
+			constructor( input ) {
+				this._input = input;
+				
+				this.domList = {
+					input: this._input,
+					tr: this.getTrDom(),
+				};
+			}
+			
+			getTrDom() {
+				return this._input.parentElement.parentElement.parentElement;
+			}
+			
+			getTableDataIndex() {
+				return this.domList.tr.dataset.index;
+			}
+			
+			getTableData( index ) {
+				index ||= this.getTableDataIndex();
+				return treeTable.getNodeDataByIndex( 'table-bili-band-config', index );
+			}
+		}
+		
+		// 更新动态卡片的数据
+		form.on( 'switch(toggleDynamicStatus)', e => {
+			const input = new Checkbox( e.elem );
+			const index = input.getTableDataIndex()
+			const data = input.getTableData( index );
+			uiEvent.update( data, 'dynamic', index );
+		} );
+		
+		// 更新视频卡片的数据
+		form.on( 'switch(toggleVideoStatus)', e => {
+			const input = new Checkbox( e.elem );
+			const index = input.getTableDataIndex()
+			const data = input.getTableData( index );
+			uiEvent.update( data, 'video', index );
+		} );
+		
+		// 更新直播卡片的数据
+		form.on( 'switch(toggleLiveStatus)', e => {
+			const input = new Checkbox( e.elem );
+			const index = input.getTableDataIndex()
+			const data = input.getTableData( index );
+			uiEvent.update( data, 'live', index );
+		} );
+		
+		// 底部分页栏事件
+		treeTable.on( 'pagebar(show)', ( e ) => {
+			const { event } = e;
+			
+			if ( event !== 'add' ) {
+				return;
+			}
+			
+			uiEvent.add();
+		} );
+		
+	} )
+
+</script>
+</body>
+</html>
