@@ -11,12 +11,12 @@
 		"style"
 	],
 	"require": [
-		""
+		"layui"
 	],
-	"resource": [
-		""
-	],
+	"resource": {
+	},
 	"icon": "",
+	"run-at": "document-start",
 	"namespace": "",
 	"license": ""
 }

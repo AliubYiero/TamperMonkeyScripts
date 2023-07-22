@@ -3,6 +3,8 @@ import { getElement } from '../../../../lib/Listener/ElementAdd'
 import { addStyle } from '../../../../lib/GM_Lib'
 import { BandList } from './src/LoadBandList'
 import { Info } from '../../../../lib/Base/Info'
+import { ConfigUI } from './src/ConfigUI'
+import { Sleep } from '../../../../lib/Base/Sleep'
 
 ( async () => {
 	const print = new Info( 'BiliBiliHideDynamic' );
@@ -22,6 +24,10 @@ import { Info } from '../../../../lib/Base/Info'
 		liveUpList: [ 'Virsaladze', '尊驾何人', '加班第一帅', '卦者那啥子靈風' ]
 	}
 	
+	print.info( '引入UI' );
+	new ConfigUI();
+	
+	await Sleep.windowLoad();
 	
 	// 根据屏蔽列表屏蔽动态
 	function bandDyn( dynItem: HTMLElement, thisBandList: string[] ) {
