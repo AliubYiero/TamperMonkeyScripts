@@ -78,8 +78,7 @@ type BandType = 'dynamic' | 'video' | 'live';
 		
 		/** 判断当前动态的Up主是否在屏蔽列表中，如果是则隐藏 */
 		band( item: HTMLElement, upNameSelector: string, bandType: BandType ) {
-			const upName = ( <HTMLElement> item.querySelector( upNameSelector ) )?.innerText;
-			
+			const upName = ( <HTMLElement> item.querySelector( upNameSelector ) )?.innerText.trim();
 			let bandTypeKey: { dynamic: 'isBandDynamic'; video: 'isBandVideo'; live: 'isBandLive' }
 			bandTypeKey = {
 				dynamic: 'isBandDynamic',
@@ -89,6 +88,8 @@ type BandType = 'dynamic' | 'video' | 'live';
 			if ( this.bandList.has( upName ) && ( <BandData> this.bandList.get( upName ) )[ bandTypeKey[ bandType ] ] ) {
 				item.classList.add( 'hide' );
 			} else {
+				// console.log( this.bandList, upName );
+				// console.log( item, this.bandList.has( upName ) );
 				item.classList.remove( 'hide' );
 			}
 		}

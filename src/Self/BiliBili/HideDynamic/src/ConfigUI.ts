@@ -97,7 +97,6 @@ class Data {
 	
 	/** 将data设置到localStorage中 */
 	setToLocalStorage( value: Map<string, BandData> = ( <Map<string, BandData>> this.data ) ) {
-		console.log( this.data )
 		localStorage.setItem( 'bandList', JSON.stringify( this.mapToArray( value ) ) );
 	}
 	
@@ -297,7 +296,6 @@ class ConfigUI {
 			// @ts-ignore
 			const { treeTable, form } = layui;
 			
-			console.log( this.data, this.data.originData );
 			treeTable.render( {
 				elem: '#ID-table-bili-band-config',
 				id: 'table-bili-band-config',
@@ -372,14 +370,11 @@ class ConfigUI {
 			
 			// 删除当前行
 			treeTable.on( 'tool(show)', ( e: { [ propName: string ]: any } ) => {
-				const { index } = e;
-				console.log( '删除当前行', index, e.data );
 				this.uiEvent.delete( e );
 			} )
 			
 			// 更新Up主名称
 			treeTable.on( 'edit(show)', ( e: { [ propName: string ]: any } ) => {
-				console.log( e );
 				this.uiEvent.change( e );
 			} )
 			
