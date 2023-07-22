@@ -2,7 +2,7 @@
 // @name		BiliBili动态隐藏
 // @author		Yiero
 // @description		根据Up主名称，在动态页进行筛选，隐藏屏蔽的Up主动态。
-// @version		1.2.0
+// @version		1.2.1
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://t.bilibili.com/*
 // @icon		https://t.bilibili.com/favicon.ico
@@ -249,9 +249,6 @@ class Data {
 	
 	/** 将data设置到localStorage中 */
 	setToLocalStorage( value = this.data ) {
-		/* @__PURE__ */
-		( () => {
-		} )( this.data );
 		localStorage.setItem( "bandList", JSON.stringify( this.mapToArray( value ) ) );
 	}
 	
@@ -417,9 +414,6 @@ class ConfigUI {
 	createElementEvent() {
 		layui.use( "table", () => {
 			const { treeTable, form } = layui;
-			/* @__PURE__ */
-			( () => {
-			} )( this.data, this.data.originData );
 			treeTable.render( {
 				elem: "#ID-table-bili-band-config",
 				id: "table-bili-band-config",
@@ -491,10 +485,6 @@ class ConfigUI {
 				defaultToolbar: ""
 			} );
 			treeTable.on( "tool(show)", ( e ) => {
-				const { index } = e;
-				/* @__PURE__ */
-				( () => {
-				} )( "删除当前行", index, e.data );
 				this.uiEvent.delete( e );
 			} );
 			treeTable.on( "edit(show)", ( e ) => {
@@ -617,7 +607,7 @@ class ConfigUI {
 		/** 判断当前动态的Up主是否在屏蔽列表中，如果是则隐藏 */
 		band( item, upNameSelector, bandType ) {
 			var _a;
-			const upName = ( _a = item.querySelector( upNameSelector ) ) == null ? void 0 : _a.innerText;
+			const upName = ( _a = item.querySelector( upNameSelector ) ) == null ? void 0 : _a.innerText.trim();
 			let bandTypeKey;
 			bandTypeKey = {
 				dynamic: "isBandDynamic",
