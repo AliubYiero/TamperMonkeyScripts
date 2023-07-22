@@ -88,6 +88,8 @@ type BandType = 'dynamic' | 'video' | 'live';
 			}
 			if ( this.bandList.has( upName ) && ( <BandData> this.bandList.get( upName ) )[ bandTypeKey[ bandType ] ] ) {
 				item.classList.add( 'hide' );
+			} else {
+				item.classList.remove( 'hide' );
 			}
 		}
 		
@@ -118,6 +120,17 @@ type BandType = 'dynamic' | 'video' | 'live';
 			upNameNodeList.forEach( ( aimElement ) => {
 				this.band( <HTMLElement> aimElement, upNameSelector, bandType );
 			} )
+		}
+		
+		// 刷新动态卡片 / 视频卡片数据
+		freshDynamic( dynamicSelectorList: ObserverSelectorList ) {
+			const bandType = this.judgeBandType( <string> dynamicSelectorList.tabsItemListSelector );
+			bandEvent.fresh( dynamicSelectorList, bandType );
+		}
+		
+		// 刷新直播数据
+		freshLive( liveSelectorList: ObserverSelectorList ) {
+			bandEvent.fresh( liveSelectorList, 'live' );
 		}
 	}
 	
@@ -181,6 +194,8 @@ type BandType = 'dynamic' | 'video' | 'live';
 		}
 	} )();
 	
+	
+	// 创建元素观察者
 	const observer = new Observer();
 	const bandEvent = new BandEvent( <Map<string, BandData>> configUI.data.data );
 	// 观察动态的载入情况
@@ -190,11 +205,7 @@ type BandType = 'dynamic' | 'video' | 'live';
 	} );
 	
 	// 再次刷新动态数据，防止数据因为网络延迟没有及时更新
-	;( () => {
-		// 更新动态卡片 / 视频卡片
-		const bandType = bandEvent.judgeBandType( <string> domSelector.dynamic.tabsItemListSelector );
-		bandEvent.fresh( domSelector.dynamic, bandType );
-	} )();
+	bandEvent.freshDynamic( domSelector.dynamic );
 	
 	
 	// 观察者，观察直播的载入情况
@@ -203,14 +214,22 @@ type BandType = 'dynamic' | 'video' | 'live';
 	} );
 	
 	// 再次刷新直播数据，防止数据因为网络延迟没有及时更新
-	;( () => {
-		// 更新直播卡片
-		bandEvent.fresh( domSelector.live, 'live' );
-	} )();
+	bandEvent.freshLive( domSelector.live );
+	
 	
 	// 绑定配置开启菜单（油猴菜单）
 	registerMenu( '添加屏蔽', () => {
 		configUI.show();
 	} )
+	
+	
+	;( () => {
+		// 给配置菜单的关闭绑定页面数据刷新事件
+		( <HTMLElement> document.querySelector( '[lay-event=close]' ) ).addEventListener( 'click', () => {
+			bandEvent.freshDynamic( domSelector.dynamic );
+			bandEvent.freshLive( domSelector.live );
+		} );
+	} )();
+	
 	
 } )();
