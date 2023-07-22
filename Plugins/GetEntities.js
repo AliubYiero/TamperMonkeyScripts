@@ -167,12 +167,22 @@ function userInfoFormat( config, projectName, isProduction = false ) {
 		config.require.push( 'file://' + resolve( 'dist', projectName + '.js' ) );
 	}
 	
+	// layui预先配置项
+	if ( config.require.indexOf( 'layui' ) !== -1 ) {
+		config.require = config.require.filter( res => {
+			if ( res !== 'layui' ) {
+				return;
+			}
+		} )
+		config.resource.layuiCss = 'https://cdn.staticfile.org/layui/2.8.11/css/layui.min.css';
+	}
+	
 	// 配置GM函数依赖
 	if ( config.grant[0] ) {
 		// 声明添加的函数
 		const newGrants = [];
 		
-		// 预先配置项
+		// grant预先配置项
 		const extraGrantMap = new Map();
 		extraGrantMap.set( 'element', [ 'GM_addStyle' ] );
 		extraGrantMap.set( 'style', [ 'GM_addStyle' ] );
@@ -196,24 +206,25 @@ function userInfoFormat( config, projectName, isProduction = false ) {
 	const configMap = {
 		name: config.name || '',
 		author: config.author || 'Yiero',
-		description: config.description || '',
+		description: config.description || 'No Description.',
 		version: config.version || 'beta',
 		namespace: config.namespace || 'https://github.com/AliubYiero/TamperMonkeyScripts',
-		icon: config.icon,
 		match: config.match || void 0,
+		icon: config.icon,
 		require: config.require,
 		resource: config.resource || void 0,
 		license: config.license || 'GPL',
 		grant: config.grant || void 0,
+		"run-at": config["run-at"] || void 0,
 		updateUrl: config.projectName && config.updateUrl || `https://raw.githubusercontent.com/AliubYiero/TamperMonkeyScripts/master/dist/${ projectName }.js`,
 		downloadUrl: config.projectName && config.downloadUrl || `https://raw.githubusercontent.com/AliubYiero/TamperMonkeyScripts/master/dist/${ projectName }.js`,
 	};
 	
 	const userScriptConfig = [ '// ==UserScript==' ];
-	
+	let extraMessage = [];
 	for ( const key in configMap ) {
 		const value = configMap[key];
-		
+		// 数组类配置项，如match、grant、require
 		if ( Array.isArray( value ) ) {
 			for ( const val of value ) {
 				if ( val ) {
@@ -221,12 +232,33 @@ function userInfoFormat( config, projectName, isProduction = false ) {
 				}
 			}
 		}
+		// 对象类配置项，如resource
+		else if ( value.toString() === '[object Object]' ) {
+			for ( const key2 in value ) {
+				const val = value[key2];
+				if ( val ) {
+					userScriptConfig.push( `// @${ key }\t\t${ key2 } ${ val }` );
+					extraMessage.push( `GM_addStyle( GM_getResourceText( '${ key2 }' ) )` );
+					
+					if ( configMap.grant.indexOf( 'GM_addStyle' ) === -1 ) {
+						configMap.grant.push( 'GM_addStyle' );
+					}
+					else if ( configMap.grant.indexOf( 'GM_getResourceText' ) === -1 ) {
+						configMap.grant.push( 'GM_getResourceText' );
+					}
+				}
+			}
+		}
+		// 字符串类配置项，如name、description
 		else if ( value ) {
 			userScriptConfig.push( `// @${ key }\t\t${ value }` );
 		}
 	}
 	
 	userScriptConfig.push( '// ==/UserScript==' );
+	
+	// 写入额外信息，如resource解析等;
+	userScriptConfig.push( ...extraMessage );
 	
 	return userScriptConfig.join( '\n' );
 }
