@@ -6,13 +6,24 @@ import { BandData, ConfigUI } from './src/ConfigUI'
 import { Sleep } from '../../../../lib/Base/Sleep'
 
 interface ObserverSelectorList {
+	
+	// 等待加载的元素容器选择器
 	waitLoadElementSelector: string;
+	
+	// mutationObserver的观察元素容器的选择器
 	observeElementSelector: string;
 	
+	// Up名的元素容器选择器
 	upNameSelector: string;
 	
-	filterToken?: string;
+	// 动态的标签容器的选择器（动态、视频、番剧、专栏）
 	tabsItemListSelector?: string;
+	
+	// 目标容器的选择器
+	aimElementSelector: string;
+	
+	// 目标容器的Token
+	filterToken?: string;
 }
 
 type BandType = 'dynamic' | 'video' | 'live';
@@ -43,12 +54,13 @@ type BandType = 'dynamic' | 'video' | 'live';
 					if ( !item || !item?.classList?.contains( observerSelectorList.filterToken || '' ) ) {
 						return;
 					}
-					
+					console.log( item );
 					// 写入屏蔽规则
 					callback( item );
 				} )
 			} );
 			
+			console.log( observerSelectorList.observeElementSelector );
 			observer.observe( <HTMLElement> document.querySelector( observerSelectorList.observeElementSelector ), {
 				childList: true,
 			} )
@@ -99,26 +111,76 @@ type BandType = 'dynamic' | 'video' | 'live';
 			return this.bandTypeList[ tabsItemIndex ] as BandType;
 		}
 		
+		/** 刷新页面数据 */
+		fresh( observerSelectorList: ObserverSelectorList, bandType: BandType ) {
+			const { aimElementSelector, upNameSelector } = observerSelectorList;
+			const upNameNodeList = document.querySelectorAll( aimElementSelector ) as NodeList;
+			upNameNodeList.forEach( ( aimElement ) => {
+				this.band( <HTMLElement> aimElement, upNameSelector, bandType );
+			} )
+		}
 	}
 	
 	// 观察者，观察动态的载入情况
 	let domSelector: {
+		// 动态Selector列表
 		dynamic: ObserverSelectorList
+		// 直播(Bilibili-Evolved)Selector列表
 		live: ObserverSelectorList
+		// 直播(旧版)Selector列表
+		oldLive: ObserverSelectorList
+		// 直播(新版)Selector列表
+		newLive: ObserverSelectorList
 	} = {
 		dynamic: {
 			waitLoadElementSelector: '.bili-dyn-list',
 			observeElementSelector: '.bili-dyn-list__items',
 			upNameSelector: '.bili-dyn-title__text',
 			tabsItemListSelector: '.bili-dyn-list-tabs__item',
+			filterToken: 'bili-dyn-list__item',
+			aimElementSelector: '.bili-dyn-list__item',
 		},
+		// Bilibili-Evolved直播侧边栏
 		live: {
 			waitLoadElementSelector: '.be-live-list-content',
 			observeElementSelector: '.be-live-list-content',
-			filterToken: 'be-live-list-item',
 			upNameSelector: '.be-live-list-item-user',
+			filterToken: 'be-live-list-item',
+			aimElementSelector: '.be-live-list-item',
+		},
+		// 旧版直播侧边栏
+		oldLive: {
+			waitLoadElementSelector: '.bili-dyn-live-users__body',
+			observeElementSelector: '.bili-dyn-live-users__body',
+			upNameSelector: '.bili-dyn-live-users__item__uname',
+			filterToken: 'bili-dyn-live-users__item',
+			aimElementSelector: '.bili-dyn-live-users__item',
+		},
+		// 新版直播侧边栏
+		newLive: {
+			waitLoadElementSelector: '.bili-dyn-live-users__body',
+			observeElementSelector: '.bili-dyn-live-users__body',
+			upNameSelector: '.bili-dyn-live-users__item__uname',
+			filterToken: 'bili-dyn-live-users__container',
+			aimElementSelector: '.bili-dyn-live-users__container',
 		}
-	}
+	};
+	
+	;( function judgeBiliUiVersion() {
+		// 新版page-header ( 原生新版 )
+		if ( document.querySelector( '#bili-header-container' ) && document.querySelector( '.bili-header.fixed-header' ) ) {
+			domSelector.live = domSelector.newLive;
+		}
+		// Bilibili-Evolved
+		else if ( document.querySelector( '#bili-header-container' ) ) {
+			// 闲置，因为默认就是Bilibili-Evolved的选择器组
+		}
+		// 旧版page-header
+		else {
+			domSelector.live = domSelector.oldLive;
+		}
+	} )();
+	
 	const observer = new Observer();
 	const bandEvent = new BandEvent( <Map<string, BandData>> configUI.data.data );
 	// 观察动态的载入情况
@@ -127,11 +189,24 @@ type BandType = 'dynamic' | 'video' | 'live';
 		bandEvent.band( item, domSelector.dynamic.upNameSelector, bandType );
 	} );
 	
+	// 再次刷新动态数据，防止数据因为网络延迟没有及时更新
+	;( () => {
+		// 更新动态卡片 / 视频卡片
+		const bandType = bandEvent.judgeBandType( <string> domSelector.dynamic.tabsItemListSelector );
+		bandEvent.fresh( domSelector.dynamic, bandType );
+	} )();
+	
+	
 	// 观察者，观察直播的载入情况
 	await observer.observe( domSelector.live, ( item: HTMLElement ) => {
 		bandEvent.band( item, domSelector.live.upNameSelector, 'live' );
 	} );
 	
+	// 再次刷新直播数据，防止数据因为网络延迟没有及时更新
+	;( () => {
+		// 更新直播卡片
+		bandEvent.fresh( domSelector.live, 'live' );
+	} )();
 	
 	// 绑定配置开启菜单（油猴菜单）
 	registerMenu( '添加屏蔽', () => {

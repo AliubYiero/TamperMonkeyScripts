@@ -267,7 +267,7 @@ class ConfigUI {
 					this.uiEvent.show();
 				}
 				
-				// 向外暴露出show事件
+				// 向外暴露出hide事件
 				this.hide = () => {
 					this.uiEvent.hide();
 				}
