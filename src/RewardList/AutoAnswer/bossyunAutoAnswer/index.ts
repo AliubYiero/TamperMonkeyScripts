@@ -22,6 +22,8 @@
 * 44-中国旅游地理
 * 5-旅游管理概论
 * 题库：国际经济与贸易
+*
+* 71-形势与政策
 * */
 
 import { matchContentsWithoutLetter, matchContentsWithoutSign } from '../gdwlxyxsAutoAnswer/src/matchContents'
@@ -30,14 +32,7 @@ import { Sleep } from '../../../../lib/Base/Sleep'
 import { getElement } from '../../../../lib/Listener/ElementAdd';
 
 ( async () => {
-	await new Promise( resolve => {
-		setInterval( () => {
-			console.info( 'Load Exam Page' );
-			if ( document.querySelector( '.page-examine .ant-breadcrumb' ) ) {
-				resolve( resolve );
-			}
-		}, 1000 );
-	} )
+	await getElement( document.body, '.page-examine .ant-breadcrumb' );
 	
 	await getElement( document.body, '.question-list-wrap' );
 	await Sleep.time( 1 );
