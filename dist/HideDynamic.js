@@ -2,7 +2,7 @@
 // @name		BiliBili动态隐藏
 // @author		Yiero
 // @description		根据Up主名称，在动态页进行筛选，隐藏屏蔽的Up主动态。
-// @version		1.1.2
+// @version		1.2.0
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://t.bilibili.com/*
 // @icon		https://t.bilibili.com/favicon.ico
@@ -598,6 +598,9 @@ class ConfigUI {
 					callback( item );
 				} );
 			} );
+			/* @__PURE__ */
+			( () => {
+			} )( observerSelectorList.observeElementSelector );
 			observer2.observe( document.querySelector( observerSelectorList.observeElementSelector ), {
 				childList: true
 			} );
@@ -624,6 +627,9 @@ class ConfigUI {
 			if ( this.bandList.has( upName ) && this.bandList.get( upName )[bandTypeKey[bandType]] ) {
 				item.classList.add( "hide" );
 			}
+			else {
+				item.classList.remove( "hide" );
+			}
 		}
 		
 		/**
@@ -641,6 +647,26 @@ class ConfigUI {
 			}
 			return this.bandTypeList[tabsItemIndex];
 		}
+		
+		/** 刷新页面数据 */
+		fresh( observerSelectorList, bandType ) {
+			const { aimElementSelector, upNameSelector } = observerSelectorList;
+			const upNameNodeList = document.querySelectorAll( aimElementSelector );
+			upNameNodeList.forEach( ( aimElement ) => {
+				this.band( aimElement, upNameSelector, bandType );
+			} );
+		}
+		
+		// 刷新动态卡片 / 视频卡片数据
+		freshDynamic( dynamicSelectorList ) {
+			const bandType = this.judgeBandType( dynamicSelectorList.tabsItemListSelector );
+			bandEvent.fresh( dynamicSelectorList, bandType );
+		}
+		
+		// 刷新直播数据
+		freshLive( liveSelectorList ) {
+			bandEvent.fresh( liveSelectorList, "live" );
+		}
 	}
 	
 	let domSelector = {
@@ -648,25 +674,64 @@ class ConfigUI {
 			waitLoadElementSelector: ".bili-dyn-list",
 			observeElementSelector: ".bili-dyn-list__items",
 			upNameSelector: ".bili-dyn-title__text",
-			tabsItemListSelector: ".bili-dyn-list-tabs__item"
+			tabsItemListSelector: ".bili-dyn-list-tabs__item",
+			filterToken: "bili-dyn-list__item",
+			aimElementSelector: ".bili-dyn-list__item"
 		},
+		// Bilibili-Evolved直播侧边栏
 		live: {
 			waitLoadElementSelector: ".be-live-list-content",
 			observeElementSelector: ".be-live-list-content",
+			upNameSelector: ".be-live-list-item-user",
 			filterToken: "be-live-list-item",
-			upNameSelector: ".be-live-list-item-user"
+			aimElementSelector: ".be-live-list-item"
+		},
+		// 旧版直播侧边栏
+		oldLive: {
+			waitLoadElementSelector: ".bili-dyn-live-users__body",
+			observeElementSelector: ".bili-dyn-live-users__body",
+			upNameSelector: ".bili-dyn-live-users__item__uname",
+			filterToken: "bili-dyn-live-users__item",
+			aimElementSelector: ".bili-dyn-live-users__item"
+		},
+		// 新版直播侧边栏
+		newLive: {
+			waitLoadElementSelector: ".bili-dyn-live-users__body",
+			observeElementSelector: ".bili-dyn-live-users__body",
+			upNameSelector: ".bili-dyn-live-users__item__uname",
+			filterToken: "bili-dyn-live-users__container",
+			aimElementSelector: ".bili-dyn-live-users__container"
 		}
 	};
+	( function judgeBiliUiVersion() {
+		if ( document.querySelector( "#bili-header-container" ) && document.querySelector( ".bili-header.fixed-header" ) ) {
+			domSelector.live = domSelector.newLive;
+		}
+		else if ( document.querySelector( "#bili-header-container" ) ) {
+			;
+		}
+		else {
+			domSelector.live = domSelector.oldLive;
+		}
+	} )();
 	const observer = new Observer();
 	const bandEvent = new BandEvent( configUI.data.data );
 	await observer.observe( domSelector.dynamic, ( item ) => {
 		const bandType = bandEvent.judgeBandType( domSelector.dynamic.tabsItemListSelector );
 		bandEvent.band( item, domSelector.dynamic.upNameSelector, bandType );
 	} );
+	bandEvent.freshDynamic( domSelector.dynamic );
 	await observer.observe( domSelector.live, ( item ) => {
 		bandEvent.band( item, domSelector.live.upNameSelector, "live" );
 	} );
+	bandEvent.freshLive( domSelector.live );
 	registerMenu( "添加屏蔽", () => {
 		configUI.show();
 	} );
+	( () => {
+		document.querySelector( "[lay-event=close]" ).addEventListener( "click", () => {
+			bandEvent.freshDynamic( domSelector.dynamic );
+			bandEvent.freshLive( domSelector.live );
+		} );
+	} )();
 } )();
