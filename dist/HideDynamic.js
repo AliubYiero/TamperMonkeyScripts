@@ -2,17 +2,17 @@
 // @name		BiliBili动态隐藏
 // @author		Yiero
 // @description		根据Up主名称，在动态页进行筛选，隐藏屏蔽的Up主动态。
-// @version		1.1.1
+// @version		1.1.2
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://t.bilibili.com/*
 // @icon		https://t.bilibili.com/favicon.ico
-// @require		layui
 // @resource		layuiCss https://cdn.staticfile.org/layui/2.8.11/css/layui.min.css
 // @license		GPL
 // @grant		GM_registerMenuCommand
 // @grant		GM_unregisterMenuCommand
 // @grant		GM_addStyle
 // @grant		GM_getResourceText
+// @run-at		document-start
 // @updateUrl		https://raw.githubusercontent.com/AliubYiero/TamperMonkeyScripts/master/dist/HideDynamic.js
 // @downloadUrl		https://raw.githubusercontent.com/AliubYiero/TamperMonkeyScripts/master/dist/HideDynamic.js
 // ==/UserScript==
