@@ -2,7 +2,7 @@
 // @name		BiliBili动态隐藏
 // @author		Yiero
 // @description		根据Up主名称，在动态页进行筛选，隐藏屏蔽的Up主动态。
-// @version		1.1.0
+// @version		1.1.1
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://t.bilibili.com/*
 // @icon		https://t.bilibili.com/favicon.ico
@@ -358,7 +358,7 @@ class UiEvent {
 		if ( mainContainer.style.display === "none" ) {
 			mainContainer.style.display = "block";
 		}
-		mainContainer.classList.remove( "layui-anim-fadeout" );
+		mainContainer.classList.remove( "layui-anim-fadeout", "hide" );
 		mainContainer.classList.add( "layui-anim-fadein" );
 	}
 	
@@ -369,7 +369,7 @@ class UiEvent {
 		}
 		const mainContainer = this.domList.main;
 		mainContainer.classList.remove( "layui-anim-fadein" );
-		mainContainer.classList.add( "layui-anim-fadeout" );
+		mainContainer.classList.add( "layui-anim-fadeout", "hide" );
 	}
 	
 	getMainDom() {
