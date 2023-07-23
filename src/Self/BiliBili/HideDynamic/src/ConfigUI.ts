@@ -260,6 +260,54 @@ class UiEvent {
 	getMainDom() {
 		this.domList.main = document.querySelector( '.bili-band-config-container' ) as HTMLElement;
 	}
+	
+	submitSearch( input: HTMLInputElement ) {
+		
+		// 防止空元素访问
+		const { value } = input;
+		if ( !value.trim() ) {
+			return false;
+		}
+		
+		// 清空输入框
+		input.value = '';
+		
+		// 更新数据，match到搜索框中的值时，unshift到数组最前面，否则push到数组后面
+		const newData: BandData[] = [];
+		let isMatchValue: boolean = false;
+		this.data.mapToArray( <Map<string, BandData>> this.data.data ).forEach( bandData => {
+			if ( bandData.id.match( value ) ) {
+				isMatchValue = true;
+				newData.unshift( bandData );
+			} else {
+				newData.push( bandData );
+			}
+		} );
+		
+		// 当没有搜索到数据的时候的返回
+		if ( !isMatchValue ) {
+			// @ts-ignore
+			layer.confirm( '没有搜索到数据，是否新建该屏蔽UP主 \n(2s后自动关闭窗口)', {
+				time: 2000,
+				btn: [ '确认', '取消' ]
+			}, ( index: number ) => {
+				// @ts-ignore
+				layer.close( index );
+				// 确认新增屏蔽UP主
+				this.add( value );
+			} )
+			return false;
+		}
+		
+		// 更新数据到配置菜单
+		this.treeTable.reloadData( 'table-bili-band-config', {
+			data: newData,
+			page: {
+				// 将当前页面设置到第一页，避免看不到搜索结果
+				curr: 1
+			}
+		} );
+	}
 }
 
 // 配置UI界面类
@@ -390,7 +438,7 @@ class ConfigUI {
 				`,
 				toolbar: `
 					<div>
-						<form style="display: flex;">
+						<form class="form-search" style="display: flex;">
 							<input type="text" class="layui-input" style="width: 200px;" placeholder="输入需要搜索的UP主"/>
 							<button type="button" lay-submit lay-filter="table-search" class="layui-btn" style="margin-left: 20px;">Search</button>
 							<button type="button" lay-submit lay-filter="table-clear" class="layui-btn" style="margin-left: 20px;">Clear</button>
@@ -485,62 +533,31 @@ class ConfigUI {
 			// 顶部搜索栏提交事件
 			form.on( 'submit(table-search)', ( res: { [ propName: string ]: any } ) => {
 				const input = res.form.querySelector( 'input' ) as HTMLInputElement;
-				input.value = '';
-				const { value } = input;
-				if ( !value.trim() ) {
-					return false;
-				}
 				
-				// 更新数据，match到搜索框中的值时，unshift到数组最前面，否则push到数组后面
-				const newData: BandData[] = [];
-				let isMatchValue: boolean = false;
-				this.data.mapToArray( <Map<string, BandData>> this.data.data ).forEach( bandData => {
-					if ( bandData.id.match( value ) ) {
-						isMatchValue = true;
-						newData.unshift( bandData );
-					} else {
-						newData.push( bandData );
-					}
-				} );
+				this.uiEvent.submitSearch( input );
 				
-				// 当没有搜索到数据的时候的返回
-				if ( !isMatchValue ) {
-					// @ts-ignore
-					layer.confirm( '没有搜索到数据，是否新建该屏蔽UP主 \n(2s后自动关闭窗口)', {
-						time: 2000,
-						btn: [ '确认', '取消' ]
-					}, ( index: number ) => {
-						// @ts-ignore
-						layer.close( index );
-						// 确认新增屏蔽UP主
-						this.uiEvent.add( value );
-					} )
-					return false;
-				}
-				
-				// 更新数据到配置菜单
-				treeTable.reloadData( 'table-bili-band-config', {
-					data: newData,
-					page: {
-						// 将当前页面设置到第一页，避免看不到搜索结果
-						curr: 1
-					}
-				} );
-				
-				// 清空输入框
-				input.value = '';
 				// 阻止默认 form 跳转
 				return false;
 			} );
 			
-			// 顶部搜索栏情况搜索文本事件
+			// 顶部搜索栏清空搜索文本事件
 			form.on( 'submit(table-clear)', ( res: { [ propName: string ]: any } ) => {
 				// 清空Input输入
 				res.form.querySelector( 'input' ).value = '';
-				
 				// 阻止默认 form 跳转
 				return false;
 			} );
+			
+			
+			// input框Enter提交搜索
+			const domList = {
+				form: document.querySelector( '.form-search' ) as HTMLFormElement,
+				input: document.querySelector( '.form-search > input' ) as HTMLInputElement
+			}
+			domList.form.addEventListener( 'submit', ( e ) => {
+				e.preventDefault();
+				this.uiEvent.submitSearch( domList.input );
+			} )
 		} )
 	}
 	
