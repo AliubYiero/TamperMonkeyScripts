@@ -53,6 +53,7 @@ class Data {
 	
 	/** 添加一个对象 */
 	set( newObj: BandData ) {
+		// 如果当前数据存在，则返回空
 		if ( ( <Map<string, BandData>> this.data ).has( newObj.id ) ) {
 			return;
 		}
@@ -148,13 +149,8 @@ class UiEvent {
 	}
 	
 	/** 添加数据 */
-	add() {
-		// 弹出输入界面
-		// @ts-ignore
-		layer.prompt( { title: '输入要屏蔽Up主名' }, ( res: string, index: number ) => {
-			// @ts-ignore
-			layer.close( index );
-			
+	add( res?: string ) {
+		const addData = ( res: string ) => {
 			// 去除空白字符
 			res = res.trim();
 			// 判断是否存在有效输入
@@ -165,12 +161,33 @@ class UiEvent {
 			// 写入新数据
 			const newData = this.data.set( { id: res } );
 			
+			// 当返回空数据时的处理
+			// 通常是当前UP已存在
+			if ( !newData ) {
+				// TODO UP存在时，将该UP提前到前面
+				return;
+			}
+			
 			// 将新数据同步到配置菜单中
 			this.treeTable.addNodes( 'table-bili-band-config', {
 				index: 0,
 				data: newData,
 			} );
 			this.treeTable.reloadData( 'table-bili-band-config' );
+		}
+		
+		// 存在输入数据时，直接添加数据刷新页面，不弹出Prompt框
+		if ( res ) {
+			addData( res );
+			return;
+		}
+		
+		// 弹出输入界面
+		// @ts-ignore
+		layer.prompt( { title: '输入要屏蔽Up主名' }, ( res: string, index: number ) => {
+			// @ts-ignore
+			layer.close( index );
+			addData( res );
 		} );
 	}
 	
@@ -468,24 +485,47 @@ class ConfigUI {
 			// 顶部搜索栏提交事件
 			form.on( 'submit(table-search)', ( res: { [ propName: string ]: any } ) => {
 				const input = res.form.querySelector( 'input' ) as HTMLInputElement;
+				input.value = '';
 				const { value } = input;
 				if ( !value.trim() ) {
-					return;
+					return false;
 				}
 				
 				// 更新数据，match到搜索框中的值时，unshift到数组最前面，否则push到数组后面
 				const newData: BandData[] = [];
+				let isMatchValue: boolean = false;
 				this.data.mapToArray( <Map<string, BandData>> this.data.data ).forEach( bandData => {
 					if ( bandData.id.match( value ) ) {
+						isMatchValue = true;
 						newData.unshift( bandData );
 					} else {
 						newData.push( bandData );
 					}
 				} );
+				
+				// 当没有搜索到数据的时候的返回
+				if ( !isMatchValue ) {
+					// @ts-ignore
+					layer.confirm( '没有搜索到数据，是否新建该屏蔽UP主 \n(2s后自动关闭窗口)', {
+						time: 2000,
+						btn: [ '确认', '取消' ]
+					}, ( index: number ) => {
+						// @ts-ignore
+						layer.close( index );
+						// 确认新增屏蔽UP主
+						this.uiEvent.add( value );
+					} )
+					return false;
+				}
+				
 				// 更新数据到配置菜单
 				treeTable.reloadData( 'table-bili-band-config', {
-					data: newData
-				} )
+					data: newData,
+					page: {
+						// 将当前页面设置到第一页，避免看不到搜索结果
+						curr: 1
+					}
+				} );
 				
 				// 清空输入框
 				input.value = '';
@@ -493,6 +533,7 @@ class ConfigUI {
 				return false;
 			} );
 			
+			// 顶部搜索栏情况搜索文本事件
 			form.on( 'submit(table-clear)', ( res: { [ propName: string ]: any } ) => {
 				// 清空Input输入
 				res.form.querySelector( 'input' ).value = '';
