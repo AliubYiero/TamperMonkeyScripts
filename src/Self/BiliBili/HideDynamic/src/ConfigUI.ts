@@ -108,6 +108,7 @@ class Data {
 	arrayToMap( array: BandData[] ) {
 		const map = new Map();
 		array.forEach( value => {
+			value.id = value.id.trim();
 			map.set( value.id, value );
 		} )
 		return map;
@@ -154,11 +155,17 @@ class UiEvent {
 			// @ts-ignore
 			layer.close( index );
 			
-			if ( !res.trim() ) {
+			// 去除空白字符
+			res = res.trim();
+			// 判断是否存在有效输入
+			if ( !res ) {
 				return;
 			}
 			
+			// 写入新数据
 			const newData = this.data.set( { id: res } );
+			
+			// 将新数据同步到配置菜单中
 			this.treeTable.addNodes( 'table-bili-band-config', {
 				index: 0,
 				data: newData,
@@ -438,19 +445,21 @@ class ConfigUI {
 				this.uiEvent.update( data, 'live', index );
 			} );
 			
-			// 底部分页栏事件
+			// 底部分页栏事件(关闭UI、添加新屏蔽)
 			treeTable.on( 'pagebar(show)', ( e: { [ propName: string ]: any } ) => {
 				const { event } = e;
 				
-				if ( [ 'add', 'close' ].indexOf( event ) === -1 ) {
+				if ( ![ 'add', 'close' ].includes( event ) ) {
 					return;
 				}
 				
+				// 添加新屏蔽事件
 				if ( event === 'add' ) {
 					this.uiEvent.add();
 					return;
 				}
 				
+				// 关闭UI事件
 				if ( event === 'close' ) {
 					this.uiEvent.hide();
 				}

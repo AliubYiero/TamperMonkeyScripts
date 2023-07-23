@@ -47,7 +47,6 @@ type BandType = 'dynamic' | 'video' | 'live';
 	const configUI = new ConfigUI();
 	
 	await Sleep.windowLoad();
-	console.log( configUI.data );
 	
 	// 观察动态是否出现
 	class Observer {
