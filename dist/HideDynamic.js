@@ -2,7 +2,7 @@
 // @name		BiliBili动态隐藏
 // @author		Yiero
 // @description		根据Up主名称，在动态页进行筛选，隐藏屏蔽的Up主动态。
-// @version		1.4.0
+// @version		1.4.1
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://t.bilibili.com/*
 // @icon		https://t.bilibili.com/favicon.ico
@@ -402,11 +402,9 @@ class ConfigUI {
 		const container = createElement( {
 			tagName: "main",
 			className: [ "bili-band-config-container", "layui-anim", "hide" ],
-			style: "position: fixed; top: 0; left:calc(50% - 355px);background: #ffffff; z-index: 10003; width: 710px",
-			draggable: true,
 			innerHTML: `<table class="layui-anim-fadeout" id="ID-table-bili-band-config" lay-filter="show"></table>`
 		} );
-		addElementToDocument( container, ``, document.body );
+		addElementToDocument( container, `.bili-band-config-container {position: fixed; top: 0; left:calc(50% - 355px);background: #ffffff; z-index: 10003; width: 710px;}`, document.body );
 	}
 	
 	/**
@@ -764,20 +762,30 @@ class ConfigUI {
 			this.domList = {
 				main: document.querySelector( ".bili-band-config-container" )
 			};
+			this.domList.tool = this.domList.main.querySelector( ".layui-table-tool" );
 			this.position = {
 				start: { x: 0, y: 0 },
 				end: { x: 0, y: 0 },
 				relative: { x: 0, y: 0 }
 			};
-			this.domList.main.addEventListener( "dragstart", ( e ) => {
+			this.bindDragEvent( this.domList.tool );
+		}
+		
+		/** 绑定拖拽事件 */
+		bindDragEvent( willDraggableElement ) {
+			willDraggableElement.draggable = true;
+			willDraggableElement.addEventListener( "dragstart", ( e ) => {
 				this.getStartPosition( e );
 			} );
-			this.domList.main.addEventListener( "dragend", ( e ) => {
+			willDraggableElement.addEventListener( "dragend", ( e ) => {
 				e.preventDefault();
 				this.getEndPosition( e );
+				this.getRelativePosition();
+				this.changeDomPosition();
 			} );
 		}
 		
+		/** 获取开始坐标 */
 		getStartPosition( e ) {
 			const { pageX, pageY } = e;
 			this.position.start = {
@@ -786,16 +794,16 @@ class ConfigUI {
 			};
 		}
 		
+		/** 获取结束坐标 */
 		getEndPosition( e ) {
 			const { pageX, pageY } = e;
 			this.position.end = {
 				x: pageX,
 				y: pageY
 			};
-			this.getRelativePosition();
-			this.changeDomPosition();
 		}
 		
+		/** 获取相对坐标 */
 		getRelativePosition() {
 			this.position.relative = {
 				x: this.position.relative.x + this.position.end.x - this.position.start.x,
@@ -803,6 +811,7 @@ class ConfigUI {
 			};
 		}
 		
+		/** 改变main容器的坐标位置 */
 		changeDomPosition() {
 			this.domList.main.style.transform = `translate(${ this.position.relative.x }px, ${ this.position.relative.y }px)`;
 		}
