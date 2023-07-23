@@ -2,7 +2,7 @@
 // @name		BiliBili动态隐藏
 // @author		Yiero
 // @description		根据Up主名称，在动态页进行筛选，隐藏屏蔽的Up主动态。
-// @version		1.3.0
+// @version		1.4.0
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://t.bilibili.com/*
 // @icon		https://t.bilibili.com/favicon.ico
@@ -474,14 +474,24 @@ class ConfigUI {
 					layout: [ "prev", "page", "next", "count", "skip" ]
 				},
 				pagebar: `
-			<div>
-				<button type="button" class="layui-btn layui-btn-sm" lay-event="add">
-					Add
-				</button>
-				<button type="button" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="close">
-					Close
-				</button>
-			</div>`,
+					<div>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="add">
+							Add
+						</button>
+						<button type="button" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="close">
+							Close
+						</button>
+					</div>
+				`,
+				toolbar: `
+					<div>
+						<form style="display: flex;">
+							<input type="text" class="layui-input" style="width: 200px;" placeholder="输入需要搜索的UP主"/>
+							<button type="button" lay-submit lay-filter="table-search" class="layui-btn" style="margin-left: 20px;">Search</button>
+							<button type="button" lay-submit lay-filter="table-clear" class="layui-btn" style="margin-left: 20px;">Clear</button>
+						</form>
+					</div>
+				`,
 				width: 710,
 				defaultToolbar: ""
 			} );
@@ -548,6 +558,31 @@ class ConfigUI {
 				if ( event === "close" ) {
 					this.uiEvent.hide();
 				}
+			} );
+			form.on( "submit(table-search)", ( res ) => {
+				const input = res.form.querySelector( "input" );
+				const { value } = input;
+				if ( !value.trim() ) {
+					return;
+				}
+				const newData = [];
+				this.data.mapToArray( this.data.data ).forEach( ( bandData ) => {
+					if ( bandData.id.match( value ) ) {
+						newData.unshift( bandData );
+					}
+					else {
+						newData.push( bandData );
+					}
+				} );
+				treeTable.reloadData( "table-bili-band-config", {
+					data: newData
+				} );
+				input.value = "";
+				return false;
+			} );
+			form.on( "submit(table-clear)", ( res ) => {
+				res.form.querySelector( "input" ).value = "";
+				return false;
 			} );
 		} );
 	}
