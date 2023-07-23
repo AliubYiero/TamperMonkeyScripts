@@ -2,7 +2,7 @@
 // @name		BiliBili动态隐藏
 // @author		Yiero
 // @description		根据Up主名称，在动态页进行筛选，隐藏屏蔽的Up主动态。
-// @version		1.2.1
+// @version		1.3.0
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://t.bilibili.com/*
 // @icon		https://t.bilibili.com/favicon.ico
@@ -401,8 +401,9 @@ class ConfigUI {
 	createContainer() {
 		const container = createElement( {
 			tagName: "main",
-			className: [ "bili-band-config-container", "layui-anim" ],
-			style: "display:none; position: fixed; top: 0; left: 50%; transform: translateX(-50%);background: #ffffff; z-index: 10003;width: 710px",
+			className: [ "bili-band-config-container", "layui-anim", "hide" ],
+			style: "position: fixed; top: 0; left:calc(50% - 355px);background: #ffffff; z-index: 10003; width: 710px",
+			draggable: true,
 			innerHTML: `<table class="layui-anim-fadeout" id="ID-table-bili-band-config" lay-filter="show"></table>`
 		} );
 		addElementToDocument( container, ``, document.body );
@@ -718,10 +719,68 @@ class ConfigUI {
 	registerMenu( "添加屏蔽", () => {
 		configUI.show();
 	} );
+	
+	class DragEvent {
+		constructor() {
+			// Dom集合
+			__publicField( this, "domList" );
+			// 坐标集合
+			__publicField( this, "position" );
+			this.domList = {
+				main: document.querySelector( ".bili-band-config-container" )
+			};
+			this.position = {
+				start: { x: 0, y: 0 },
+				end: { x: 0, y: 0 },
+				relative: { x: 0, y: 0 }
+			};
+			this.domList.main.addEventListener( "dragstart", ( e ) => {
+				this.getStartPosition( e );
+			} );
+			this.domList.main.addEventListener( "dragend", ( e ) => {
+				e.preventDefault();
+				this.getEndPosition( e );
+			} );
+		}
+		
+		getStartPosition( e ) {
+			const { pageX, pageY } = e;
+			this.position.start = {
+				x: pageX,
+				y: pageY
+			};
+		}
+		
+		getEndPosition( e ) {
+			const { pageX, pageY } = e;
+			this.position.end = {
+				x: pageX,
+				y: pageY
+			};
+			this.getRelativePosition();
+			this.changeDomPosition();
+		}
+		
+		getRelativePosition() {
+			this.position.relative = {
+				x: this.position.relative.x + this.position.end.x - this.position.start.x,
+				y: this.position.relative.y + this.position.end.y - this.position.start.y
+			};
+		}
+		
+		changeDomPosition() {
+			this.domList.main.style.transform = `translate(${ this.position.relative.x }px, ${ this.position.relative.y }px)`;
+		}
+	}
+	
 	( () => {
-		document.querySelector( "[lay-event=close]" ).addEventListener( "click", () => {
+		const domList = {
+			closeBtn: document.querySelector( "[lay-event=close]" )
+		};
+		domList.closeBtn.addEventListener( "click", () => {
 			bandEvent.freshDynamic( domSelector.dynamic );
 			bandEvent.freshLive( domSelector.live );
 		} );
+		new DragEvent();
 	} )();
 } )();

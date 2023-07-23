@@ -2,7 +2,7 @@
 	"name": "BiliBili动态隐藏",
 	"description": "根据Up主名称，在动态页进行筛选，隐藏屏蔽的Up主动态。",
 	"author": "Yiero",
-	"version": "1.2.1",
+	"version": "1.3.0",
 	"match": [
 		"https://t.bilibili.com/*"
 	],
