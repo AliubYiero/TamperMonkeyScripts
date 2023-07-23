@@ -426,16 +426,15 @@ class ConfigUI {
 				page: {
 					layout: [ 'prev', 'page', 'next', 'count', 'skip' ],
 				},
+				// 底部工具栏
 				pagebar: `
 					<div>
-						<button type="button" class="layui-btn layui-btn-sm" lay-event="add">
-							Add
-						</button>
-						<button type="button" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="close">
-							Close
-						</button>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="add"> Add </button>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="addFromClipboard"> ReadClipboard </button>
+						<button type="button" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="close"> Close </button>
 					</div>
 				`,
+				// 顶部工具栏
 				toolbar: `
 					<div>
 						<form class="form-search" style="display: flex;">
@@ -446,6 +445,7 @@ class ConfigUI {
 					</div>
 				`,
 				width: 710,
+				// 不开启顶部右侧默认工具栏
 				defaultToolbar: ''
 			} )
 			
@@ -514,19 +514,35 @@ class ConfigUI {
 			treeTable.on( 'pagebar(show)', ( e: { [ propName: string ]: any } ) => {
 				const { event } = e;
 				
-				if ( ![ 'add', 'close' ].includes( event ) ) {
+				if ( ![ 'add', 'close', 'addFromClipboard' ].includes( event ) ) {
 					return;
 				}
 				
-				// 添加新屏蔽事件
+				// 事件：通过弹出框添加新的屏蔽字段
 				if ( event === 'add' ) {
 					this.uiEvent.add();
 					return;
 				}
 				
-				// 关闭UI事件
+				// 事件：通过剪切板添加新的屏蔽字段
+				if ( event === 'addFromClipboard' ) {
+					navigator.clipboard.readText().then(
+						( res ) => {
+							this.uiEvent.add( res );
+						},
+						( err ) => {
+							// @ts-ignore
+							layer.msg( err );
+						}
+					)
+					
+					return;
+				}
+				
+				// 事件：关闭UI
 				if ( event === 'close' ) {
 					this.uiEvent.hide();
+					return;
 				}
 			} );
 			
