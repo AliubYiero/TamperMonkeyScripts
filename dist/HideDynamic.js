@@ -2,7 +2,7 @@
 // @name		BiliBili动态隐藏
 // @author		Yiero
 // @description		根据Up主名称，在动态页进行筛选，隐藏屏蔽的Up主动态。
-// @version		1.4.2
+// @version		1.4.5
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://t.bilibili.com/*
 // @icon		https://t.bilibili.com/favicon.ico
@@ -294,19 +294,29 @@ class UiEvent {
 	}
 	
 	/** 添加数据 */
-	add() {
-		layer.prompt( { title: "输入要屏蔽Up主名" }, ( res, index ) => {
-			layer.close( index );
-			res = res.trim();
-			if ( !res ) {
+	add( res ) {
+		const addData = ( res2 ) => {
+			res2 = res2.trim();
+			if ( !res2 ) {
 				return;
 			}
-			const newData = this.data.set( { id: res } );
+			const newData = this.data.set( { id: res2 } );
+			if ( !newData ) {
+				return;
+			}
 			this.treeTable.addNodes( "table-bili-band-config", {
 				index: 0,
 				data: newData
 			} );
 			this.treeTable.reloadData( "table-bili-band-config" );
+		};
+		if ( res ) {
+			addData( res );
+			return;
+		}
+		layer.prompt( { title: "输入要屏蔽Up主名" }, ( res2, index ) => {
+			layer.close( index );
+			addData( res2 );
 		} );
 	}
 	
@@ -373,6 +383,43 @@ class UiEvent {
 	
 	getMainDom() {
 		this.domList.main = document.querySelector( ".bili-band-config-container" );
+	}
+	
+	submitSearch( input ) {
+		const { value } = input;
+		if ( !value.trim() ) {
+			return false;
+		}
+		input.value = "";
+		const newData = [];
+		let isMatchValue = false;
+		this.data.mapToArray( this.data.data ).forEach( ( bandData ) => {
+			if ( bandData.id.match( value ) ) {
+				isMatchValue = true;
+				newData.unshift( bandData );
+			}
+			else {
+				newData.push( bandData );
+			}
+		} );
+		if ( !isMatchValue ) {
+			layer.confirm( `没有搜索到UP主 [${ value }] ，是否新建UP主
+(2s后自动关闭窗口)`, {
+				time: 2e3,
+				btn: [ "确认", "取消" ]
+			}, ( index ) => {
+				layer.close( index );
+				this.add( value );
+			} );
+			return false;
+		}
+		this.treeTable.reloadData( "table-bili-band-config", {
+			data: newData,
+			page: {
+				// 将当前页面设置到第一页，避免看不到搜索结果
+				curr: 1
+			}
+		} );
 	}
 }
 
@@ -473,19 +520,18 @@ class ConfigUI {
 				page: {
 					layout: [ "prev", "page", "next", "count", "skip" ]
 				},
+				// 底部工具栏
 				pagebar: `
 					<div>
-						<button type="button" class="layui-btn layui-btn-sm" lay-event="add">
-							Add
-						</button>
-						<button type="button" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="close">
-							Close
-						</button>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="add"> Add </button>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="addFromClipboard"> ReadClipboard </button>
+						<button type="button" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="close"> Close </button>
 					</div>
 				`,
+				// 顶部工具栏
 				toolbar: `
 					<div>
-						<form style="display: flex;">
+						<form class="form-search" style="display: flex;">
 							<input type="text" class="layui-input" style="width: 200px;" placeholder="输入需要搜索的UP主"/>
 							<button type="button" lay-submit lay-filter="table-search" class="layui-btn" style="margin-left: 20px;">Search</button>
 							<button type="button" lay-submit lay-filter="table-clear" class="layui-btn" style="margin-left: 20px;">Clear</button>
@@ -493,6 +539,7 @@ class ConfigUI {
 					</div>
 				`,
 				width: 710,
+				// 不开启顶部右侧默认工具栏
 				defaultToolbar: ""
 			} );
 			treeTable.on( "tool(show)", ( e ) => {
@@ -548,41 +595,45 @@ class ConfigUI {
 			} );
 			treeTable.on( "pagebar(show)", ( e ) => {
 				const { event } = e;
-				if ( ![ "add", "close" ].includes( event ) ) {
+				if ( ![ "add", "close", "addFromClipboard" ].includes( event ) ) {
 					return;
 				}
 				if ( event === "add" ) {
 					this.uiEvent.add();
 					return;
 				}
+				if ( event === "addFromClipboard" ) {
+					navigator.clipboard.readText().then(
+						( res ) => {
+							this.uiEvent.add( res );
+						},
+						( err ) => {
+							layer.msg( err );
+						}
+					);
+					return;
+				}
 				if ( event === "close" ) {
 					this.uiEvent.hide();
+					return;
 				}
 			} );
 			form.on( "submit(table-search)", ( res ) => {
 				const input = res.form.querySelector( "input" );
-				const { value } = input;
-				if ( !value.trim() ) {
-					return;
-				}
-				const newData = [];
-				this.data.mapToArray( this.data.data ).forEach( ( bandData ) => {
-					if ( bandData.id.match( value ) ) {
-						newData.unshift( bandData );
-					}
-					else {
-						newData.push( bandData );
-					}
-				} );
-				treeTable.reloadData( "table-bili-band-config", {
-					data: newData
-				} );
-				input.value = "";
+				this.uiEvent.submitSearch( input );
 				return false;
 			} );
 			form.on( "submit(table-clear)", ( res ) => {
 				res.form.querySelector( "input" ).value = "";
 				return false;
+			} );
+			const domList = {
+				form: document.querySelector( ".form-search" ),
+				input: document.querySelector( ".form-search > input" )
+			};
+			domList.form.addEventListener( "submit", ( e ) => {
+				e.preventDefault();
+				this.uiEvent.submitSearch( domList.input );
 			} );
 		} );
 	}
