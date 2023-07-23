@@ -280,12 +280,10 @@ class ConfigUI {
 		const container = createElement( {
 			tagName: 'main',
 			className: [ 'bili-band-config-container', 'layui-anim', 'hide' ],
-			style: 'position: fixed; top: 0; left:calc(50% - 355px);background: #ffffff; z-index: 10003; width: 710px',
-			draggable: true,
 			innerHTML: `<table class="layui-anim-fadeout" id="ID-table-bili-band-config" lay-filter="show"></table>`
 		} )
 		
-		addElementToDocument( container, ``, document.body );
+		addElementToDocument( container, `.bili-band-config-container {position: fixed; top: 0; left:calc(50% - 355px);background: #ffffff; z-index: 10003; width: 710px;}`, document.body );
 	}
 	
 	/**

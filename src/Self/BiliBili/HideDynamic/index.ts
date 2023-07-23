@@ -244,6 +244,7 @@ type BandType = 'dynamic' | 'video' | 'live';
 			this.domList = {
 				main: document.querySelector( '.bili-band-config-container' ) as HTMLElement,
 			}
+			this.domList.tool = this.domList.main.querySelector( '.layui-table-tool' ) as HTMLElement;
 			
 			this.position = {
 				start: { x: 0, y: 0 },
@@ -251,19 +252,33 @@ type BandType = 'dynamic' | 'video' | 'live';
 				relative: { x: 0, y: 0 },
 			}
 			
+			this.bindDragEvent( this.domList.tool );
+		}
+		
+		/** 绑定拖拽事件 */
+		bindDragEvent( willDraggableElement: HTMLElement ) {
+			willDraggableElement.draggable = true;
+			
 			// TODO 改变拖拽时鼠标的样式，不再是禁止样式
 			// 绑定拖拽事件开始
-			this.domList.main.addEventListener( 'dragstart', ( e ) => {
+			willDraggableElement.addEventListener( 'dragstart', ( e ) => {
+				// 获取开始坐标
 				this.getStartPosition( e );
 			} )
 			
 			// 绑定拖拽事件结束
-			this.domList.main.addEventListener( 'dragend', ( e ) => {
+			willDraggableElement.addEventListener( 'dragend', ( e ) => {
 				e.preventDefault();
+				// 获取结束坐标
 				this.getEndPosition( e );
+				// 计算相对坐标
+				this.getRelativePosition();
+				// 改变Dom位置
+				this.changeDomPosition()
 			} )
 		}
 		
+		/** 获取开始坐标 */
 		getStartPosition( e: MouseEvent ) {
 			const { pageX, pageY } = e;
 			this.position.start = {
@@ -272,16 +287,16 @@ type BandType = 'dynamic' | 'video' | 'live';
 			}
 		}
 		
+		/** 获取结束坐标 */
 		getEndPosition( e: MouseEvent ) {
 			const { pageX, pageY } = e;
 			this.position.end = {
 				x: pageX,
 				y: pageY,
 			}
-			this.getRelativePosition();
-			this.changeDomPosition()
 		}
 		
+		/** 获取相对坐标 */
 		getRelativePosition() {
 			this.position.relative = {
 				x: this.position.relative.x + this.position.end.x - this.position.start.x,
@@ -289,6 +304,7 @@ type BandType = 'dynamic' | 'video' | 'live';
 			}
 		}
 		
+		/** 改变main容器的坐标位置 */
 		changeDomPosition() {
 			this.domList.main.style.transform = `translate(${ this.position.relative.x }px, ${ this.position.relative.y }px)`
 		}
