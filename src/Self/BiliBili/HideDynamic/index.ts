@@ -5,6 +5,7 @@ import { Info } from '../../../../lib/Base/Info'
 import { BandData, ConfigUI } from './src/ConfigUI'
 import { Sleep } from '../../../../lib/Base/Sleep'
 
+// 观察者需要用到的选择器接口
 interface ObserverSelectorList {
 	
 	// 等待加载的元素容器选择器
@@ -26,7 +27,15 @@ interface ObserverSelectorList {
 	filterToken?: string;
 }
 
+// 坐标类
+interface Position {
+	x: number;
+	y: number;
+}
+
+// 屏蔽类型
 type BandType = 'dynamic' | 'video' | 'live';
+
 
 ( async () => {
 	const print = new Info( 'BiliBiliHideDynamic' );
@@ -223,13 +232,80 @@ type BandType = 'dynamic' | 'video' | 'live';
 		configUI.show();
 	} )
 	
+	// 创建拖拽事件
+	class DragEvent {
+		// Dom集合
+		domList: { [ propName: string ]: HTMLElement }
+		
+		// 坐标集合
+		position: { start: Position, end: Position, relative: Position }
+		
+		constructor() {
+			this.domList = {
+				main: document.querySelector( '.bili-band-config-container' ) as HTMLElement,
+			}
+			
+			this.position = {
+				start: { x: 0, y: 0 },
+				end: { x: 0, y: 0 },
+				relative: { x: 0, y: 0 },
+			}
+			
+			// TODO 改变拖拽时鼠标的样式，不再是禁止样式
+			// 绑定拖拽事件开始
+			this.domList.main.addEventListener( 'dragstart', ( e ) => {
+				this.getStartPosition( e );
+			} )
+			
+			// 绑定拖拽事件结束
+			this.domList.main.addEventListener( 'dragend', ( e ) => {
+				e.preventDefault();
+				this.getEndPosition( e );
+			} )
+		}
+		
+		getStartPosition( e: MouseEvent ) {
+			const { pageX, pageY } = e;
+			this.position.start = {
+				x: pageX,
+				y: pageY,
+			}
+		}
+		
+		getEndPosition( e: MouseEvent ) {
+			const { pageX, pageY } = e;
+			this.position.end = {
+				x: pageX,
+				y: pageY,
+			}
+			this.getRelativePosition();
+			this.changeDomPosition()
+		}
+		
+		getRelativePosition() {
+			this.position.relative = {
+				x: this.position.relative.x + this.position.end.x - this.position.start.x,
+				y: this.position.relative.y + this.position.end.y - this.position.start.y,
+			}
+		}
+		
+		changeDomPosition() {
+			this.domList.main.style.transform = `translate(${ this.position.relative.x }px, ${ this.position.relative.y }px)`
+		}
+	}
 	
 	;( () => {
+		const domList: { [ propName: string ]: HTMLElement } = {
+			closeBtn: document.querySelector( '[lay-event=close]' ) as HTMLElement,
+		}
 		// 给配置菜单的关闭绑定页面数据刷新事件
-		( <HTMLElement> document.querySelector( '[lay-event=close]' ) ).addEventListener( 'click', () => {
+		domList.closeBtn.addEventListener( 'click', () => {
 			bandEvent.freshDynamic( domSelector.dynamic );
 			bandEvent.freshLive( domSelector.live );
 		} );
+		
+		// 实例化拖拽事件
+		new DragEvent();
 	} )();
 	
 	
