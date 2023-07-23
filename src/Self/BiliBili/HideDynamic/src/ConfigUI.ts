@@ -357,14 +357,24 @@ class ConfigUI {
 					layout: [ 'prev', 'page', 'next', 'count', 'skip' ],
 				},
 				pagebar: `
-			<div>
-				<button type="button" class="layui-btn layui-btn-sm" lay-event="add">
-					Add
-				</button>
-				<button type="button" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="close">
-					Close
-				</button>
-			</div>`,
+					<div>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="add">
+							Add
+						</button>
+						<button type="button" class="layui-btn layui-btn-sm layui-btn-warm" lay-event="close">
+							Close
+						</button>
+					</div>
+				`,
+				toolbar: `
+					<div>
+						<form style="display: flex;">
+							<input type="text" class="layui-input" style="width: 200px;" placeholder="输入需要搜索的UP主"/>
+							<button type="button" lay-submit lay-filter="table-search" class="layui-btn" style="margin-left: 20px;">Search</button>
+							<button type="button" lay-submit lay-filter="table-clear" class="layui-btn" style="margin-left: 20px;">Clear</button>
+						</form>
+					</div>
+				`,
 				width: 710,
 				defaultToolbar: ''
 			} )
@@ -448,6 +458,41 @@ class ConfigUI {
 				}
 			} );
 			
+			// 顶部搜索栏提交事件
+			form.on( 'submit(table-search)', ( res: { [ propName: string ]: any } ) => {
+				const input = res.form.querySelector( 'input' ) as HTMLInputElement;
+				const { value } = input;
+				if ( !value.trim() ) {
+					return;
+				}
+				
+				// 更新数据，match到搜索框中的值时，unshift到数组最前面，否则push到数组后面
+				const newData: BandData[] = [];
+				this.data.mapToArray( <Map<string, BandData>> this.data.data ).forEach( bandData => {
+					if ( bandData.id.match( value ) ) {
+						newData.unshift( bandData );
+					} else {
+						newData.push( bandData );
+					}
+				} );
+				// 更新数据到配置菜单
+				treeTable.reloadData( 'table-bili-band-config', {
+					data: newData
+				} )
+				
+				// 清空输入框
+				input.value = '';
+				// 阻止默认 form 跳转
+				return false;
+			} );
+			
+			form.on( 'submit(table-clear)', ( res: { [ propName: string ]: any } ) => {
+				// 清空Input输入
+				res.form.querySelector( 'input' ).value = '';
+				
+				// 阻止默认 form 跳转
+				return false;
+			} );
 		} )
 	}
 	

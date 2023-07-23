@@ -298,6 +298,7 @@ type BandType = 'dynamic' | 'video' | 'live';
 		const domList: { [ propName: string ]: HTMLElement } = {
 			closeBtn: document.querySelector( '[lay-event=close]' ) as HTMLElement,
 		}
+		
 		// 给配置菜单的关闭绑定页面数据刷新事件
 		domList.closeBtn.addEventListener( 'click', () => {
 			bandEvent.freshDynamic( domSelector.dynamic );
