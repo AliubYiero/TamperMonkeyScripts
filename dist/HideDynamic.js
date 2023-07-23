@@ -2,7 +2,7 @@
 // @name		BiliBili动态隐藏
 // @author		Yiero
 // @description		根据Up主名称，在动态页进行筛选，隐藏屏蔽的Up主动态。
-// @version		1.4.1
+// @version		1.4.2
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://t.bilibili.com/*
 // @icon		https://t.bilibili.com/favicon.ico
@@ -260,6 +260,7 @@ class Data {
 	arrayToMap( array ) {
 		const map = /* @__PURE__ */ new Map();
 		array.forEach( ( value ) => {
+			value.id = value.id.trim();
 			map.set( value.id, value );
 		} );
 		return map;
@@ -296,7 +297,8 @@ class UiEvent {
 	add() {
 		layer.prompt( { title: "输入要屏蔽Up主名" }, ( res, index ) => {
 			layer.close( index );
-			if ( !res.trim() ) {
+			res = res.trim();
+			if ( !res ) {
 				return;
 			}
 			const newData = this.data.set( { id: res } );
@@ -546,7 +548,7 @@ class ConfigUI {
 			} );
 			treeTable.on( "pagebar(show)", ( e ) => {
 				const { event } = e;
-				if ( [ "add", "close" ].indexOf( event ) === -1 ) {
+				if ( ![ "add", "close" ].includes( event ) ) {
 					return;
 				}
 				if ( event === "add" ) {
@@ -602,9 +604,6 @@ class ConfigUI {
 	print.info( "引入UI" );
 	const configUI = new ConfigUI();
 	await Sleep.windowLoad();
-	/* @__PURE__ */
-	( () => {
-	} )( configUI.data );
 	
 	class Observer {
 		constructor() {
