@@ -287,7 +287,7 @@ class UiEvent {
 		// 当没有搜索到数据的时候的返回
 		if ( !isMatchValue ) {
 			// @ts-ignore
-			layer.confirm( '没有搜索到数据，是否新建该屏蔽UP主 \n(2s后自动关闭窗口)', {
+			layer.confirm( `没有搜索到UP主 [${ value }] ，是否新建UP主 \n(2s后自动关闭窗口)`, {
 				time: 2000,
 				btn: [ '确认', '取消' ]
 			}, ( index: number ) => {
