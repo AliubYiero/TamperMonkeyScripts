@@ -2,7 +2,7 @@
 // @name		kmelearningAutoVideoPass
 // @author		Yiero
 // @description		自动播放视频, 切换视频
-// @version		1.0.1
+// @version		1.1.0
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://pc.kmelearning.com/*
 // @icon		https://pc.kmelearning.com/favicon.ico
@@ -21,10 +21,16 @@ var __publicField = ( obj, key, value ) => {
 	return value;
 };
 
-function freshListenerPushState( callback, delay = 1 ) {
+function freshListenerPopstate( callback, s = 1 ) {
+	window.addEventListener( "popstate", () => {
+		setTimeout( callback, s * 1e3 );
+	} );
+}
+
+function freshListenerPushState( callback, s = 1 ) {
 	let _pushState = window.history.pushState;
 	window.history.pushState = function () {
-		setTimeout( callback, delay * 1e3 );
+		setTimeout( callback, s * 1e3 );
 		return _pushState.apply( this, arguments );
 	};
 }
@@ -59,6 +65,14 @@ class Info {
 	contentInfo( ...msg ) {
 		return [ this.header, ...msg ];
 	}
+}
+
+function judgeVideoPage() {
+	return !!document.URL.match( /^https:\/\/pc\.kmelearning\.com\/jxccb\/home\/courseplay\/.*/g );
+}
+
+function judgeStudyPage() {
+	return !!document.URL.match( /^https:\/\/pc\.kmelearning\.com\/jxccb\/home\/training\/study\/.*/g );
 }
 
 function getElement( parent, selector, timeoutPerMs = 0 ) {
@@ -117,68 +131,126 @@ class Sleep {
 	}
 }
 
-const print = new Info( "kmelearningAutoVideoPass" );
-( () => {
-	function jedgeVideoPage() {
-		return !!document.URL.match( /^https:\/\/pc.kmelearning.com\/jxccb\/home\/courseplay\/.*/g );
-	}
-	
-	let domList = {};
-	
-	async function getVideoList() {
-		domList.videoList = await getElement( document.body, ".course-menu-container" );
-		await Sleep.time( 0.5 );
-	}
-	
-	function checkVideoList() {
-		const videoList = domList.videoList;
-		const notReadVideoList = videoList.querySelectorAll( ".course-menu-item:not(.isChapter) .course-menu-dot:not(:has(.anticon))" );
-		const videoPage = notReadVideoList[0];
+let domList = {};
+
+async function getVideoList() {
+	domList.videoList = await getElement( document.body, ".course-menu-container" );
+	await Sleep.time( 0.5 );
+}
+
+function checkVideoList() {
+	const videoList = domList.videoList;
+	const notReadVideoList = videoList.querySelectorAll( ".course-menu-item:not(.isChapter) .course-menu-dot:not(:has(.anticon))" );
+	const videoPage = notReadVideoList[0];
+	if ( videoPage ) {
 		videoPage.click();
 	}
-	
-	async function getVideoElement() {
-		await Sleep.time( 2 );
-		domList.video = await getElement( document.body, "video" );
+	else {
+		print.log( "全部视频已经完成观看" );
+		backHistoryInStudyList();
 	}
-	
-	function playVideo() {
-		let videoElement = domList.video;
-		videoElement.volume = 0;
-		videoElement.autoplay = true;
-		videoElement.play();
+}
+
+function backHistoryInStudyList() {
+	if ( judgeStudyPage() ) {
+		return;
 	}
-	
-	async function videoObserver( callback ) {
-		if ( !jedgeVideoPage() ) {
-			return;
+	else {
+		history.go( -1 );
+	}
+}
+
+async function getVideoElement() {
+	await Sleep.time( 2 );
+	domList.video = await getElement( document.body, "video" );
+}
+
+function playVideo() {
+	let videoElement = domList.video;
+	videoElement.volume = 0;
+	videoElement.autoplay = true;
+	videoElement.play();
+}
+
+function videoEndEvent() {
+	let videoElement = domList.video;
+	videoElement.addEventListener( "ended", () => {
+		print.log( "视频结束" );
+		checkVideoList();
+	} );
+}
+
+async function videoObserver( callback ) {
+	if ( !judgeVideoPage() ) {
+		return;
+	}
+	domList.videoContainer = await getElement( document.body, ".course-content-play-area" );
+	const observer = new MutationObserver( ( e ) => {
+		e.forEach( ( record ) => {
+			const removeDom = record.removedNodes[0];
+			if ( removeDom && removeDom.toString() === "[object HTMLDivElement]" && ( removeDom == null ? void 0 : removeDom.classList.contains( "course-player" ) ) ) {
+				print.log( "视频跳转" );
+				setTimeout( callback, 2e3 );
+			}
+		} );
+	} );
+	observer.observe( domList.videoContainer, {
+		subtree: true,
+		childList: true
+	} );
+}
+
+async function getAllNotFinishedVideoList() {
+	await getElement( document.body, ".panelHeader" );
+	await Sleep.time( 0.5 );
+	domList.videoList = document.querySelectorAll( ".panelHeader:not(:has(.completeLabel))" );
+}
+
+async function getNotFinishedVideoList() {
+	const videoListContainer = domList.videoList[0];
+	if ( videoListContainer ) {
+		domList.videoListContainer = videoListContainer;
+		domList.videoListContainer.click();
+		await Sleep.time( 0.5 );
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+function getUnFinishedChildVideoList() {
+	const childVideoListNodeList = document.querySelectorAll( ".panelContent" );
+	for ( const childVideoList of childVideoListNodeList ) {
+		const isFinishDom = childVideoList.querySelector( "use" );
+		if ( isFinishDom.getAttribute( "xlink:href" ) === "#." ) {
+			print.log( "进入未完成的视频" );
+			childVideoList.click();
 		}
-		domList.videoContainer = await getElement( document.body, ".course-content-play-area" );
-		const observer = new MutationObserver( ( e ) => {
-			e.forEach( ( record ) => {
-				const removeDom = record.removedNodes[0];
-				if ( removeDom && removeDom.toString() === "[object HTMLDivElement]" && ( removeDom == null ? void 0 : removeDom.classList.contains( "course-player" ) ) ) {
-					print.log( "视频跳转" );
-					setTimeout( callback, 2e3 );
-				}
-			} );
-		} );
-		observer.observe( domList.videoContainer, {
-			subtree: true,
-			childList: true
-		} );
 	}
-	
+}
+
+const print = new Info( "kmelearningAutoVideoPass" );
+( () => {
 	async function main() {
-		if ( !jedgeVideoPage() ) {
+		if ( judgeVideoPage() ) {
+			print.log( "进入视频页面" );
+			await getVideoList();
+			await checkVideoList();
+			await getVideoElement();
+			print.log( "播放视频", domList.video );
+			playVideo();
+			videoEndEvent();
 			return;
 		}
-		print.log( "进入视频页面" );
-		await getVideoList();
-		await checkVideoList();
-		await getVideoElement();
-		print.log( "播放视频", domList.video );
-		playVideo();
+		else if ( judgeStudyPage() ) {
+			print.log( "进入学习目录页面" );
+			await getAllNotFinishedVideoList();
+			if ( !await getNotFinishedVideoList() ) {
+				return;
+			}
+			getUnFinishedChildVideoList();
+		}
 	}
 	
 	main();
@@ -186,5 +258,8 @@ const print = new Info( "kmelearningAutoVideoPass" );
 	freshListenerPushState( () => {
 		main();
 		videoObserver( main );
+	} );
+	freshListenerPopstate( () => {
+		main();
 	} );
 } )();
