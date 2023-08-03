@@ -1,0 +1,20 @@
+{
+	"name": "kmelearningAutoVideoPass",
+	"description": "自动播放视频, 切换视频",
+	"author": "Yiero",
+	"version": "1.0.1",
+	"match": [
+		"https://pc.kmelearning.com/*"
+	],
+	"grant": [
+		""
+	],
+	"require": [
+		""
+	],
+	"resource": {},
+	"run-at": "",
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}

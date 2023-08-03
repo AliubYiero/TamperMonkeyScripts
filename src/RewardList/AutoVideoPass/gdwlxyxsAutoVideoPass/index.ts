@@ -1,5 +1,5 @@
 /* entry */
-import { FreshListenerPushState } from '../../../../lib/Listener/Page/FreshListener'
+import { freshListenerPushState } from '../../../../lib/Listener/Page/FreshListener'
 import { getElement } from '../../../../lib/Listener/ElementAdd'
 import { Sleep } from '../../../../lib/Base/Sleep'
 
@@ -47,7 +47,7 @@ import { Sleep } from '../../../../lib/Base/Sleep'
 		bindVideoObserver();
 		
 		// 监听页面改变
-		FreshListenerPushState( bindVideoObserver );
+		freshListenerPushState( bindVideoObserver );
 		
 		async function bindVideoObserver() {
 			console.log( '检测到页面改变' );
