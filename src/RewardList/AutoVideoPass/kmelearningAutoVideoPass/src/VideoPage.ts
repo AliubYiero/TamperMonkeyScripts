@@ -8,7 +8,7 @@
 import { getElement } from '../../../../../lib/Listener/ElementAdd'
 import { Sleep } from '../../../../../lib/Base/Sleep'
 import { judgeStudyPage, judgeVideoPage } from './PageListener'
-import { main, print } from '../index';
+import { print } from '../index';
 
 export {
 	domList,
@@ -37,13 +37,24 @@ function checkVideoList() {
 	
 	print.log( '检查视频列表', videoPage );
 	// 如果存在未看视频, 则跳转观看视频
+	if ( notReadVideoList.length === 1 || !videoPage ) {
+		getElement( document.body, 'video' ).then(
+			( video ) => {
+				domList.video = video as HTMLElement;
+				videoEndEvent();
+			}
+		)
+	}
+	
 	if ( videoPage ) {
 		videoPage.click();
 	}
 	// 如果不存在未看视频, 则后退一页历史
 	else {
 		print.log( '全部视频已经完成观看' );
-		backHistoryInStudyList();
+		if ( !sessionStorage.getItem( 'closeFinishedEvent' ) ) {
+			backHistoryInStudyList();
+		}
 	}
 }
 
@@ -85,7 +96,7 @@ function videoEndEvent() {
 	let videoElement = domList.video as HTMLVideoElement;
 	videoElement.addEventListener( 'ended', () => {
 		print.log( '视频结束' );
-		setTimeout( main, 2000 );
+		location.reload();
 	} )
 }
 

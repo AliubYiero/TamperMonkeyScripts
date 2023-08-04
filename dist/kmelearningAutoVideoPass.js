@@ -2,7 +2,7 @@
 // @name		kmelearningAutoVideoPass
 // @author		Yiero
 // @description		自动播放视频, 切换视频
-// @version		1.1.2
+// @version		1.1.3
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://pc.kmelearning.com/*
 // @icon		https://pc.kmelearning.com/favicon.ico
@@ -147,12 +147,22 @@ function checkVideoList() {
 	const notReadVideoList = videoList.querySelectorAll( ".course-menu-item:not(.isChapter) .course-menu-dot:not(:has(.anticon))" );
 	const videoPage = notReadVideoList[0];
 	print.log( "检查视频列表", videoPage );
+	if ( notReadVideoList.length === 1 || !videoPage ) {
+		getElement( document.body, "video" ).then(
+			( video ) => {
+				domList.video = video;
+				videoEndEvent();
+			}
+		);
+	}
 	if ( videoPage ) {
 		videoPage.click();
 	}
 	else {
 		print.log( "全部视频已经完成观看" );
-		backHistoryInStudyList();
+		if ( !sessionStorage.getItem( "closeFinishedEvent" ) ) {
+			backHistoryInStudyList();
+		}
 	}
 }
 
@@ -186,7 +196,7 @@ function videoEndEvent() {
 	let videoElement = domList.video;
 	videoElement.addEventListener( "ended", () => {
 		print.log( "视频结束" );
-		setTimeout( main, 2e3 );
+		location.reload();
 	} );
 }
 
@@ -250,7 +260,6 @@ async function main() {
 		await getVideoElement();
 		print.log( "播放视频", domList.video );
 		playVideo();
-		videoEndEvent();
 		return;
 	}
 	else if ( judgeStudyPage() ) {

@@ -3,15 +3,7 @@ import { freshListenerPopstate, freshListenerPushState } from '../../../../lib/L
 import { Info } from '../../../../lib/Base/Info'
 
 import { judgeStudyPage, judgeVideoPage, saveStudyPageId } from './src/PageListener'
-import {
-	checkVideoList,
-	domList,
-	getVideoElement,
-	getVideoList,
-	playVideo,
-	videoEndEvent,
-	videoObserver
-} from './src/VideoPage'
+import { checkVideoList, domList, getVideoElement, getVideoList, playVideo, videoObserver } from './src/VideoPage'
 import { getAllNotFinishedVideoList, getNotFinishedVideoList, getUnFinishedChildVideoList } from './src/VideoListPage'
 
 
@@ -40,7 +32,6 @@ async function main() {
 		playVideo();
 		
 		// 绑定视频结束事件
-		videoEndEvent();
 		return;
 	}
 	else if ( judgeStudyPage() ) {
