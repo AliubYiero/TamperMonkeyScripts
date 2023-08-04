@@ -2,7 +2,7 @@
 import { freshListenerPopstate, freshListenerPushState } from '../../../../lib/Listener/Page/FreshListener'
 import { Info } from '../../../../lib/Base/Info'
 
-import { judgeStudyPage, judgeVideoPage } from './src/PageListener'
+import { judgeStudyPage, judgeVideoPage, saveStudyPageId } from './src/PageListener'
 import {
 	checkVideoList,
 	domList,
@@ -45,6 +45,10 @@ export {
 		}
 		else if ( judgeStudyPage() ) {
 			print.log( '进入学习目录页面' );
+			
+			/* 保存学习目录id */
+			const studyId = saveStudyPageId();
+			localStorage.setItem( 'studyId', String( studyId ) );
 			
 			// 获取视频列表
 			await getAllNotFinishedVideoList();

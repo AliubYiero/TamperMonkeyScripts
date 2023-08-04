@@ -8,7 +8,8 @@
 
 export {
 	judgeVideoPage,
-	judgeStudyPage
+	judgeStudyPage,
+	saveStudyPageId,
 }
 
 
@@ -21,4 +22,9 @@ function judgeVideoPage(): boolean {
 function judgeStudyPage(): boolean {
 	// print.log( 'judgeStudyPage', document.URL, !!document.URL.match( /^https:\/\/pc.kmelearning.com\/jxccb\/training\/study\/.*/g ) );
 	return !!document.URL.match( /^https:\/\/pc\.kmelearning\.com\/jxccb\/home\/training\/study\/.*/g );
+}
+
+/* 保存学习目录id */
+function saveStudyPageId() {
+	return +( <string[]> document.URL.match( /(?<=\/)\d+/g ) )[ 0 ] as number;
 }

@@ -6,6 +6,7 @@
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://pc.kmelearning.com/*
 // @icon		https://pc.kmelearning.com/favicon.ico
+// @require		file://D:\Code\TamperMoneyScripts-vite\dist\kmelearningAutoVideoPass.js
 // @license		GPL
 // ==/UserScript==
 
@@ -45,9 +46,7 @@ class Info {
 	}
 	
 	log( ...msg ) {
-		/* @__PURE__ */
-		( () => {
-		} )( ...this.contentInfo( ...msg ) );
+		console.log( ...this.contentInfo( ...msg ) );
 	}
 	
 	info( ...msg ) {
@@ -63,7 +62,7 @@ class Info {
 	}
 	
 	contentInfo( ...msg ) {
-		return [ this.header, ...msg ];
+		return [ this.header, `[${ (/* @__PURE__ */ new Date() ).toLocaleString( "zh-ch" ) }]`, ...msg ];
 	}
 }
 
@@ -73,6 +72,10 @@ function judgeVideoPage() {
 
 function judgeStudyPage() {
 	return !!document.URL.match( /^https:\/\/pc\.kmelearning\.com\/jxccb\/home\/training\/study\/.*/g );
+}
+
+function saveStudyPageId() {
+	return +document.URL.match( new RegExp( "(?<=\\/)\\d+", "g" ) )[0];
 }
 
 function getElement( parent, selector, timeoutPerMs = 0 ) {
@@ -142,6 +145,7 @@ function checkVideoList() {
 	const videoList = domList.videoList;
 	const notReadVideoList = videoList.querySelectorAll( ".course-menu-item:not(.isChapter) .course-menu-dot:not(:has(.anticon))" );
 	const videoPage = notReadVideoList[0];
+	print.log( "检查视频列表", videoPage );
 	if ( videoPage ) {
 		videoPage.click();
 	}
@@ -156,6 +160,11 @@ function backHistoryInStudyList() {
 		return;
 	}
 	else {
+		const studyId = localStorage.getItem( "studyId" );
+		if ( studyId ) {
+			location.href = `https://pc.kmelearning.com/jxccb/home/training/study/${ studyId }`;
+			return;
+		}
 		history.go( -1 );
 	}
 }
@@ -176,7 +185,7 @@ function videoEndEvent() {
 	let videoElement = domList.video;
 	videoElement.addEventListener( "ended", () => {
 		print.log( "视频结束" );
-		checkVideoList();
+		setTimeout( checkVideoList, 2e3 );
 	} );
 }
 
@@ -245,6 +254,8 @@ const print = new Info( "kmelearningAutoVideoPass" );
 		}
 		else if ( judgeStudyPage() ) {
 			print.log( "进入学习目录页面" );
+			const studyId = saveStudyPageId();
+			localStorage.setItem( "studyId", String( studyId ) );
 			await getAllNotFinishedVideoList();
 			if ( !await getNotFinishedVideoList() ) {
 				return;

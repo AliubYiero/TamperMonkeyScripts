@@ -35,6 +35,7 @@ function checkVideoList() {
 	const notReadVideoList = ( <HTMLElement> videoList ).querySelectorAll( '.course-menu-item:not(.isChapter) .course-menu-dot:not(:has(.anticon))' ) as NodeList;
 	const videoPage = notReadVideoList[ 0 ] as HTMLElement;
 	
+	print.log( '检查视频列表', videoPage );
 	// 如果存在未看视频, 则跳转观看视频
 	if ( videoPage ) {
 		videoPage.click();
@@ -52,8 +53,12 @@ function backHistoryInStudyList() {
 		return;
 	}
 	else {
+		const studyId = localStorage.getItem( 'studyId' );
+		if ( studyId ) {
+			location.href = `https://pc.kmelearning.com/jxccb/home/training/study/${ studyId }`;
+			return;
+		}
 		history.go( -1 );
-		// backHistoryInStudyList();
 	}
 }
 
@@ -80,7 +85,7 @@ function videoEndEvent() {
 	let videoElement = domList.video as HTMLVideoElement;
 	videoElement.addEventListener( 'ended', () => {
 		print.log( '视频结束' );
-		checkVideoList();
+		setTimeout( checkVideoList, 2000 );
 	} )
 }
 
