@@ -2,7 +2,7 @@
 // @name		kmelearningAutoVideoPass
 // @author		Yiero
 // @description		自动播放视频, 切换视频
-// @version		1.1.1
+// @version		1.1.2
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://pc.kmelearning.com/*
 // @icon		https://pc.kmelearning.com/favicon.ico
