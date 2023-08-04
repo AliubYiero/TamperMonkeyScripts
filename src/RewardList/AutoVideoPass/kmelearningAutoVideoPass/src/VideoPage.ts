@@ -8,7 +8,7 @@
 import { getElement } from '../../../../../lib/Listener/ElementAdd'
 import { Sleep } from '../../../../../lib/Base/Sleep'
 import { judgeStudyPage, judgeVideoPage } from './PageListener'
-import { print } from '../index';
+import { main, print } from '../index';
 
 export {
 	domList,
@@ -85,7 +85,7 @@ function videoEndEvent() {
 	let videoElement = domList.video as HTMLVideoElement;
 	videoElement.addEventListener( 'ended', () => {
 		print.log( '视频结束' );
-		setTimeout( checkVideoList, 2000 );
+		setTimeout( main, 2000 );
 	} )
 }
 

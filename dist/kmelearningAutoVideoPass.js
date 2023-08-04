@@ -186,7 +186,7 @@ function videoEndEvent() {
 	let videoElement = domList.video;
 	videoElement.addEventListener( "ended", () => {
 		print.log( "视频结束" );
-		setTimeout( checkVideoList, 2e3 );
+		setTimeout( main, 2e3 );
 	} );
 }
 
@@ -241,30 +241,31 @@ function getUnFinishedChildVideoList() {
 }
 
 const print = new Info( "kmelearningAutoVideoPass" );
-( () => {
-	async function main() {
-		if ( judgeVideoPage() ) {
-			print.log( "进入视频页面" );
-			await getVideoList();
-			await checkVideoList();
-			await getVideoElement();
-			print.log( "播放视频", domList.video );
-			playVideo();
-			videoEndEvent();
+
+async function main() {
+	if ( judgeVideoPage() ) {
+		print.log( "进入视频页面" );
+		await getVideoList();
+		await checkVideoList();
+		await getVideoElement();
+		print.log( "播放视频", domList.video );
+		playVideo();
+		videoEndEvent();
+		return;
+	}
+	else if ( judgeStudyPage() ) {
+		print.log( "进入学习目录页面" );
+		const studyId = saveStudyPageId();
+		localStorage.setItem( "studyId", String( studyId ) );
+		await getAllNotFinishedVideoList();
+		if ( !await getNotFinishedVideoList() ) {
 			return;
 		}
-		else if ( judgeStudyPage() ) {
-			print.log( "进入学习目录页面" );
-			const studyId = saveStudyPageId();
-			localStorage.setItem( "studyId", String( studyId ) );
-			await getAllNotFinishedVideoList();
-			if ( !await getNotFinishedVideoList() ) {
-				return;
-			}
-			getUnFinishedChildVideoList();
-		}
+		getUnFinishedChildVideoList();
 	}
-	
+}
+
+( () => {
 	main();
 	videoObserver( main );
 	freshListenerPushState( () => {
