@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+	      name="viewport">
+	<title>Document</title>
+	<link href="./style.min.css" rel="stylesheet">
+</head>
+<body>
+<form class="config--container"><h1 class="config--title">配置菜单</h1>
+	<aside class="config--close-btn">×</aside>
+	<section class="config--delay"><label class="config--left__content" for="config--right__delay">发送间隔(s):</label>
+		<section class="config--right__container"><input id="config--right__delay" min="0.1"
+		                                                 placeholder="请输入发言的时间间隔(单位: s)" required
+		                                                 step="0.1" type="number"></section>
+	</section>
+	<section class="config--send-way"><label class="config--left__content">发送方式:</label>
+		<section class="config--right__container"><label class="config--right__content"
+		                                                 for="config-right__send-way-loop">循环发送<input
+				id="config-right__send-way-loop" name="send-way" type="radio" value="loop"></label><label
+				class="config--right__content" for="config-right__send-way-random">随机发送<input
+				id="config-right__send-way-random" name="send-way" type="radio" value="random"></label></section>
+	</section>
+	<section class="config--fresh-page"><label class="config--left__content">刷新页面:</label>
+		<section class="config--right__container"><label class="config--right__content"
+		                                                 for="config--right__fresh-page-true">开启<input
+				id="config--right__fresh-page-true" name="is-fresh-page" type="radio" value="true"></label><label
+				class="config--right__content" for="config--right__fresh-page-false">关闭<input
+				id="config--right__fresh-page-false" name="is-fresh-page" type="radio" value="false"></label></section>
+	</section>
+	<section class="config--fresh-page"><label class="config--left__content">刷新页面延时(min):</label>
+		<section class="config--right__container"><input id="config--right__fresh-page-delay" min="0"
+		                                                 placeholder="请输入刷新延时(单位: min)" type="number"></section>
+	</section>
+	<section class="config--input"><label class="config--left__content">输入文本:</label>
+		<section class="config--right__container"><input id="config--right__input"
+		                                                 placeholder="请输入要发送的自定义文本">
+			<button id="config--right__input-btn">发送</button>
+		</section>
+	</section>
+	<section class="config--show-content-list"><label class="config--left__content">自定义文本列表:</label>
+		<section class="config--right__container"></section>
+	</section>
+</form>
+</body>
+</html>
+<script src="./script.js"></script>

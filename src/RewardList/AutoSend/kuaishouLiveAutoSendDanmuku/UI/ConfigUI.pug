@@ -1,0 +1,81 @@
+doctype html
+html(lang="zh-cn")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
+		title Document
+		link(rel="stylesheet", href="./style.min.css")
+	body
+		form.config--container
+			h1.config--title 配置菜单
+			aside.config--close-btn ×
+			section.config--delay
+				label.config--left__content(for="config--right__delay") 发送间隔(s):
+				section.config--right__container
+					input#config--right__delay(
+						type="number"
+						placeholder="请输入发言的时间间隔(单位: s)"
+						step="0.1"
+						min="0.1"
+						required
+					)
+			section.config--send-way
+				label.config--left__content 发送方式:
+				section.config--right__container
+
+					label.config--right__content(
+						for="config-right__send-way-loop"
+					) 循环发送
+						input#config-right__send-way-loop(
+							type="radio"
+							name="send-way"
+							value="loop"
+						)
+					label.config--right__content(
+						for="config-right__send-way-random"
+					) 随机发送
+						input#config-right__send-way-random(
+							type="radio"
+							name="send-way"
+							value="random"
+						)
+			section.config--fresh-page
+				label.config--left__content 刷新页面:
+				section.config--right__container
+					label.config--right__content(
+						for="config--right__fresh-page-true"
+					) 开启
+						input#config--right__fresh-page-true(
+							type="radio"
+							name="is-fresh-page"
+							value="true"
+						)
+
+					label.config--right__content(
+						for="config--right__fresh-page-false"
+					) 关闭
+						input#config--right__fresh-page-false(
+							type="radio"
+							name="is-fresh-page"
+							value="false"
+						)
+			section.config--fresh-page
+				label.config--left__content 刷新页面延时(min):
+				section.config--right__container
+					input#config--right__fresh-page-delay(
+						type="number"
+						placeholder="请输入刷新延时(单位: min)"
+						min="0"
+					)
+			section.config--input
+				label.config--left__content 输入文本:
+				section.config--right__container
+					input#config--right__input(
+						placeholder="请输入要发送的自定义文本"
+					)
+					button#config--right__input-btn 发送
+			section.config--show-content-list
+				label.config--left__content 自定义文本列表:
+				section.config--right__container
+
+script(src="./script.js")
