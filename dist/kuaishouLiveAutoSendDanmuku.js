@@ -342,6 +342,7 @@ class AutoSendEvent {
 	constructor() {
 		// @ts-ignore
 		__publicField( this, "timer" );
+		__publicField( this, "pageTimer" );
 		__publicField( this, "_contentIndex", 0 );
 	}
 	
@@ -359,7 +360,7 @@ class AutoSendEvent {
 	open() {
 		configStorage.config.openRandomCode = true;
 		if ( configStorage.config.freshPageDelayPerMinute ) {
-			this.freshPage();
+			this.freshPageOpen();
 		}
 		const callback = () => {
 			print.log( this.getContentFromContentList() );
@@ -371,6 +372,7 @@ class AutoSendEvent {
 	/** 关闭自动发送弹幕时间 */
 	close() {
 		clearInterval( this.timer );
+		this.freshPageClose();
 	}
 	
 	/** 给文本添加后缀 */
@@ -387,10 +389,15 @@ class AutoSendEvent {
 	}
 	
 	/** 定时刷新网页 */
-	freshPage() {
-		setTimeout( () => {
+	freshPageOpen() {
+		this.pageTimer = setTimeout( () => {
 			location.reload();
 		}, configStorage.config.freshPageDelayPerMinute * 1e3 * 60 );
+	}
+	
+	/** 关闭定时刷新网页, 在关闭弹幕发送的同时 */
+	freshPageClose() {
+		clearTimeout( this.pageTimer );
 	}
 }
 

@@ -19,7 +19,7 @@ const domList: { [ propName: string ]: HTMLElement } = {};
 		uiMenu.showForm();
 	} );
 	
-	// 判断自动发送弹幕是否开启
+	// 判断自动发送弹幕是否开启 
 	// 需要定时刷新页面开启 且 开启刷新页面后自动发送弹幕
 	console.log( autoSendData.isOpenAutoSend() );
 	if ( autoSendData.isOpenAutoSend() && configStorage.config.freshPageDelayPerMinute && configStorage.config.isOpenFreshAutoSend ) {

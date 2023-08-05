@@ -49,6 +49,7 @@ class AutoSendData {
 class AutoSendEvent {
 	// @ts-ignore
 	timer: NodeJS.Timer;
+	pageTimer?: NodeJS.Timeout
 	
 	constructor() {
 	}
@@ -80,7 +81,7 @@ class AutoSendEvent {
 		
 		/* 定时刷新 */
 		if ( configStorage.config.freshPageDelayPerMinute ) {
-			this.freshPage();
+			this.freshPageOpen();
 		}
 		
 		/* 自动发送弹幕 */
@@ -94,6 +95,7 @@ class AutoSendEvent {
 	/** 关闭自动发送弹幕时间 */
 	close() {
 		clearInterval( this.timer );
+		this.freshPageClose();
 	}
 	
 	/** 给文本添加后缀 */
@@ -112,10 +114,15 @@ class AutoSendEvent {
 	}
 	
 	/** 定时刷新网页 */
-	private freshPage() {
-		setTimeout( () => {
+	private freshPageOpen() {
+		this.pageTimer = setTimeout( () => {
 			location.reload();
 		}, configStorage.config.freshPageDelayPerMinute * 1000 * 60 );
+	}
+	
+	/** 关闭定时刷新网页, 在关闭弹幕发送的同时 */
+	private freshPageClose() {
+		clearTimeout( this.pageTimer );
 	}
 }
 
