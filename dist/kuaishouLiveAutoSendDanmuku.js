@@ -15,6 +15,7 @@
 // @grant		GM_deleteValue
 // @grant		GM_listValues
 // @updateUrl		https://raw.githubusercontent.com/AliubYiero/TamperMonkeyScripts/master/dist/kuaishouLiveAutoSendDanmuku.js
+// @downloadUrl		https://raw.githubusercontent.com/AliubYiero/TamperMonkeyScripts/master/dist/kuaishouLiveAutoSendDanmuku.js
 // ==/UserScript==
 
 var __defProp = Object.defineProperty;
