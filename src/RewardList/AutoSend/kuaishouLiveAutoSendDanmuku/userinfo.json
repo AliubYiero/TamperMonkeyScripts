@@ -2,7 +2,7 @@
 	"name": "kuaishouLiveAutoSendDanmuku",
 	"description": "快手直播自动发送内容",
 	"author": "Yiero",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"match": [
 		"https://live.kuaishou.com/*"
 	],
