@@ -2,7 +2,7 @@
 // @name		kuaishouLiveAutoSendDanmuku
 // @author		Yiero
 // @description		快手直播自动发送内容
-// @version		1.0.0
+// @version		1.0.1
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://live.kuaishou.com/*
 // @icon		https://live.kuaishou.com/favicon.ico
