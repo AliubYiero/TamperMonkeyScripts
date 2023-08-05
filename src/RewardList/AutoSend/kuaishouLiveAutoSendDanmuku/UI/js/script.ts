@@ -8,8 +8,11 @@
 
 const configStorage = {
 	config: {
-		/** 弹幕发送延时 (s) */
+		/** 弹幕发送最小延时 (s) */
 		sendDelayPerSecond: 5,
+		
+		/** 弹幕发送最大延时 (s) */
+		sendDelayMaxPerSecond: 6,
 		
 		/** 发送方式 (0-loop | 1-random) */
 		sendWay: 0,
@@ -71,6 +74,18 @@ class UiMenu {
 		return inputElement;
 	}
 	
+	/** 获取发送间隔结束表单项 */
+	get sendDelayMaxInput(): HTMLInputElement {
+		const inputElement = this.domList.form.querySelector( '#config--right__delay-end' ) as HTMLInputElement;
+		inputElement.value = String( configStorage.config.sendDelayMaxPerSecond );
+		
+		inputElement.addEventListener( 'change', () => {
+			configStorage.config.sendDelayMaxPerSecond = +inputElement.value;
+		} )
+		
+		return inputElement;
+	}
+	
 	/** 获取发送方式(循环)表单项*/
 	get sendWayLoopInput(): HTMLInputElement {
 		const radioElement = this.domList.form.querySelector( '#config-right__send-way-random' ) as HTMLInputElement;
@@ -112,6 +127,32 @@ class UiMenu {
 		return radioElement;
 	}
 	
+	/** 获取文本乱码状态(开启)表单项 */
+	get textCodeOpenInput(): HTMLInputElement {
+		const radioElement = this.domList.form.querySelector( '#config-right__send-text-code-true' ) as HTMLInputElement;
+		radioElement.checked = configStorage.config.openRandomCode;
+		radioElement.addEventListener( 'click', () => {
+			if ( radioElement.checked ) {
+				( <HTMLInputElement> this.domList.freshPageDelayInput ).disabled = false;
+			}
+		} )
+		return radioElement;
+	}
+	
+	/** 获取文本乱码状态(关闭)表单项 */
+	get textCodeCloseInput(): HTMLInputElement {
+		const radioElement = this.domList.form.querySelector( '#config-right__send-text-code-false' ) as HTMLInputElement;
+		radioElement.checked = !configStorage.config.openRandomCode;
+		
+		radioElement.addEventListener( 'click', () => {
+			if ( radioElement.checked ) {
+				( <HTMLInputElement> this.domList.freshPageDelayInput ).disabled = true;
+			}
+		} )
+		
+		return radioElement;
+	}
+	
 	/** 获取刷新页面延时表单项 */
 	get freshPageDelayInput(): HTMLInputElement {
 		const radioElement = this.domList.form.querySelector( '#config--right__fresh-page-delay' ) as HTMLInputElement;
@@ -129,11 +170,19 @@ class UiMenu {
 	/** 获取输入文本提交表单项 */
 	get inputContentSubmit(): HTMLInputElement {
 		const inputContentSubmitBtn = this.domList.form.querySelector( '#config--right__input-btn' ) as HTMLInputElement;
+		
 		inputContentSubmitBtn.addEventListener( 'click', () => {
-			configStorage.config.contentList.push( this.inputContent.value );
+			let text = this.inputContent.value as string;
+			text.split( '\n' ).forEach( ( text ) => {
+				if ( !text.trim() ) {
+					return;
+				}
+				configStorage.config.contentList.push( text.trim() );
+			} );
 			this.inputContent.value = '';
 			this.contentListContainer;
 		} )
+		
 		return inputContentSubmitBtn;
 	}
 	
@@ -163,12 +212,12 @@ class UiMenu {
 	
 	/** 注册表单 */
 	registerFormElement() {
-		const form = document.createElement( 'form' );
-		form.className = 'config--container';
-		form.innerHTML = `
-<h1 class="config--title">配置菜单</h1><section class="config--delay"><label class="config--left__content" for="config--right__delay">发送间隔(s):</label><section class="config--right__container"><input id="config--right__delay" type="number" placeholder="请输入发言的时间间隔(单位: s)" step="0.1" min="0.1" required></section></section><section class="config--send-way"><label class="config--left__content">发送方式:</label><section class="config--right__container"><label class="config--right__content" for="config-right__send-way-loop">循环发送<input id="config-right__send-way-loop" type="radio" name="send-way" value="loop"></label><label class="config--right__content" for="config-right__send-way-random">随机发送<input id="config-right__send-way-random" type="radio" name="send-way" value="random"></label></section></section><section class="config--fresh-page"><label class="config--left__content">刷新页面:</label><section class="config--right__container"><label class="config--right__content" for="config--right__fresh-page-true">开启<input id="config--right__fresh-page-true" type="radio" name="is-fresh-page" value="true"></label><label class="config--right__content" for="config--right__fresh-page-false">关闭<input id="config--right__fresh-page-false" type="radio" name="is-fresh-page" value="false"></label></section></section><section class="config--fresh-page"><label class="config--left__content">刷新页面延时(min):</label><section class="config--right__container"><input id="config--right__fresh-page-delay" type="number" placeholder="请输入刷新延时(单位: min)" disabled min="0"></section></section><section class="config--input"><label class="config--left__content">输入文本:</label><section class="config--right__container"><input id="config--right__input" placeholder="请输入要发送的自定义文本"><button id="config--right__input-btn">发送</button></section></section><section class="config--show-content-list"><label class="config--left__content">自定义文本列表:</label><section class="config--right__container"></section></section>
-`;
-		document.body.appendChild( form );
+// 		const form = document.createElement( 'form' );
+// 		form.className = 'config--container';
+// 		form.innerHTML = `
+// <h1 class="config--title">配置菜单</h1><section class="config--delay"><label class="config--left__content" for="config--right__delay">发送间隔(s):</label><section class="config--right__container"><input id="config--right__delay" type="number" placeholder="请输入发言的时间间隔(单位: s)" step="0.1" min="0.1" required></section></section><section class="config--send-way"><label class="config--left__content">发送方式:</label><section class="config--right__container"><label class="config--right__content" for="config-right__send-way-loop">循环发送<input id="config-right__send-way-loop" type="radio" name="send-way" value="loop"></label><label class="config--right__content" for="config-right__send-way-random">随机发送<input id="config-right__send-way-random" type="radio" name="send-way" value="random"></label></section></section><section class="config--fresh-page"><label class="config--left__content">刷新页面:</label><section class="config--right__container"><label class="config--right__content" for="config--right__fresh-page-true">开启<input id="config--right__fresh-page-true" type="radio" name="is-fresh-page" value="true"></label><label class="config--right__content" for="config--right__fresh-page-false">关闭<input id="config--right__fresh-page-false" type="radio" name="is-fresh-page" value="false"></label></section></section><section class="config--fresh-page"><label class="config--left__content">刷新页面延时(min):</label><section class="config--right__container"><input id="config--right__fresh-page-delay" type="number" placeholder="请输入刷新延时(单位: min)" disabled min="0"></section></section><section class="config--input"><label class="config--left__content">输入文本:</label><section class="config--right__container"><input id="config--right__input" placeholder="请输入要发送的自定义文本"><button id="config--right__input-btn">发送</button></section></section><section class="config--show-content-list"><label class="config--left__content">自定义文本列表:</label><section class="config--right__container"></section></section>
+// `;
+// 		document.body.appendChild( form );
 	}
 	
 	/** 阻止form表单自动提交 */

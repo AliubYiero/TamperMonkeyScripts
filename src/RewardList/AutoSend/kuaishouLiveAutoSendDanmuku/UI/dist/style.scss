@@ -2,7 +2,7 @@
 	display: none !important;
 }
 
-input[id^=config] {
+input[id^=config], textarea[id^=config] {
 	-webkit-appearance: radio;
 	outline: none;
 	border: solid 1px #f8f8f8;
@@ -14,7 +14,7 @@ input[id^=config] {
 .config-- {
 	&container {
 		width: 500px;
-		height: 500px;
+		height: 600px;
 		border: 2px solid #a6a6a6;
 		border-radius: 5px;
 		margin: 0 auto;
@@ -111,7 +111,7 @@ input[type="radio"] {
 	transform: translate(5px, 3px);
 }
 
-#config--right__delay, #config--right__input, #config--right__fresh-page-delay {
+#config--right__delay, #config--right__input, #config--right__fresh-page-delay, #config--right__delay-end {
 	box-sizing: border-box;
 	height: 30px;
 	line-height: 30px;
@@ -123,6 +123,10 @@ input[type="radio"] {
 	}
 }
 
+#config--right__delay, #config--right__delay-end {
+	width: 50%;
+}
+
 .config--input .config--right__container {
 	display: flex;
 	gap: 5px;
@@ -130,6 +134,9 @@ input[type="radio"] {
 
 #config--right__input {
 	width: 90%;
+	resize: none;
+	font-size: 12px;
+	line-height: 12px;
 }
 
 #config--right__input-btn {

@@ -10,7 +10,6 @@ import { registerMenu, unregisterMenu } from '../../../../../lib/GM_Lib'
 import { configStorage } from './Storage'
 import { mathRandom } from '../../../../../lib/Math'
 import { nanoid } from 'nanoid'
-import { sendDanmuku } from './Send'
 import { print } from '../index'
 
 export {
@@ -48,7 +47,7 @@ class AutoSendData {
  * */
 class AutoSendEvent {
 	// @ts-ignore
-	timer: NodeJS.Timer;
+	timer?: NodeJS.Timer;
 	pageTimer?: NodeJS.Timeout
 	
 	constructor() {
@@ -68,12 +67,17 @@ class AutoSendEvent {
 		}
 	}
 	
+	/** 随机时间 */
+	private get randomTime(): number {
+		return mathRandom( configStorage.config.sendDelayPerSecond * 1000, configStorage.config.sendDelayMaxPerSecond * 1000 );
+	}
+	
 	/** 开启自动发送弹幕事件 */
 	open() {
 		// // test: 开启随机模式
 		// configStorage.config.sendWay = SendWay.random;
 		// // test: 关闭乱码模式
-		configStorage.config.openRandomCode = true;
+		// configStorage.config.openRandomCode = true;
 		// // test: 定时刷新网页
 		// configStorage.config.freshPageDelayPerMinute = 1;
 		// // test: 刷新网页后开启自动发送
@@ -87,14 +91,25 @@ class AutoSendEvent {
 		/* 自动发送弹幕 */
 		const callback = () => {
 			print.log( this.getContentFromContentList() );
-			sendDanmuku( this.getContentFromContentList() );
+			// sendDanmuku( this.getContentFromContentList() );
 		}
-		this.timer = setInterval( callback, configStorage.config.sendDelayPerSecond * 1000 );
+		// this.timer =
+		const sendTimer = () => {
+			this.timer = setTimeout( () => {
+				callback();
+				if ( this.timer ) {
+					sendTimer();
+				}
+			}, this.randomTime );
+		}
+		sendTimer();
+		// this.timer = setInterval( callback, this.randomTime );
 	}
 	
 	/** 关闭自动发送弹幕时间 */
 	close() {
-		clearInterval( this.timer );
+		clearTimeout( this.timer );
+		this.timer = void 0;
 		this.freshPageClose();
 	}
 	

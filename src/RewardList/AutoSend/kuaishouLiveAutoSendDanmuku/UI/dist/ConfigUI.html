@@ -12,8 +12,12 @@
 	<aside class="config--close-btn">×</aside>
 	<section class="config--delay"><label class="config--left__content" for="config--right__delay">发送间隔(s):</label>
 		<section class="config--right__container"><input id="config--right__delay" min="0.1"
-		                                                 placeholder="请输入发言的时间间隔(单位: s)" required
-		                                                 step="0.1" type="number"></section>
+		                                                 placeholder="输入发言的最小时间间隔(单位: s)" required
+		                                                 step="0.1" type="number"><input id="config--right__delay-end"
+		                                                                           min="0.1"
+		                                                                           placeholder="输入发言的最大时间间隔(单位: s)"
+		                                                                           required step="0.1" type="number">
+		</section>
 	</section>
 	<section class="config--send-way"><label class="config--left__content">发送方式:</label>
 		<section class="config--right__container"><label class="config--right__content"
@@ -21,6 +25,14 @@
 				id="config-right__send-way-loop" name="send-way" type="radio" value="loop"></label><label
 				class="config--right__content" for="config-right__send-way-random">随机发送<input
 				id="config-right__send-way-random" name="send-way" type="radio" value="random"></label></section>
+	</section>
+	<section class="config--send-text-code"><label class="config--left__content">开启乱码后缀:</label>
+		<section class="config--right__container"><label class="config--right__content"
+		                                                 for="config-right__send-text-code-true">开启<input
+				id="config-right__send-text-code-true" name="send-text-code" type="radio" value="true"></label><label
+				class="config--right__content" for="config-right__send-text-code-false">关闭<input
+				id="config-right__send-text-code-false" name="send-text-code" type="radio" value="false"></label>
+		</section>
 	</section>
 	<section class="config--fresh-page"><label class="config--left__content">刷新页面:</label>
 		<section class="config--right__container"><label class="config--right__content"
@@ -34,8 +46,8 @@
 		                                                 placeholder="请输入刷新延时(单位: min)" type="number"></section>
 	</section>
 	<section class="config--input"><label class="config--left__content">输入文本:</label>
-		<section class="config--right__container"><input id="config--right__input"
-		                                                 placeholder="请输入要发送的自定义文本">
+		<section class="config--right__container"><textarea id="config--right__input"
+		                                                    placeholder="请输入要发送的自定义文本"></textarea>
 			<button id="config--right__input-btn">发送</button>
 		</section>
 	</section>

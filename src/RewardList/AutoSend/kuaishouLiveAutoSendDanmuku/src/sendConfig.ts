@@ -26,6 +26,9 @@ interface SendConfig {
 	/** 弹幕发送延时 (s) */
 	sendDelayPerSecond: number;
 	
+	/** 弹幕发送最大延时 (s) */
+	sendDelayMaxPerSecond: number;
+	
 	/** 发送方式 (0-loop | 1-random) */
 	sendWay: SendWay;
 	
@@ -44,13 +47,33 @@ interface SendConfig {
 
 
 class Config implements SendConfig {
+	get openRandomCodeStorage(): GMStorage {
+		return new GMStorage( 'openRandomCode' + this.spaceId );
+	}
 	
-	sendDelayStorage = new GMStorage( 'sendDelayPerSecond' );
-	sendWayStorage = new GMStorage( 'sendWay' );
-	freshPageDelayStorage = new GMStorage( 'freshPageDelayPerSecond' );
-	contentListStorage = new GMStorage( 'contentList' );
-	openFreshAutoSendStorage = new GMStorage( 'openFreshAutoSend' );
-	openRandomCodeStorage = new GMStorage( 'openRandomCode' );
+	get openFreshAutoSendStorage(): GMStorage {
+		return new GMStorage( 'sendWay' + this.spaceId );
+	}
+	
+	get contentListStorage(): GMStorage {
+		return new GMStorage( 'freshPageDelayPerSecond' + this.spaceId );
+	}
+	
+	get freshPageDelayStorage(): GMStorage {
+		return new GMStorage( 'contentList' + this.spaceId );
+	}
+	
+	get sendWayStorage(): GMStorage {
+		return new GMStorage( 'openFreshAutoSend' + this.spaceId );
+	}
+	
+	get sendDelayStorage(): GMStorage {
+		return new GMStorage( 'sendDelayPerSecond' + this.spaceId );
+	}
+	
+	get sendDelayMaxStorage(): GMStorage {
+		return new GMStorage( 'sendDelayMaxStorage' + this.spaceId );
+	}
 	
 	/** 发送延时getter */
 	get sendDelayPerSecond(): number {
@@ -60,6 +83,16 @@ class Config implements SendConfig {
 	/** 发送延时setter */
 	set sendDelayPerSecond( s: number ) {
 		this.sendDelayStorage.set( s );
+	}
+	
+	/** 发送延时getter */
+	get sendDelayMaxPerSecond(): number {
+		return this.sendDelayMaxStorage.get( 6 );
+	}
+	
+	/** 发送延时setter */
+	set sendDelayMaxPerSecond( s: number ) {
+		this.sendDelayMaxStorage.set( s );
 	}
 	
 	/** 开启文本乱码后缀getter */
@@ -106,14 +139,19 @@ class Config implements SendConfig {
 	get contentList(): string[] {
 		return this.contentListStorage.get( [
 			'测试自定义文本1',
-			'测试自定义文本2',
-			'测试自定义文本3',
-			'测试自定义文本4',
-			'测试自定义文本5',
 		] );
 	}
 	
 	set contentList( contentList: string[] ) {
 		this.contentListStorage.set( contentList );
 	}
-} 
+	
+	private get spaceId() {
+		const spaceId = document.URL.match( /(?<=u\/)[^/]*/g );
+		if ( spaceId ) {
+			return spaceId[ 0 ];
+		}
+		return '';
+	}
+	
+}

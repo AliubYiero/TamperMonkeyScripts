@@ -32,7 +32,6 @@ class ConfigStorage {
 		contentList.delete( content );
 		this.config.contentList = [ ...contentList ];
 	}
-	
 }
 
 const configStorage = new ConfigStorage();

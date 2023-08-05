@@ -2,6 +2,7 @@
 const configStorage = {
     config: {
         sendDelayPerSecond: 5,
+        sendDelayMaxPerSecond: 6,
         sendWay: 0,
         isOpenFreshAutoSend: true,
         freshPageDelayPerMinute: 0,
@@ -15,10 +16,8 @@ const configStorage = {
         openRandomCode: true,
     }
 };
-
 class UiMenu {
     domList = {};
-    
     constructor() {
         this.registerFormElement();
         this.domList.form = this.form;
@@ -31,7 +30,6 @@ class UiMenu {
         this.domList.contentListContainer = this.contentListContainer;
         this.domList.inputContentSubmit = this.inputContentSubmit;
     }
-    
     get form() {
         const form = document.querySelector( '.config--container' );
         this.preventFormSubmit( form );
@@ -47,6 +45,15 @@ class UiMenu {
         return inputElement;
     }
     
+    get sendDelayMaxInput() {
+        const inputElement = this.domList.form.querySelector( '#config--right__delay-end' );
+        inputElement.value = String( configStorage.config.sendDelayMaxPerSecond );
+        inputElement.addEventListener( 'change', () => {
+            configStorage.config.sendDelayMaxPerSecond = +inputElement.value;
+        } );
+        return inputElement;
+    }
+    
     get sendWayLoopInput() {
         const radioElement = this.domList.form.querySelector( '#config-right__send-way-random' );
         radioElement.checked = !!configStorage.config.sendWay;
@@ -58,7 +65,6 @@ class UiMenu {
         radioElement.checked = !configStorage.config.sendWay;
         return radioElement;
     }
-    
     get freshPageDelayOpenInput() {
         const radioElement = this.domList.form.querySelector( '#config--right__fresh-page-true' );
         radioElement.checked = !!configStorage.config.freshPageDelayPerMinute;
@@ -69,11 +75,32 @@ class UiMenu {
         } );
         return radioElement;
     }
-    
     get freshPageDelayCloseInput() {
         const radioElement = this.domList.form.querySelector( '#config--right__fresh-page-false' );
         console.log( configStorage.config.freshPageDelayPerMinute );
         radioElement.checked = !configStorage.config.freshPageDelayPerMinute;
+        radioElement.addEventListener( 'click', () => {
+            if ( radioElement.checked ) {
+                this.domList.freshPageDelayInput.disabled = true;
+            }
+        } );
+        return radioElement;
+    }
+    
+    get textCodeOpenInput() {
+        const radioElement = this.domList.form.querySelector( '#config-right__send-text-code-true' );
+        radioElement.checked = configStorage.config.openRandomCode;
+        radioElement.addEventListener( 'click', () => {
+            if ( radioElement.checked ) {
+                this.domList.freshPageDelayInput.disabled = false;
+            }
+        } );
+        return radioElement;
+    }
+    
+    get textCodeCloseInput() {
+        const radioElement = this.domList.form.querySelector( '#config-right__send-text-code-false' );
+        radioElement.checked = !configStorage.config.openRandomCode;
         radioElement.addEventListener( 'click', () => {
             if ( radioElement.checked ) {
                 this.domList.freshPageDelayInput.disabled = true;
@@ -96,13 +123,18 @@ class UiMenu {
     get inputContentSubmit() {
         const inputContentSubmitBtn = this.domList.form.querySelector( '#config--right__input-btn' );
         inputContentSubmitBtn.addEventListener( 'click', () => {
-            configStorage.config.contentList.push( this.inputContent.value );
+            let text = this.inputContent.value;
+            text.split( '\n' ).forEach( ( text ) => {
+                if ( !text.trim() ) {
+                    return;
+                }
+                configStorage.config.contentList.push( text.trim() );
+            } );
             this.inputContent.value = '';
             this.contentListContainer;
         } );
         return inputContentSubmitBtn;
     }
-    
     get contentListContainer() {
         const radioElement = this.domList.form.querySelector( '.config--show-content-list .config--right__container' );
         radioElement.innerHTML = '';
@@ -127,12 +159,6 @@ class UiMenu {
     }
     
     registerFormElement() {
-        const form = document.createElement( 'form' );
-        form.className = 'config--container';
-        form.innerHTML = `
-<h1 class="config--title">配置菜单</h1><section class="config--delay"><label class="config--left__content" for="config--right__delay">发送间隔(s):</label><section class="config--right__container"><input id="config--right__delay" type="number" placeholder="请输入发言的时间间隔(单位: s)" step="0.1" min="0.1" required></section></section><section class="config--send-way"><label class="config--left__content">发送方式:</label><section class="config--right__container"><label class="config--right__content" for="config-right__send-way-loop">循环发送<input id="config-right__send-way-loop" type="radio" name="send-way" value="loop"></label><label class="config--right__content" for="config-right__send-way-random">随机发送<input id="config-right__send-way-random" type="radio" name="send-way" value="random"></label></section></section><section class="config--fresh-page"><label class="config--left__content">刷新页面:</label><section class="config--right__container"><label class="config--right__content" for="config--right__fresh-page-true">开启<input id="config--right__fresh-page-true" type="radio" name="is-fresh-page" value="true"></label><label class="config--right__content" for="config--right__fresh-page-false">关闭<input id="config--right__fresh-page-false" type="radio" name="is-fresh-page" value="false"></label></section></section><section class="config--fresh-page"><label class="config--left__content">刷新页面延时(min):</label><section class="config--right__container"><input id="config--right__fresh-page-delay" type="number" placeholder="请输入刷新延时(单位: min)" disabled min="0"></section></section><section class="config--input"><label class="config--left__content">输入文本:</label><section class="config--right__container"><input id="config--right__input" placeholder="请输入要发送的自定义文本"><button id="config--right__input-btn">发送</button></section></section><section class="config--show-content-list"><label class="config--left__content">自定义文本列表:</label><section class="config--right__container"></section></section>
-`;
-        document.body.appendChild( form );
     }
     
     preventFormSubmit( form ) {
@@ -141,5 +167,4 @@ class UiMenu {
         } );
     }
 }
-
 const uiMenu = new UiMenu();

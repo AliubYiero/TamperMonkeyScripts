@@ -14,7 +14,14 @@ html(lang="zh-cn")
 				section.config--right__container
 					input#config--right__delay(
 						type="number"
-						placeholder="请输入发言的时间间隔(单位: s)"
+						placeholder="输入发言的最小时间间隔(单位: s)"
+						step="0.1"
+						min="0.1"
+						required
+					)
+					input#config--right__delay-end(
+						type="number"
+						placeholder="输入发言的最大时间间隔(单位: s)"
 						step="0.1"
 						min="0.1"
 						required
@@ -38,6 +45,25 @@ html(lang="zh-cn")
 							type="radio"
 							name="send-way"
 							value="random"
+						)
+			section.config--send-text-code
+				label.config--left__content 开启乱码后缀:
+				section.config--right__container
+					label.config--right__content(
+						for="config-right__send-text-code-true"
+					) 开启
+						input#config-right__send-text-code-true(
+							type="radio"
+							name="send-text-code"
+							value="true"
+						)
+					label.config--right__content(
+						for="config-right__send-text-code-false"
+					) 关闭
+						input#config-right__send-text-code-false(
+							type="radio"
+							name="send-text-code"
+							value="false"
 						)
 			section.config--fresh-page
 				label.config--left__content 刷新页面:
@@ -70,7 +96,7 @@ html(lang="zh-cn")
 			section.config--input
 				label.config--left__content 输入文本:
 				section.config--right__container
-					input#config--right__input(
+					textarea#config--right__input(
 						placeholder="请输入要发送的自定义文本"
 					)
 					button#config--right__input-btn 发送
