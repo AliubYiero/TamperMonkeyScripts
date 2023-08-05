@@ -325,6 +325,33 @@ let nanoid = ( size = 21 ) => crypto.getRandomValues( new Uint8Array( size ) ).r
 	return id;
 }, "" );
 
+function inputEvent( aimElement, inputContent2 ) {
+	aimElement.value = inputContent2;
+	aimElement.dispatchEvent( new Event( "focus" ) );
+	aimElement.dispatchEvent( new Event( "change" ) );
+	aimElement.dispatchEvent( new Event( "input" ) );
+	aimElement.dispatchEvent( new Event( "blur" ) );
+}
+
+function clickEvent( aimElement ) {
+	aimElement.dispatchEvent( new Event( "click" ) );
+}
+
+function sendDanmuku( content ) {
+	inputContent( content );
+	clickSendBtn();
+}
+
+function inputContent( content ) {
+	domList.sendInputBar = document.querySelector( ".chat-actions textarea" );
+	inputEvent( domList.sendInputBar, content );
+}
+
+function clickSendBtn() {
+	domList.sendBtn = document.querySelector( ".chat-actions .submit-button" );
+	clickEvent( domList.sendBtn );
+}
+
 class AutoSendData {
 	constructor() {
 	}
@@ -375,6 +402,7 @@ class AutoSendEvent {
 		}
 		const callback = () => {
 			print.log( this.getContentFromContentList() );
+			sendDanmuku( this.getContentFromContentList() );
 		};
 		const sendTimer = () => {
 			this.timer = setTimeout( () => {
@@ -722,6 +750,7 @@ class UiMenu {
 }
 
 const print = new Info( "kuaishouLiveAutoSendDanmuku" );
+const domList = {};
 ( async () => {
 	const uiMenu = new UiMenu();
 	registerMenu( "配置", () => {

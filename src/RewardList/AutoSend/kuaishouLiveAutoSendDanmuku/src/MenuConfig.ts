@@ -11,6 +11,7 @@ import { configStorage } from './Storage'
 import { mathRandom } from '../../../../../lib/Math'
 import { nanoid } from 'nanoid'
 import { print } from '../index'
+import { sendDanmuku } from './Send'
 
 export {
 	autoSendData,
@@ -91,7 +92,7 @@ class AutoSendEvent {
 		/* 自动发送弹幕 */
 		const callback = () => {
 			print.log( this.getContentFromContentList() );
-			// sendDanmuku( this.getContentFromContentList() );
+			sendDanmuku( this.getContentFromContentList() );
 		}
 		// this.timer =
 		const sendTimer = () => {
