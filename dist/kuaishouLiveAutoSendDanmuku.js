@@ -6,7 +6,6 @@
 // @namespace		https://github.com/AliubYiero/TamperMonkeyScripts
 // @match		https://live.kuaishou.com/*
 // @icon		https://live.kuaishou.com/favicon.ico
-// @require		file://D:\Code\TamperMoneyScripts-vite\dist\kuaishouLiveAutoSendDanmuku.js
 // @license		GPL
 // @grant		GM_addStyle
 // @grant		GM_registerMenuCommand
@@ -446,7 +445,9 @@ class Info {
 	}
 	
 	log( ...msg ) {
-		console.log( ...this.contentInfo( ...msg ) );
+		/* @__PURE__ */
+		( () => {
+		} )( ...this.contentInfo( ...msg ) );
 	}
 	
 	info( ...msg ) {
@@ -653,7 +654,9 @@ const domList = {};
 	registerMenu( "配置", () => {
 		uiMenu.showForm();
 	} );
-	console.log( autoSendData.isOpenAutoSend() );
+	/* @__PURE__ */
+	( () => {
+	} )( autoSendData.isOpenAutoSend() );
 	if ( autoSendData.isOpenAutoSend() && configStorage.config.freshPageDelayPerMinute && configStorage.config.isOpenFreshAutoSend ) {
 		autoSendEvent.open();
 	}
