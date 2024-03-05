@@ -1,0 +1,33 @@
+/**
+ * 授权函数名数组
+ * */
+export type GrantFunctionInterface =
+	'GM_addStyle'
+	| 'GM_addElement'
+	| 'GM_getResourceText'
+	| 'GM_getResourceURL'
+	| 'GM_registerMenuCommand'
+	| 'GM_unregisterMenuCommand'
+	| 'GM_info'
+	| 'GM_log'
+	| 'GM_notification'
+	| 'GM_setClipboard'
+	| 'GM_getTab'
+	| 'GM_saveTab'
+	| 'GM_getTabs'
+	| 'GM_setValue'
+	| 'GM_getValue'
+	| 'GM_deleteValue'
+	| 'GM_listValues'
+	| 'GM_addValueChangeListener'
+	| 'GM_removeValueChangeListener'
+	| 'GM_openInTab'
+	| 'GM_download'
+	| 'GM_xmlhttpRequest'
+	| 'GM_webRequest'
+	| 'GM_cookie.list'
+	| 'GM_cookie.set'
+	| 'GM_cookie.delete'
+	| 'window.onurlchange'
+	| 'window.close'
+	| 'window.focus';
