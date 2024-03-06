@@ -10,9 +10,9 @@ import {
 
 export const BuildConfigs: BuildConfigsInterface = {
 	/* 是否在开发环境中压缩混淆代码 */
-	devMinify: true,
+	devMinify: false,
 	/* 是否在生产环境中压缩混淆代码 */
-	productionMinify: true,
+	productionMinify: false,
 	/* 是否在生产环境中加密代码 */
 	productionTerser: true,
 	
