@@ -49,7 +49,9 @@ export function parseScriptInfoOptions(
 		throw new TypeError(
 			'脚本配置缺少必填项 (name, description or match).\n' +
 			// 替换 '\\' 为 '/', 让终端能够识别本地文件地址
-			`请在 [file:///${ resolve( __dirname, '../../config/ScriptInfoConfigs.ts' ).replace( /\\/g, '/' ) } ] 中补充必要元素.`,
+			`请在配置文件中补充必要元素: \n` +
+			`[ file:///${ resolve( 'config', 'ScriptInfoConfigs.ts' ).replace( /\\/g, '/' ) } ]\n` +
+			`[ file:///${ resolve( 'config', 'PersonalScriptConfigs.ts' ).replace( /\\/g, '/' ) } ]`,
 		);
 	}
 	

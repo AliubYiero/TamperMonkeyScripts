@@ -67,7 +67,9 @@ export default defineConfig( ( { mode } ) => {
 	info( `[Info] 开始打包文件, 当前的构建环境是: ${ isProduction ? '生产环境' : '开发环境' }.` );
 	// 提示打包文件地址
 	info( `[Info] 文件将打包到: [file:///${
-		resolve( 'dist', scriptInfoOptions.outputFileName as string ).replace( /\\/g, '/' )
+		resolve( 'dist', scriptInfoOptions.outputFileName as string )
+			.replace( /\\/g, '/' )
+			.replace( / /g, '%20' )
 	}]` );
 	
 	/*

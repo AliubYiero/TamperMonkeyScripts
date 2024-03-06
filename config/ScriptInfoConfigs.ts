@@ -14,9 +14,9 @@ import { GlobalScriptsConfigInterface } from './interfaces';
  * */
 export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 	/* 脚本名 */
-	name: '',
+	name: 'Style Beautify',
 	/* 脚本简介 */
-	description: '',
+	description: '代码样式美化 / 屏蔽样式',
 	/* 脚本当前版本号 */
 	version: '1.0.0',
 	/* 脚本作用域 (脚本作用网站) */
