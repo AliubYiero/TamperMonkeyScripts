@@ -4,9 +4,7 @@
  * @file 当前脚本打包时的配置
  * @author  Yiero
  * */
-import {
-	BuildConfigsInterface,
-} from './interfaces/BuildConfigsInterface';
+import { BuildConfigsInterface } from './interfaces';
 
 export const BuildConfigs: BuildConfigsInterface = {
 	/* 是否在开发环境中压缩混淆代码 */

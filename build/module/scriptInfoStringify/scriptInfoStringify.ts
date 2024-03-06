@@ -6,7 +6,7 @@
  * */
 import {
 	ScriptInfoOptions,
-} from '../../config/interfaces/ScriptInfoOptions';
+} from '../../../config/interfaces/ScriptInfoOptions';
 
 /**
  * 将脚本信息转换成字符串

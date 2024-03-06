@@ -1,5 +1,5 @@
 /**
- * GlobalScriptsConfigs.ts
+ * ScriptInfoConfigs.ts
  * created by 2024/3/5
  * @file 脚本的全局配置文件
  * @author  Yiero
@@ -80,6 +80,8 @@ export interface GlobalScriptsConfigInterface {
 	
 	/**
 	 * 脚本运行时机
+	 *
+	 * @default document-idle
 	 * */
 	'run-at'?: 'document-start' | 'document-idle' | 'document-end' | 'document-body' | 'context-menu';
 	
