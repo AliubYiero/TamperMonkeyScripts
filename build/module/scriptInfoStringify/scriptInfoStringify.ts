@@ -4,9 +4,7 @@
  * @file 格式化用户脚本信息
  * @author  Yiero
  * */
-import {
-	ScriptInfoOptions,
-} from '../../../config/interfaces/ScriptInfoOptions';
+import { ScriptInfoOptions } from '../../../config/interfaces';
 
 /**
  * 将脚本信息转换成字符串

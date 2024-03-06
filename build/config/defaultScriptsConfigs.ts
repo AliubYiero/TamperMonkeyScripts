@@ -12,7 +12,7 @@
  * */
 import {
 	GlobalScriptsConfigInterface,
-} from '../../config/interfaces/GlobalScriptsConfigInterface';
+} from '../../config/interfaces';
 
 export const defaultScriptsConfigs: Partial<GlobalScriptsConfigInterface> = {
 	/* 默认版本号 */
