@@ -15,7 +15,6 @@ import {
 	scriptInfoStringify,
 	warn,
 } from './build';
-import { GlobalScriptsConfigs } from './config/GlobalScriptsConfigs';
 import replace from '@rollup/plugin-replace';
 import { resolve } from 'path';
 
@@ -61,7 +60,7 @@ export default defineConfig( ( { mode } ) => {
 	* 将脚本配置信息赋予默认信息,
 	* 并添加上额外配置值
 	* */
-	const scriptInfoOptions = parseScriptInfoOptions( GlobalScriptsConfigs, isProduction );
+	const scriptInfoOptions = parseScriptInfoOptions( isProduction );
 	
 	
 	// 提示打包信息
@@ -147,8 +146,6 @@ export default defineConfig( ( { mode } ) => {
 						delimiters: [ '', '' ],
 					} ),
 				],
-				
-				
 			},
 		},
 	};

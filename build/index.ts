@@ -5,9 +5,8 @@
  * @author  Yiero
  * */
 
-export * from './parseScriptInfoOptions/parseScriptInfoOptions';
-export * from './scriptInfoStringify/scriptInfoStringify';
-export type {
-	ScriptInfoOptions,
-} from '../config/interfaces/ScriptInfoOptions';
-export * from './utils/console';
+export *
+	from './module/parseScriptInfoOptions/parseScriptInfoOptions';
+export * from './module/scriptInfoStringify/scriptInfoStringify';
+export * from './util/console';
+export * from './config/defaultScriptsConfigs';

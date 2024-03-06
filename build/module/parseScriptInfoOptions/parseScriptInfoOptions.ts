@@ -1,43 +1,42 @@
-import {
-	GlobalScriptsConfigInterface,
-} from '../../config/interfaces/GlobalScriptsConfigInterface';
+import { ScriptInfoOptions } from '../../../config/interfaces';
 import {
 	defaultScriptsConfigs,
-} from '../config/defaultScriptsConfigs';
-import { BuildConfigs } from '../../config/BuildConfigs';
+} from '../../config/defaultScriptsConfigs';
+import { BuildConfigs } from '../../../config/BuildConfigs';
 import { resolve } from 'path';
-import {
-	ScriptInfoOptions,
-} from '../../config/interfaces/ScriptInfoOptions';
 import * as fs from 'fs';
-import { warn } from '../utils/console';
+import { warn } from '../../util/console';
+import { ScriptInfoConfigs } from '../../../config/ScriptInfoConfigs';
+import {
+	PersonalScriptConfigs,
+} from '../../../config/PersonalScriptConfigs';
 
 export function parseScriptInfoOptions(
-	globalScriptsConfigs: GlobalScriptsConfigInterface,
 	isProduction: boolean,
 ): ScriptInfoOptions {
-	/*
-	* 过滤 globalScriptsConfigs 中的空元素
-	* */
-	Object.keys( globalScriptsConfigs ).forEach( key => {
-		if (
-			// 过滤空字符串
-			globalScriptsConfigs[ key ] === ''
-			// 过滤空数组
-			|| ( Array.isArray( globalScriptsConfigs[ key ] ) && !globalScriptsConfigs[ key ].length )
-		) {
-			delete globalScriptsConfigs[ key ];
-		}
-	} );
-	
 	/*
 	* 默认值赋予
 	* */
 	const scriptInfoOptions: ScriptInfoOptions = {
 		outputFileName: 'index.dev.js',
 		...defaultScriptsConfigs,
-		...globalScriptsConfigs,
-	};
+		...PersonalScriptConfigs,
+		...ScriptInfoConfigs,
+	} as ScriptInfoOptions;
+	
+	/*
+	* 过滤 scriptInfoOptions 中的空元素
+	* */
+	Object.keys( scriptInfoOptions ).forEach( key => {
+		if (
+			// 过滤空字符串
+			scriptInfoOptions[ key ] === ''
+			// 过滤空数组
+			|| ( Array.isArray( scriptInfoOptions[ key ] ) && !scriptInfoOptions[ key ].length )
+		) {
+			delete scriptInfoOptions[ key ];
+		}
+	} );
 	
 	/*
 	* 检查是否填入必填项 (脚本名, 脚本简介, 脚本作用域)
@@ -50,7 +49,7 @@ export function parseScriptInfoOptions(
 		throw new TypeError(
 			'脚本配置缺少必填项 (name, description or match).\n' +
 			// 替换 '\\' 为 '/', 让终端能够识别本地文件地址
-			`请在 [file:///${ resolve( __dirname, '../../config/GlobalScriptsConfigs.ts' ).replace( /\\/g, '/' ) } ] 中补充必要元素.`,
+			`请在 [file:///${ resolve( __dirname, '../../config/ScriptInfoConfigs.ts' ).replace( /\\/g, '/' ) } ] 中补充必要元素.`,
 		);
 	}
 	
