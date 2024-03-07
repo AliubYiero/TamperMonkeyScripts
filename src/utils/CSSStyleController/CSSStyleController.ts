@@ -1,4 +1,4 @@
-import { CSSRuleMap } from './CSSRuleMap.ts';
+import { CSSRuleMap } from './interfaces';
 
 /**
  * 写入新样式
@@ -27,8 +27,8 @@ export class CSSStyleController {
 		/* 创建 style 样式表 */
 		this.createStyleSheet();
 		
-		/* 如果传入 css 字符串, 则写入 */
-		cssRuleString && this.add( cssRuleString );
+		/* 如果传入 css 字符串, 则写入样式 */
+		cssRuleString && this.push( cssRuleString );
 	}
 	
 	/**
@@ -89,19 +89,63 @@ export class CSSStyleController {
 	 * @todo 软添加CSS样式, 如果当前样式表中存在样式, 则在原样式的基础上添加样式
 	 * */
 	add( cssRuleString: string ) {
+		const cssRuleMap = this.matchBrackets( cssRuleString );
 		
+		/*
+		* 将 cssRuleMap 分成两个 Map, 一个是新样式, 一个是旧样式
+		* */
+		const newCssRuleMap: CSSRuleMap = new Map();
+		const oldCssRuleMap: CSSRuleMap = new Map();
+		cssRuleMap.forEach( ( cssRule, selectorText ) => {
+			this.cssRules.has( selectorText )
+				/* 旧样式 */
+				? oldCssRuleMap.set( selectorText, cssRule )
+				/* 新样式 */
+				: newCssRuleMap.set( selectorText, cssRule );
+		} );
 		
+		/* 新样式直接添加到样式表中 */
+		this.push( newCssRuleMap );
+		
+		/* 旧样式进行覆盖操作 */
+		oldCssRuleMap.forEach( ( cssRule, selectorText ) => {
+			// 获取旧的样式
+			const oldCssRule = this.cssRules.get( selectorText ) as Map<string, string>;
+			
+			// 遍历新样式, 将新样式覆写在旧样式上
+			cssRule.forEach( ( value, key ) => {
+				oldCssRule.set( key, value );
+			} );
+			
+			// 重新写入样式
+			oldCssRuleMap.set( selectorText, oldCssRule );
+			
+			// 删除原有样式
+			this.delete( selectorText );
+		} );
+		
+		/* 将旧样式添加到样式表中 */
+		this.push( oldCssRuleMap );
 		return this;
 	}
 	
 	/**
-	 * 删除某个 CSS 规则
+	 * 删除某个选择器对应的 CSS 样式
 	 * @todo 删除某个 CSS 规则
 	 * */
 	delete( selector: string ) {
-		console.log( selector );
-		console.log( this.cssRules.has( selector ) );
+		// 如果不存在当前 CSS 选择器, 则直接返回
+		if ( !this.cssRules.has( selector ) ) {
+			return this;
+		}
 		
+		// 找到 CSS 选择器对应的索引
+		const willDeleteIndex = Array.from( this.cssRules ).findIndex( ( [ key ] ) => {
+			return key === selector;
+		} );
+		
+		// 删除对应 CSSRule
+		this.styleSheet.deleteRule( willDeleteIndex );
 		
 		return this;
 	}
@@ -109,24 +153,24 @@ export class CSSStyleController {
 	/**
 	 * 强制添加 CSS 规则到样式表中
 	 *
-	 * 如果当前样式表中存在同样选择器的样式, 则会覆盖原来的样式
+	 * 如果当前样式表中存在同样选择器的样式, 则会失效 / 覆盖原来的样式
 	 * */
-	push( cssRuleString: string ) {
+	push( cssRule: string | CSSRuleMap ) {
 		/* 写入新的CSS规则 */
 		try {
 			// 解析 CSS 字符串
-			const cssRuleMap = this.matchBrackets( cssRuleString );
-			
-			const cssRuleStringList = this.show( cssRuleMap );
+			let cssRuleMap: CSSRuleMap = typeof cssRule === 'string'
+				? this.matchBrackets( cssRule )
+				: cssRule;
+			const cssRuleStringList: string[] = this.show( cssRuleMap );
 			
 			/*
 			* 插入 CSS 规则到页面中
 			* */
 			cssRuleStringList.forEach( cssRuleString => {
+				// 一次只能插入一条CSS规则
 				this.styleSheet.insertRule( cssRuleString );
 			} );
-			
-			
 		} catch ( e ) {
 			// 报错时(写入CSS规则失败), 移除刚添加的CSSStyleSheet (回滚操作)
 			this.remove();
@@ -227,7 +271,8 @@ export class CSSStyleController {
 			if ( cssContent[ i ] === spiltConfig.sign.left ) {
 				// 获取到左匹配符号, 增加层级
 				spiltConfig.levelCounter++;
-			} else if ( cssContent[ i ] === spiltConfig.sign.right ) {
+			}
+			else if ( cssContent[ i ] === spiltConfig.sign.right ) {
 				// 获取到右匹配符号, 减少层级
 				spiltConfig.levelCounter--;
 				

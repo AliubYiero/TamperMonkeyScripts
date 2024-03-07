@@ -1,5 +1,5 @@
 /**
- * addStyle.ts
+ * CSSStyleController.ts
  * created by 2024/3/6
  * @file 向页面添加css样式工具类
  * @author  Yiero
