@@ -1,12 +1,4 @@
-/**
- * addStyle.ts
- * created by 2024/3/6
- * @file 向页面添加css样式工具类
- * @author  Yiero
- * */
-// const a = `
-// .b_algo .b_deep h3{font-size:20px;line-height:24px}.b_algo .b_deep h3{padding-bottom:3px;line-height:1.2em}.b_deep p{display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;-webkit-line-clamp:2;height:40px;line-height:20px}#tabcontrol_53_B02FF1 .tab-head { height: 40px; } #tabcontrol_53_B02FF1 .tab-menu { height: 40px; } #tabcontrol_53_B02FF1_menu { height: 40px; } #tabcontrol_53_B02FF1_menu>li { background-color: #ffffff; margin-right: 0px; height: 40px; line-height:40px; font-weight: 700; color: #767676; } #tabcontrol_53_B02FF1_menu>li:hover { color: #111; position:relative; } #tabcontrol_53_B02FF1_menu .tab-active { box-shadow: inset 0 -3px 0 0 #111; background-color: #ffffff; line-height: 40px; color: #111; } #tabcontrol_53_B02FF1_menu .tab-active:hover { color: #111; } #tabcontrol_53_B02FF1_navr, #tabcontrol_53_B02FF1_navl { height: 40px; width: 32px; background-color: #ffffff; } #tabcontrol_53_B02FF1_navr .sv_ch, #tabcontrol_53_B02FF1_navl .sv_ch { fill: #444; } #tabcontrol_53_B02FF1_navr:hover .sv_ch, #tabcontrol_53_B02FF1_navl:hover .sv_ch { fill: #111; } #tabcontrol_53_B02FF1_navr.tab-disable .sv_ch, #tabcontrol_53_B02FF1_navl.tab-disable .sv_ch { fill: #444; opacity:.2; }#slideexp1_B42088 .slide { width: 280px; margin-right: 8px; }#slideexp1_B42088c .b_slidebar .slide { border-radius: 6px; }#slideexp1_B42088 .slide:last-child { margin-right: 1px; }#slideexp1_B42088c { margin: -4px; } #slideexp1_B42088c .b_viewport { padding: 4px 1px 4px 1px; margin: 0 3px; } #slideexp1_B42088c .b_slidebar .slide { box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05); -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05); } #slideexp1_B42088c .b_slidebar .slide.see_more { box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.00); -webkit-box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.00); } #slideexp1_B42088c .b_slidebar .slide.see_more .carousel_seemore { border: 0px; }#slideexp1_B42088c .b_slidebar .slide.see_more:hover { box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.00); -webkit-box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.00); }
-// `;
+import { CSSRuleMap } from './CSSRuleMap.ts';
 
 /**
  * 写入新样式
@@ -15,21 +7,146 @@
  * 某些情况下使用 `new CSSStyleSheet()` 创建的 StyleSheet 无法注入页面
  *
  * @param { string } cssRuleString 包含了将要插入的规则的 DOMString, 详细规则见 CSSStyleSheet.insertRule
- * @tutorial https://developer.mozilla.org/zh-CN/docs/Web/API/CSSStyleSheet/insertRule
+ * @tutorial https://developer.mozilla.org/zh-CN/docs/Web/API/CSSStyleSheet/
  * */
 export class CSSStyleController {
-	private styleElement: HTMLStyleElement | undefined;
-	private styleSheet: CSSStyleSheet | undefined;
+	/**
+	 * 样式元素 (样式表依附的 style 元素)
+	 */
+	private styleElement: HTMLStyleElement = document.createElement( 'style' );
 	
+	/**
+	 * 样式表
+	 */
+	private styleSheet: CSSStyleSheet = new CSSStyleSheet();
+	
+	/**
+	 * @constructor
+	 */
 	constructor( cssRuleString?: string ) {
-		/* 如果传入css字符串, 则创建 style 样式表 */
-		cssRuleString && this.createStyle( cssRuleString );
+		/* 创建 style 样式表 */
+		this.createStyleSheet();
+		
+		/* 如果传入 css 字符串, 则写入 */
+		cssRuleString && this.add( cssRuleString );
+	}
+	
+	/**
+	 * 获取当前样式表的长度
+	 * @readonly
+	 * */
+	get length(): number {
+		return this.styleSheet.cssRules.length;
+	}
+	
+	/**
+	 * 获取当前样式表的规则对象
+	 * @readonly
+	 */
+	get cssRules(): CSSRuleMap {
+		const cssTexts = Array.from( this.styleSheet.cssRules )
+			.map( item => item.cssText )
+			.join( '\n' );
+		
+		// console.log( cssTexts );
+		
+		return this.matchBrackets( cssTexts );
+	};
+	
+	/**
+	 * 展示当前样式表中所有的样式 /
+	 * 或者展示输入样式表中的所有样式
+	 */
+	show( cssRuleMap?: CSSRuleMap ): string[] {
+		/* 参数归一 */
+		cssRuleMap ||= this.cssRules;
+		
+		/*
+		* 遍历样式表, 转换成格式字符串
+		* */
+		return Array.from( cssRuleMap )
+			.map( ( [ selectorText, cssStyleMap ] ) => {
+				const cssStyleText = Array.from( cssStyleMap )
+					.map( ( [ property, value ] ) => {
+						return `${ property }:${ value };`;
+					} )
+					.join( '\n\t' );
+				return `${ selectorText } {\n\t${ cssStyleText }\n}`;
+			} );
+	}
+	
+	/**
+	 * 展示当前样式表中所有的样式
+	 */
+	toString(): string {
+		return this.show().join( '\n' );
+	}
+	
+	/**
+	 * 添加 CSS 样式到样式表中
+	 *
+	 * 如果当前样式表中存在样式, 则在原样式的基础上添加样式
+	 * @todo 软添加CSS样式, 如果当前样式表中存在样式, 则在原样式的基础上添加样式
+	 * */
+	add( cssRuleString: string ) {
+		
+		
+		return this;
+	}
+	
+	/**
+	 * 删除某个 CSS 规则
+	 * @todo 删除某个 CSS 规则
+	 * */
+	delete( selector: string ) {
+		console.log( selector );
+		console.log( this.cssRules.has( selector ) );
+		
+		
+		return this;
+	}
+	
+	/**
+	 * 强制添加 CSS 规则到样式表中
+	 *
+	 * 如果当前样式表中存在同样选择器的样式, 则会覆盖原来的样式
+	 * */
+	push( cssRuleString: string ) {
+		/* 写入新的CSS规则 */
+		try {
+			// 解析 CSS 字符串
+			const cssRuleMap = this.matchBrackets( cssRuleString );
+			
+			const cssRuleStringList = this.show( cssRuleMap );
+			
+			/*
+			* 插入 CSS 规则到页面中
+			* */
+			cssRuleStringList.forEach( cssRuleString => {
+				this.styleSheet.insertRule( cssRuleString );
+			} );
+			
+			
+		} catch ( e ) {
+			// 报错时(写入CSS规则失败), 移除刚添加的CSSStyleSheet (回滚操作)
+			this.remove();
+			throw new Error( e as string );
+		}
+		
+		return this;
+	}
+	
+	/**
+	 * 移除整个样式表
+	 * */
+	remove() {
+		this.styleElement && this.styleElement.remove();
 	}
 	
 	/**
 	 * 创建一个新的样式表到页面中
 	 * */
-	createStyle( cssRuleString: string ) {
+	private createStyleSheet() {
 		/*
 		* 如果存在 CSS 样式, 则先删除再创建
 		* */
@@ -48,13 +165,14 @@ export class CSSStyleController {
 		* 新添加了CSSStyleSheet可能不在document.styleSheets的最后一个, 需要遍历获取空样式表
 		* 倒序遍历, 优化性能
 		* */
-		const newStyleSheet = Array.from( document.styleSheets ).findLast( cssStyleSheet => {
-			/*
-			* 通过link引入的CSSStyleSheet无法读取cssRules, 通过cssStyleSheet.href筛选是否通过link引入的css;
-			* 通过link引入的css的href属性会是一个链接字符串, 直接使用style定义的href属性是null.
-			* */
-			return !cssStyleSheet.href && cssStyleSheet.type === 'text/css' && cssStyleSheet.cssRules.length === 0;
-		} );
+		const newStyleSheet = Array.from( document.styleSheets )
+			.findLast( cssStyleSheet => {
+				/*
+				* 通过link引入的CSSStyleSheet无法读取cssRules, 通过cssStyleSheet.href筛选是否通过link引入的css;
+				* 通过link引入的css的href属性会是一个链接字符串, 直接使用style定义的href属性是null.
+				* */
+				return !cssStyleSheet.href && cssStyleSheet.type === 'text/css' && cssStyleSheet.cssRules.length === 0;
+			} );
 		
 		/*
 		* 当没有找到空的样式表时
@@ -68,66 +186,16 @@ export class CSSStyleController {
 		
 		/* 储存样式表 */
 		this.styleSheet = newStyleSheet;
-		
-		// 写入新的CSS规则
-		this.add( cssRuleString );
-	}
-	
-	/**
-	 * 添加 CSS 样式到样式表中
-	 * */
-	add( cssRuleString: string ) {
-		/* 写入新的CSS规则 */
-		try {
-			// 将 CSS 规则字符串分割成数组 (单独的 CSS 规则为一个元素)
-			const cssRuleList = this.matchBrackets( cssRuleString );
-			// 依次将 CSS 规则写入样式表中
-			cssRuleList.forEach( cssRule => {
-				this.styleSheet?.insertRule( cssRule );
-			} );
-		} catch ( e ) {
-			// 报错时(写入CSS规则失败), 移除刚添加的CSSStyleSheet (回滚操作)
-			this.remove();
-			throw new Error( e as string );
-		}
-		
-		return this;
-	}
-	
-	/**
-	 * 删除某个 CSS 规则
-	 * @todo 删除某个 CSS 规则
-	 * */
-	delete() {
-		return this;
-	}
-	
-	/**
-	 * 替换某个 CSS 规则
-	 * @todo 替换某个 CSS 规则
-	 * */
-	replace( cssRuleString: string ) {
-		console.log( this.styleSheet );
-		this.styleSheet?.replaceSync( cssRuleString );
-		
-		return this;
-	}
-	
-	/**
-	 * 移除整个样式表
-	 * */
-	remove() {
-		this.styleElement && this.styleElement.remove();
 	}
 	
 	/**
 	 * 匹配同层级的CSS字符串, 将 CSS 字符串转化成 CSS 规则数组
-	 * @param { string } cssContent CSS规则字符串
-	 * @return { string[] } CSS规则数组
 	 *
-	 * @todo 分割成 {selectorText: { [cssKey: string]: string }}[] 数组的形式
+	 * @param { string } cssContent CSS规则字符串
+	 *
+	 * @return { string[] } CSS规则数组
 	 * */
-	private matchBrackets( cssContent: string ): string[] {
+	private matchBrackets( cssContent: string ): CSSRuleMap {
 		/*
 		* 定义计数变量配置
 		* */
@@ -147,9 +215,9 @@ export class CSSStyleController {
 		};
 		
 		/*
-		* 清空空白字符
+		* 清空制表符, 换行符
 		* */
-		cssContent = cssContent.replace( /\s/g, '' );
+		cssContent = cssContent.replace( /[\t\n]/g, '' );
 		
 		/*
 		* 匹配 CSS 规则
@@ -159,8 +227,7 @@ export class CSSStyleController {
 			if ( cssContent[ i ] === spiltConfig.sign.left ) {
 				// 获取到左匹配符号, 增加层级
 				spiltConfig.levelCounter++;
-			}
-			else if ( cssContent[ i ] === spiltConfig.sign.right ) {
+			} else if ( cssContent[ i ] === spiltConfig.sign.right ) {
 				// 获取到右匹配符号, 减少层级
 				spiltConfig.levelCounter--;
 				
@@ -168,11 +235,43 @@ export class CSSStyleController {
 				if ( spiltConfig.levelCounter === 0 ) {
 					spiltConfig.index.end = i + 1;
 					matchList.push( cssContent.substring( spiltConfig.index.start, spiltConfig.index.end ) );
-					spiltConfig.index.start = spiltConfig.index.end + 1;
+					spiltConfig.index.start = spiltConfig.index.end;
 				}
 			}
 		}
 		
-		return matchList;
+		// console.log( matchList );
+		
+		/*
+		* 将 CSS 规则数组变成对象数组
+		* */
+		const cssRuleMap = matchList.reduce( (
+			cssRuleMap: CSSRuleMap,
+			cssRule,
+		) => {
+			const [ _, selectorText, cssStyleText ] = cssRule
+				.match( /([^{]+){(.*)}/ ) as RegExpMatchArray;
+			
+			
+			/**
+			 * css 样式 Map
+			 *
+			 * @example Map<属性, 值>
+			 * */
+			const cssStyleMap: Map<string, string> = cssStyleText
+				.split( ';' )
+				.filter( item => item.trim() )
+				.reduce( ( result: Map<string, string>, item ) => {
+					const [ key, value ] = item.split( ':' );
+					result.set( key.trim(), value.trim() );
+					return result;
+				}, new Map() );
+			// console.log( selectorText );
+			cssRuleMap.set( selectorText.trim(), cssStyleMap );
+			
+			return cssRuleMap;
+		}, new Map() );
+		
+		return cssRuleMap;
 	}
 }
