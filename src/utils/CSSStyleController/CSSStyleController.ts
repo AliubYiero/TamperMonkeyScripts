@@ -40,22 +40,27 @@ export class CSSStyleController {
 	}
 	
 	/**
+	 * 内部缓存的 CSS 样式表对象
+	 *
+	 * @todo 有更好的缓存方式? 等找到了再更新 (目前是手动更新缓存 (通过 .push() 和 .delete() 方法))
+	 *
+	 * @private
+	 * */
+	private _cssRules: CSSRuleMap = new Map();
+	
+	/**
 	 * 获取当前样式表的规则对象
 	 * @readonly
 	 */
 	get cssRules(): CSSRuleMap {
-		const cssTexts = Array.from( this.styleSheet.cssRules )
-			.map( item => item.cssText )
-			.join( '\n' );
-		
-		// console.log( cssTexts );
-		
-		return this.matchBrackets( cssTexts );
+		return this._cssRules;
 	};
 	
 	/**
-	 * 展示当前样式表中所有的样式 /
-	 * 或者展示输入样式表中的所有样式
+	 * 以字符串数组的形式展示当前样式表中所有的样式 /
+	 * 或者展示输入参数(样式表)中的所有样式
+	 *
+	 * @returns { string[] } 字符串数组, 每个元素为一个样式规则 (已自动格式化缩进)
 	 */
 	show( cssRuleMap?: CSSRuleMap ): string[] {
 		/* 参数归一 */
@@ -77,6 +82,8 @@ export class CSSStyleController {
 	
 	/**
 	 * 展示当前样式表中所有的样式
+	 *
+	 * @returns { string } 样式字符串 (已自动格式化缩进)
 	 */
 	toString(): string {
 		return this.show().join( '\n' );
@@ -86,7 +93,6 @@ export class CSSStyleController {
 	 * 添加 CSS 样式到样式表中
 	 *
 	 * 如果当前样式表中存在样式, 则在原样式的基础上添加样式
-	 * @todo 软添加CSS样式, 如果当前样式表中存在样式, 则在原样式的基础上添加样式
 	 * */
 	add( cssRuleString: string ) {
 		const cssRuleMap = this.matchBrackets( cssRuleString );
@@ -131,7 +137,6 @@ export class CSSStyleController {
 	
 	/**
 	 * 删除某个选择器对应的 CSS 样式
-	 * @todo 删除某个 CSS 规则
 	 * */
 	delete( selector: string ) {
 		// 如果不存在当前 CSS 选择器, 则直接返回
@@ -146,6 +151,11 @@ export class CSSStyleController {
 		
 		// 删除对应 CSSRule
 		this.styleSheet.deleteRule( willDeleteIndex );
+		
+		/*
+		* 更新内部 CSS 样式表缓存
+		* */
+		this.freshCssRules();
 		
 		return this;
 	}
@@ -171,6 +181,11 @@ export class CSSStyleController {
 				// 一次只能插入一条CSS规则
 				this.styleSheet.insertRule( cssRuleString );
 			} );
+			
+			/*
+			* 更新内部 CSS 样式表缓存
+			* */
+			this.freshCssRules();
 		} catch ( e ) {
 			// 报错时(写入CSS规则失败), 移除刚添加的CSSStyleSheet (回滚操作)
 			this.remove();
@@ -185,6 +200,17 @@ export class CSSStyleController {
 	 * */
 	remove() {
 		this.styleElement && this.styleElement.remove();
+	}
+	
+	/**
+	 * 更新内部的 CSS 规则缓存
+	 * */
+	private freshCssRules() {
+		const cssTexts = Array.from( this.styleSheet.cssRules )
+			.map( item => item.cssText )
+			.join( '\n' );
+		
+		this._cssRules = this.matchBrackets( cssTexts );
 	}
 	
 	/**

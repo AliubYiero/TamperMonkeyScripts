@@ -27,7 +27,7 @@ border: 1px solid #000;
 
 // console.log( test.cssRules );
 // console.log( test.delete( '#app1' ) );
-// console.log( test.cssRules );
+console.log( test.cssRules );
 
 setTimeout( () => {
 	test.push( `
