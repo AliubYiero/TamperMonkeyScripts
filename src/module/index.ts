@@ -9,3 +9,4 @@ export * from './getReadFavouriteList/getReadFavouriteList.ts';
 export * from './registerMenu/registerMenu.ts';
 export * from './checkFavoriteIsFull/checkFavoriteIsFull.ts';
 export * from './getVideoAvId/getVideoAvId.ts';
+export * from './addNewFavorite/addNewFavorite.ts';
