@@ -30,7 +30,13 @@ export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 	/* 脚本依赖的第三份资源库 */
 	resource: [],
 	/* 脚本授权的GM函数 */
-	grant: [],
+	grant: [
+		'GM_addElement',
+		'GM_registerMenuCommand',
+		'GM_unregisterMenuCommand',
+		'GM_getValue',
+		'GM_setValue',
+	],
 	/* 脚本载入时机 */
 	'run-at': 'document-idle',
 };

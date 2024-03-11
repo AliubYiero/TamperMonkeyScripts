@@ -15,5 +15,8 @@
 		"typescript": "^5.2.2",
 		"vite": "^5.1.4",
 		"vite-plugin-banner": "^0.7.1"
+	},
+	"dependencies": {
+		"@yiero/gm-menu-controller": "^1.0.1"
 	}
 }

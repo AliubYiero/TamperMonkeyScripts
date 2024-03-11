@@ -226,9 +226,23 @@ export class CSSStyleController {
 		* 声明新的CSSStyleSheet
 		* 向head元素中添加一个新的style元素
 		*  */
-		this.styleElement = document.createElement( 'style' );
-		this.styleElement.id = `style-${ Date.now() }-${ Math.random().toString().slice( 2, 8 ) }`;
-		document.head.appendChild( this.styleElement );
+		try {
+			/*
+			* 如果当前环境中存在 GM_addElement() 函数, 则使用 GM_addElement() 函数
+			*
+			* 虽然添加的 style 元素不是通过 link 引入的应该不会触发 CSP 防御, 但是还是防止一下
+			* */
+			this.styleElement = GM_addElement( document.head, 'style', {
+				id: `style-${ Date.now() }-${ Math.random().toString().slice( 2, 8 ) }`,
+			} ) as HTMLStyleElement;
+		} catch ( e ) {
+			/*
+			* 如果当前环境中不存在 GM_addElement() 函数, 则使用原生方法添加元素
+			* */
+			this.styleElement = document.createElement( 'style' );
+			this.styleElement.id = `style-${ Date.now() }-${ Math.random().toString().slice( 2, 8 ) }`;
+			document.head.appendChild( this.styleElement );
+		}
 		
 		/*
 		* 遍历所有样式表获取空的CSS样式表(新添加的CSS样式表)

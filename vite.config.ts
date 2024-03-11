@@ -102,7 +102,7 @@ export default defineConfig( ( { mode } ) => {
 			/* 是否在开发环境中热更新代码 */
 			watch: openWatchConfig
 				? {
-					exclude: [ 'node_modules', 'build' ],
+					include: [ 'src/**', 'config/**' ],
 				}
 				: null,
 			

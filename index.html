@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="UTF-8"/>
 	<meta
 			content="width=device-width, initial-scale=1.0"
 			name="viewport"
@@ -12,22 +12,7 @@
 <div id="app"></div>
 <script src="/src/main.ts" type="module"></script>
 <script>
-	const cssRule = `#app {display: none;color:red}`;
 
-	const [ _, selectorText, cssRuleText ] = cssRule
-		.replace( /\s/g, '' )
-		.match( /([^{]+){(.*)}/ );
-
-	console.log(
-		cssRuleText
-			.split( ';' )
-			.filter( item => item )
-			.reduce( ( result, item ) => {
-				const [ key, value ] = item.split( ':' );
-				result[ key ] = value;
-				return result;
-			}, {} ),
-	);
 </script>
 </body>
 </html>
