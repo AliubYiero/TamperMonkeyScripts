@@ -29,6 +29,18 @@ export const scriptInfoStringify = ( scriptInfo: ScriptInfoOptions ) => {
 		const scriptInfoValue = scriptInfo[ scriptInfoKey ];
 		
 		/*
+		* 当脚本配置项的值是字符串, 并且是 `name` 配置的时候时,
+		* 添加到配置项的顶部
+		* */
+		if (
+			typeof scriptInfoValue === 'string'
+			&& scriptInfoKey === 'name'
+		) {
+			scriptInfoStringList.unshift( `// @${ scriptInfoKey }\t${ scriptInfoValue }` );
+			continue;
+		}
+		
+		/*
 		* 当脚本配置项的值是字符串时,
 		* 直接添加到配置项中
 		* */
