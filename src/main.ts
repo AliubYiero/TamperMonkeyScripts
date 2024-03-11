@@ -12,8 +12,8 @@ import {
 	getVideoAvId,
 	registerMenu,
 } from './module';
-import { api_collectVideoToFavorite } from './api';
 import { FavoriteInfo } from './interfaces';
+import { api_collectVideoToFavorite } from './api';
 
 ( async () => {
 	// 注册油猴菜单
@@ -34,7 +34,15 @@ import { FavoriteInfo } from './interfaces';
 	const isFullInFavorite = checkFavoriteIsFull( readFavouriteList[ 0 ] );
 	// 如果未满, 则添加到最新一个收藏夹
 	if ( !isFullInFavorite ) {
-		console.log( await api_collectVideoToFavorite( videoId, String( readFavouriteList[ 0 ].id ) ) );
+		// 请求
+		const latestFavoriteId = String( readFavouriteList[ 0 ].id );
+		const res = await api_collectVideoToFavorite( videoId, latestFavoriteId );
+		const successfullyAdd = res?.success_num === 0;
+		if ( !successfullyAdd ) {
+			return;
+		}
+		
+		console.log( `当前视频已添加至收藏夹 [${ readFavouriteList[ 0 ].title }]` );
 	}
 	
 	// 如果已满, 则新增收藏夹
