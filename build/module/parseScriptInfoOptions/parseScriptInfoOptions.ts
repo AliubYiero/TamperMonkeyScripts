@@ -114,7 +114,7 @@ export function parseScriptInfoOptions(
 	* 警告: BuildConfigs.productionCheckVersion 未开启
 	* */
 	if ( !BuildConfigs.productionCheckVersion && isProduction ) {
-		warn( '警告: BuildConfigs.productionCheckVersion 已关闭.' );
+		console.error( '警告: [BuildConfigs.productionCheckVersion] 版本号冲突检测已关闭.' );
 	}
 	
 	/*

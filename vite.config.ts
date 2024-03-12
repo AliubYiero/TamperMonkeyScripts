@@ -10,6 +10,7 @@ import { BuildConfigs } from './config/BuildConfigs';
 
 import banner from 'vite-plugin-banner';
 import {
+	getDefaultTerserOptions,
 	info,
 	parseScriptInfoOptions,
 	scriptInfoStringify,
@@ -17,9 +18,6 @@ import {
 } from './build';
 import replace from '@rollup/plugin-replace';
 import { resolve } from 'path';
-import {
-	defaultTerserOptions,
-} from './build/config/defaultTerserOptions';
 
 export default defineConfig( ( { mode } ) => {
 	/*
@@ -87,9 +85,13 @@ export default defineConfig( ( { mode } ) => {
 				: isTerserCode
 					? 'terser'
 					: false,
-			// 是否加密代码
+			
+			// 是否压缩代码
 			terserOptions: isTerserCode
-				? defaultTerserOptions
+				? getDefaultTerserOptions( {
+					removeConsoleLog,
+					compressOption: BuildConfigs.productionTerser,
+				} )
 				: void 0,
 			
 			// 清空打包目录

@@ -17,12 +17,17 @@ export interface BuildConfigsInterface {
 	productionMinify: boolean;
 	
 	/**
-	 * 是否在生产环境中加密代码 (字符转Unicode, 清空注释),
+	 * 是否在生产环境中压缩代码 (字符转Unicode, 清空注释等等),
 	 * 在有限度保证代码完整性的同时阻止影响代码的阅读性
 	 *
 	 * @default true
+	 *
+	 * @example true | 'complex' - 进行默认的terser压缩操作, 打包后的代码比较难读
+	 * @tutorial [默认的terser压缩操作](https://github.com/terser/terser?tab=readme-ov-file#compress-options)
+	 * @example 'simple' - 只清空注释和将字符转Unicode, 打包后的代码具有良好的可读性
+	 * @example false - 关闭压缩代码
 	 * */
-	productionTerser: boolean;
+	productionTerser: boolean | 'complex' | 'simple';
 	
 	/**
 	 * 是否在开发环境中版本号添加 beta 后缀
