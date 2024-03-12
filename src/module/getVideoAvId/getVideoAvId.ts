@@ -18,5 +18,10 @@ export const getVideoAvId = (): string => {
 		videoId = String( bvToAv( <`BV1${ string }`> videoId ) );
 	}
 	
+	// 如果获取到的视频号是 av 号, 则去除av编号头
+	if ( videoId.startsWith( 'av' ) ) {
+		videoId = videoId.slice( 2 );
+	}
+	
 	return videoId;
 };
