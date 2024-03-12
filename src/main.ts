@@ -62,7 +62,8 @@ import { getElement } from './lib';
 	}
 	
 	// 给收藏夹按钮添加上已添加的样式, 以提示用户已添加
-	const favButtonDom = await getElement( document, '.video-fav.video-toolbar-left-item:not(.on)' );
+	const favButtonSelector = '.video-fav.video-toolbar-left-item:not(.on)';
+	const favButtonDom = await getElement( document, favButtonSelector );
 	
 	if ( favButtonDom ) {
 		favButtonDom.classList.add( 'on' );
