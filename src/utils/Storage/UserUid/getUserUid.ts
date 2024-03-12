@@ -19,7 +19,7 @@ export const getUserUid = async (): Promise<string> => {
 		await getElement(
 			document,
 			selector,
-			5000,
+			60_000,
 		);
 		
 		// 获取用户信息dom

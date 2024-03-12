@@ -4,7 +4,7 @@ import { api_collectVideoToFavorite } from '../../api';
 /**
  * 将当前视频收藏到最新的收藏夹中
  * */
-export const addNewFavorite = async ( videoId: string, latestFavorite: FavoriteInfo ) => {
+export const addVideoToFavorite = async ( videoId: string, latestFavorite: FavoriteInfo ) => {
 	// 请求
 	const latestFavoriteId = String( latestFavorite.id );
 	const res = await api_collectVideoToFavorite( videoId, latestFavoriteId );

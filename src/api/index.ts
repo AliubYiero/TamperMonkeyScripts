@@ -6,6 +6,6 @@
  * */
 
 export * from './lib/api_collectVideoToFavorite.ts';
-export * from './lib/api_addFavorites.ts';
+export * from './lib/api_createFavorites.ts';
 export * from './lib/api_listAllFavorites.ts';
 export * from './lib/api_showFavoriteInfo.ts';

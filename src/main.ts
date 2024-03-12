@@ -5,9 +5,9 @@
  * @author  Yiero
  * */
 
-import { getUserUid } from './utils';
+import { getFavouriteTitle, getUserUid } from './utils';
 import {
-	addNewFavorite,
+	addVideoToFavorite,
 	checkFavoriteIsFull,
 	getReadFavouriteList,
 	getVideoAvId,
@@ -32,6 +32,7 @@ import { getElement } from './lib';
 	
 	// 获取用户uid
 	const userUid = await getUserUid();
+	debugger
 	
 	if ( !userUid ) {
 		throw new Error( '获取用户uid失败' );
@@ -44,14 +45,24 @@ import { getElement } from './lib';
 	const videoId = getVideoAvId();
 	
 	// 判断最新一个收藏夹是否已满
-	const isFullInFavorite = checkFavoriteIsFull( readFavouriteList[ 0 ] );
+	// 获取最新一个收藏夹
+	const latestFavourite: FavoriteInfo = readFavouriteList[ 0 ];
+	const isFullInFavorite = checkFavoriteIsFull( latestFavourite );
 	// 如果未满, 则添加到最新一个收藏夹
 	if ( !isFullInFavorite ) {
-		const latest = readFavouriteList[ 0 ];
-		await addNewFavorite( videoId, latest );
+		// 将视频添加到最新的收藏夹中
+		await addVideoToFavorite( videoId, latestFavourite );
 	}
 	
+	const latestFavouriteIndex = latestFavourite.title.slice( 0, getFavouriteTitle().length );
+	console.log( latestFavouriteIndex );
 	// @todo 如果已满, 则新增收藏夹
+	if ( isFullInFavorite ) {
+		// 获取最新一个收藏夹的编号
+		const latestFavouriteIndex = latestFavourite.title.slice( 0, getFavouriteTitle().length );
+		console.log( latestFavouriteIndex );
+		// createFavourite();
+	}
 	
 	// 再检查一遍当前视频是否已经被收藏过了
 	isFavorVideo = await api_isFavorVideo();
@@ -71,3 +82,14 @@ import { getElement } from './lib';
 	
 	// @todo 发送弹窗, 提示用户已收藏
 } )();
+
+/**
+ * 新建一个收藏夹
+ *
+ * @param title 新增的收藏夹标题
+ */
+// const createFavourite = ( title: string ) => {
+// 	api_createFavorites( title ).then( r => {
+// 		console.log( r );
+// 	} );
+// }; 
