@@ -1,7 +1,7 @@
 /**
- * api_addFavorites.ts
+ * api_createFavorites.ts
  * created by 2024/3/11
- * @file 新增收藏夹api
+ * @file 创建一个新的收藏夹api
  * @author  Yiero
  * */
 import { request } from '../request.ts';
@@ -12,7 +12,7 @@ import { request } from '../request.ts';
  * @param {string} favTitle - 收藏夹文件夹的标题。
  * @return {Promise<any>} 请求添加收藏文件夹的结果。
  */
-export const api_addFavorites = ( favTitle: string ): Promise<any> => {
+export const api_createFavorites = ( favTitle: string ): Promise<any> => {
 	return request( '/x/v3/fav/folder/add', 'POST', {
 		// 视频标题
 		title: favTitle,
