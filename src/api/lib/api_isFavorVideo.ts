@@ -10,5 +10,11 @@ import { getVideoAvId } from '../../module';
 export const api_isFavorVideo = (): Promise<boolean> => {
 	return request( '/x/v2/fav/video/favoured', 'GET', {
 		aid: getVideoAvId(),
+	} ).then( res => {
+		if ( res.code !== 0 ) {
+			throw new Error( res.message );
+		}
+		
+		return res.data.favoured;
 	} );
 };

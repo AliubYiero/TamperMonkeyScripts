@@ -23,6 +23,7 @@ import { getElement } from './lib';
 	
 	// 判断当前视频是否已经被收藏
 	let isFavorVideo = await api_isFavorVideo();
+	console.log( '当前视频已经被收藏:', isFavorVideo );
 	
 	// 如果已经收藏过了, 则直接返回
 	if ( isFavorVideo ) {
@@ -31,6 +32,10 @@ import { getElement } from './lib';
 	
 	// 获取用户uid
 	const userUid = await getUserUid();
+	
+	if ( !userUid ) {
+		throw new Error( '获取用户uid失败' );
+	}
 	
 	// 获取用户收藏夹目录
 	const readFavouriteList: FavoriteInfo[] = await getReadFavouriteList( userUid );
@@ -56,7 +61,7 @@ import { getElement } from './lib';
 		throw new Error( '收藏失败' );
 	}
 	
-	// @todo 给收藏夹按钮添加上已添加的样式, 以提示用户已添加
+	// 给收藏夹按钮添加上已添加的样式, 以提示用户已添加
 	const favButtonDom = await getElement( document, '.video-fav.video-toolbar-left-item:not(.on)' );
 	
 	if ( favButtonDom ) {
