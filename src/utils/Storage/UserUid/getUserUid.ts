@@ -1,4 +1,5 @@
 import { getElement } from '../../../lib';
+import { userUidConfig } from './config/userUidConfig.ts';
 
 /**
  * 从存储中检索用户UID，或从页面中提取用户UID。
@@ -7,10 +8,11 @@ import { getElement } from '../../../lib';
  */
 export const getUserUid = async (): Promise<string> => {
 	// 如果当前存储中有用户uid, 则直接使用
-	let userUid: string = GM_getValue( 'userUid', '' );
-	console.log( userUid, !userUid );
+	let userUid: string = GM_getValue( userUidConfig.key, '' );
+	
 	// 如果没有, 从页面中获取
 	if ( !userUid ) {
+		// 用户信息dom选择器
 		const selector = 'a.header-entry-mini[href^="//space.bilibili.com/"]';
 		
 		// 等待用户信息加载
