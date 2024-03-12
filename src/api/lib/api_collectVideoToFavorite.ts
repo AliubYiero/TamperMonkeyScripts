@@ -5,6 +5,9 @@
  * @author  Yiero
  * */
 
+import { xhrRequest } from '../xhr_request.ts';
+import { requestConfig } from '../config/requestConfig.ts';
+
 /**
  * 使用提供的视频ID和收藏夹ID将视频收集到收藏夹。
  *
@@ -13,39 +16,18 @@
  * @return {Promise<any>} 收集视频后返回到收藏夹的数据。
  */
 export const api_collectVideoToFavorite = ( videoId: string, favoriteId: string ): Promise<any> => {
-	// 从 document.cookie 中获取 bili_jct
-	const csrf = new URLSearchParams( document.cookie.split( '; ' ).join( '&' ) ).get( 'bili_jct' ) || '';
-	
 	const formData = {
 		rid: videoId,
 		type: '2',
 		add_media_ids: favoriteId,
-		csrf: csrf,
+		csrf: requestConfig.csrf,
 	};
 	
-	/**
-	 * 通过原生 xhr 请求添加视频到收藏夹中
-	 *
-	 * @tutorial https://github.com/the1812/Bilibili-Evolved/blob/8a4e422612a7bd0b42da9aa50c21c7bf3ea401b8/src/core/ajax.ts#L5
-	 * @tutorial https://github.com/the1812/Bilibili-Evolved/blob/master/registry/lib/components/video/quick-favorite/QuickFavorite.vue#L146
-	 * */
-	const url = `https://api.bilibili.com/x/v3/fav/resource/deal`;
-	const xhr = new XMLHttpRequest();
-	xhr.open( 'POST', url );
-	xhr.withCredentials = true;
-	xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
-	// @ts-ignore
-	let { promise, resolve, reject } = Promise.withResolvers();
-	xhr.addEventListener( 'load', () => {
-		const response = JSON.parse( xhr.response );
-		if ( response.code !== 0 ) {
-			return reject( response.message );
-		}
-		return resolve( response.data );
-	} );
-	xhr.addEventListener( 'error', () => reject( xhr.status ) );
-	xhr.send( new URLSearchParams( formData ) );
-	return promise;
+	return xhrRequest(
+		'/x/v3/fav/resource/deal',
+		'POST',
+		formData,
+	);
 	
 	
 	/**

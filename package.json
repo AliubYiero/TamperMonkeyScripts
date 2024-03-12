@@ -11,11 +11,9 @@
 		"@rollup/plugin-replace": "^5.0.5",
 		"@types/node": "^20.11.24",
 		"@types/tampermonkey": "^5.0.2",
+		"@yiero/gm-menu-controller": "^1.0.1",
 		"typescript": "^5.2.2",
 		"vite": "^5.1.4",
 		"vite-plugin-banner": "^0.7.1"
-	},
-	"dependencies": {
-		"@yiero/gm-menu-controller": "^1.0.1"
 	}
 }
