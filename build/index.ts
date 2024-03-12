@@ -10,3 +10,12 @@ export *
 export * from './module/scriptInfoStringify/scriptInfoStringify';
 export * from './util/console';
 export * from './config/defaultScriptsConfigs';
+export *
+	from './module/getDefaultTerserOptions/getDefaultTerserOptions';
+export {
+	defaultTerserOptionsType,
+} from './interfaces/defaultTerserOptionsType';
+export {
+	PartialTerserOptionInterface,
+}
+	from './interfaces/partialTerserOptionInterface';

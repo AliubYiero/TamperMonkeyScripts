@@ -7,24 +7,29 @@
 import { BuildConfigsInterface } from './interfaces';
 
 export const BuildConfigs: BuildConfigsInterface = {
-	/* 是否在开发环境中压缩混淆代码 */
+	/** 是否在开发环境中压缩混淆代码 */
 	devMinify: false,
-	/* 是否在生产环境中压缩混淆代码 */
+	/** 是否在生产环境中压缩混淆代码 */
 	productionMinify: false,
-	/* 是否在生产环境中加密代码 */
+	/**
+	 * 在生产环境中压缩代码
+	 *
+	 * @type { boolean | 'complex' | 'simple' }
+	 * @default true
+	 * */
 	productionTerser: true,
 	
-	/* 是否在开发环境中版本号添加 beta 后缀 */
+	/** 是否在开发环境中版本号添加 beta 后缀 */
 	devVersionSuffix: true,
-	/* 是否在开发环境中热更新代码 (每次更新代码就重新打包一次文件) */
+	/** 是否在开发环境中热更新代码 (每次更新代码就重新打包一次文件) */
 	devHotUpdate: true,
-	/* 是否在开发环境中添加默认自我引用方便开发调试 */
+	/** 是否在开发环境中添加默认自我引用方便开发调试 */
 	devSelfLink: true,
 	
-	/* 是否在生产环境中移除 console.log() */
+	/** 是否在生产环境中移除 console.log() */
 	productionRemoveConsoleLog: true,
-	/* 是否在生产环境中热更新代码 (每次更新代码就重新打包一次文件) */
+	/** 是否在生产环境中热更新代码 (每次更新代码就重新打包一次文件) */
 	productionHotUpdate: false,
-	/* 是否在生产环境中检查版本更新 */
+	/** 是否在生产环境中检查版本冲突 (当前版本号与打包脚本文件版本号一致时将报错) */
 	productionCheckVersion: true,
 };
