@@ -100,7 +100,13 @@ export function parseScriptInfoOptions(
 		
 		// 比较版本号是否与当前版本号相同, 如果相同则报错
 		if ( matchVersionLine && matchVersionLine[ 1 ] === scriptInfoOptions.version ) {
-			throw new TypeError( `版本号冲突: ${ matchVersionLine[ 1 ] }` );
+			throw new TypeError(
+				`版本号冲突: ${ scriptInfoOptions.version } at: ` +
+				`[ file:///${
+					resolve( 'config', 'ScriptInfoConfigs.ts' )
+						.replace( /\\/g, '/' )
+				} ]`,
+			);
 		}
 	}
 	
@@ -120,7 +126,8 @@ export function parseScriptInfoOptions(
 		
 		try {
 			url = new URL( item );
-		} catch ( e ) {
+		}
+		catch ( e ) {
 			return false;
 		}
 		
