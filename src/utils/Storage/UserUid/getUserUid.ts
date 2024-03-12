@@ -11,12 +11,19 @@ export const getUserUid = async (): Promise<string> => {
 	console.log( userUid, !userUid );
 	// 如果没有, 从页面中获取
 	if ( !userUid ) {
-		const userDom = await getElement(
-			document,
-			'a.header-entry-mini[href^="//space.bilibili.com/"]',
-			5000,
-		) as HTMLLinkElement | null;
+		const selector = 'a.header-entry-mini[href^="//space.bilibili.com/"]';
 		
+		// 等待用户信息加载
+		await getElement(
+			document,
+			selector,
+			5000,
+		);
+		
+		// 获取用户信息dom
+		const userDom = document.querySelector( selector ) as HTMLLinkElement | null;
+		
+		// 如果没有用户信息, 则返回空字符串
 		if ( !userDom ) {
 			return '';
 		}

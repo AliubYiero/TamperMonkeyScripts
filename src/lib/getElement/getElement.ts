@@ -34,7 +34,8 @@ function getElement( parent: Element | HTMLElement | Document, selector: string,
 							if ( result ) {
 								observer.disconnect();
 								timer && clearTimeout( timer );
-								return resolve( result );
+								// 为了避免在元素插入后立即解析，我们在这里添加一个短暂的延迟。
+								setTimeout( () => resolve( result ), 300 );
 							}
 						}
 					}
@@ -50,8 +51,7 @@ function getElement( parent: Element | HTMLElement | Document, selector: string,
 					return resolve( null );
 				}, timeout );
 			}
-		}
-		else {
+		} else {
 			const listener = ( e: any ) => {
 				if ( e.target instanceof Element ) {
 					result = e.target.matches( selector ) ? e.target : e.target.querySelector( selector );
