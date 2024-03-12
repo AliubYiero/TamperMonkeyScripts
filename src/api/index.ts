@@ -9,3 +9,4 @@ export * from './lib/api_collectVideoToFavorite.ts';
 export * from './lib/api_createFavorites.ts';
 export * from './lib/api_listAllFavorites.ts';
 export * from './lib/api_showFavoriteInfo.ts';
+export { xhrRequest } from './xhr_request.ts';

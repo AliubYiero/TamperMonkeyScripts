@@ -9,7 +9,12 @@
  * 请求基础数据列表
  * */
 export const requestConfig: {
+	// 基础url
 	baseURL: string
+	
+	// csrf校验码
+	csrf: string
 } = {
 	baseURL: 'https://api.bilibili.com',
+	csrf: new URLSearchParams( document.cookie.split( '; ' ).join( '&' ) ).get( 'bili_jct' ) || '',
 };

@@ -10,6 +10,7 @@ export * from './Storage/UserUid/setUserUid.ts';
 
 export * from './Storage/FavouriteTitle/getFavouriteTitle.ts';
 export * from './Storage/FavouriteTitle/setFavouriteTitle.ts';
+export * from './Storage/FavouriteTitle/hasFavouriteTitle.ts';
 
 export * from './VideoIdTransform/avIdToBvId.ts';
 export * from './VideoIdTransform/bvIdToAvId.ts';
