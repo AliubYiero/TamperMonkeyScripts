@@ -5,7 +5,10 @@
  * @author  Yiero
  * */
 
-import { favouriteTitleConfig } from './config/favouriteTitleConfig.ts';
+import {
+	favouriteTitleConfig,
+} from './config/favouriteTitleConfig.ts';
+import { GMStorage } from '../../../lib';
 
 /**
  * 从本地存储检索收藏夹标题，如果找不到，则检索空字符串。
@@ -13,5 +16,5 @@ import { favouriteTitleConfig } from './config/favouriteTitleConfig.ts';
  * @return {string} 本地存储中的收藏夹标题或空字符串。
  */
 export const getFavouriteTitle = (): string => {
-	return localStorage.getItem( favouriteTitleConfig.key ) || favouriteTitleConfig.title;
+	return GMStorage.getItem( favouriteTitleConfig.key, favouriteTitleConfig.title );
 };

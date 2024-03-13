@@ -7,7 +7,10 @@
  * @author  Yiero
  * */
 
-import { getFavouriteTitle } from './getFavouriteTitle.ts';
+import { GMStorage } from '../../../lib';
+import {
+	favouriteTitleConfig,
+} from './config/favouriteTitleConfig.ts';
 
 /**
  * 查询是否存在收藏夹检索标题。
@@ -15,5 +18,5 @@ import { getFavouriteTitle } from './getFavouriteTitle.ts';
  * @return {boolean} 如果找到收藏夹标题，则返回 true，否则返回 false。
  */
 export const hasFavouriteTitle = (): boolean => {
-	return Boolean( getFavouriteTitle() );
+	return GMStorage.hasItem( favouriteTitleConfig.key );
 };

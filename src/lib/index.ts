@@ -6,3 +6,5 @@
  * */
 
 export * from './getElement/getElement.ts';
+
+export * from './Storage/GMStorage.ts';

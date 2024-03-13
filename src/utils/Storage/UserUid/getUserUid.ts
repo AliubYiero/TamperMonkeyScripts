@@ -1,4 +1,4 @@
-import { getElement } from '../../../lib';
+import { getElement, GMStorage } from '../../../lib';
 import { userUidConfig } from './config/userUidConfig.ts';
 
 /**
@@ -8,7 +8,7 @@ import { userUidConfig } from './config/userUidConfig.ts';
  */
 export const getUserUid = async (): Promise<string> => {
 	// 如果当前存储中有用户uid, 则直接使用
-	let userUid: string = GM_getValue( userUidConfig.key, '' );
+	let userUid: string = GMStorage.getItem( userUidConfig.key, '' );
 	
 	// 如果没有, 从页面中获取
 	if ( !userUid ) {
@@ -33,5 +33,7 @@ export const getUserUid = async (): Promise<string> => {
 		// 获取链接中的用户uid
 		userUid = new URL( userDom.href ).pathname.split( '/' )[ 1 ];
 	}
+	
+	// 返回用户uid
 	return Promise.resolve( userUid );
 };
