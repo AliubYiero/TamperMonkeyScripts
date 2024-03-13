@@ -5,7 +5,11 @@
  * @author  Yiero
  * */
 
-import { getFavouriteTitle, getUserUid } from './utils';
+import {
+	checkScriptCatEnvironment,
+	getFavouriteTitle,
+	getUserUid,
+} from './utils';
 import {
 	addVideoToFavorite,
 	checkFavoriteIsFull,
@@ -95,7 +99,7 @@ const autoAddVideoToFavourites = async () => {
 };
 
 // 注册油猴菜单
-registerMenu();
+!checkScriptCatEnvironment() && registerMenu();
 
 // 自动添加视频到收藏夹
 autoAddVideoToFavourites();

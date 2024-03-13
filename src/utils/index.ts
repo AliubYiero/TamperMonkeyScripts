@@ -14,3 +14,5 @@ export * from './Storage/FavouriteTitle/hasFavouriteTitle.ts';
 
 export * from './VideoIdTransform/avIdToBvId.ts';
 export * from './VideoIdTransform/bvIdToAvId.ts';
+
+export * from './ScriptCatEnvironment/checkScriptCatEnvironment.ts';

@@ -30,4 +30,6 @@ export type GrantFunctionInterface =
 	| 'GM_cookie.delete'
 	| 'window.onurlchange'
 	| 'window.close'
-	| 'window.focus';
+	| 'window.focus'
+	| 'CAT_userConfig'
+	| 'CAT_fileStorage';
