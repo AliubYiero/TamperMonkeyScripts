@@ -14,6 +14,7 @@
 		"terser": "^5.29.1",
 		"typescript": "^5.2.2",
 		"vite": "^5.1.4",
-		"vite-plugin-banner": "^0.7.1"
+		"vite-plugin-banner": "^0.7.1",
+		"yamljs": "^0.3.0"
 	}
 }
