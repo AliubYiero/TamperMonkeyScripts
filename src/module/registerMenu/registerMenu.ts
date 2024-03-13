@@ -1,4 +1,4 @@
-import { menuList } from './config.menuList.ts';
+import { menuList } from './config';
 
 /**
  * 注册油猴菜单项及其各自的onClick处理程序。

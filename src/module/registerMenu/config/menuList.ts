@@ -1,5 +1,5 @@
 /**
- * config.menuList.ts
+ * menuList.ts
  * created by 2024/3/12
  * @file 菜单配置列表数组
  * @author  Yiero
@@ -10,7 +10,7 @@ import {
 	hasFavouriteTitle,
 	setFavouriteTitle,
 	setUserUid,
-} from '../../utils';
+} from '../../../utils';
 
 export const menuList = [
 	{

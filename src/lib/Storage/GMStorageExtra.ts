@@ -31,6 +31,7 @@ export class GMStorageExtra extends Storage {
 	 * @override Storage.getItem()
 	 * */
 	static getItem( key: string, defaultValue: any, group?: string ): any {
+		console.log( this.createKey( key, group ) );
 		return GM_getValue( this.createKey( key, group ), defaultValue );
 	}
 	

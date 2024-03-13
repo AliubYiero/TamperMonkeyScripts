@@ -98,11 +98,11 @@ export const scriptInfoStringify = ( scriptInfo: ScriptInfoOptions ) => {
 	/*
 	* 添加配置头和配置尾
 	* */
-	scriptInfoStringList.unshift( '// ==UserScript==' );
-	scriptInfoStringList.push( '// ==/UserScript==' );
+	const scriptInfoHeader = '// ==UserScript==';
+	const scriptInfoFooter = '// ==/UserScript==';
 	
 	/*
 	* 返回配置项文本
 	* */
-	return scriptInfoStringList.join( '\n' );
+	return [ scriptInfoHeader, ...scriptInfoStringList, scriptInfoFooter ].join( '\n' );
 };

@@ -13,10 +13,12 @@ import {
 	info,
 	parseScriptInfoOptions,
 	scriptInfoStringify,
+	userConfigStringify,
 	warn,
 } from './build';
 import replace from '@rollup/plugin-replace';
 import { resolve } from 'path';
+import { UserConfigs } from './config/UserConfigs';
 
 export default defineConfig( ( { mode } ) => {
 	/*
@@ -131,7 +133,9 @@ export default defineConfig( ( { mode } ) => {
 					* */
 					banner( {
 						content: () => {
-							return scriptInfoStringify( scriptInfoOptions );
+							const scriptInfo = scriptInfoStringify( scriptInfoOptions );
+							const userConfig = userConfigStringify( UserConfigs );
+							return `${ scriptInfo }\n\n${ userConfig }`;
 						},
 						// 关闭注释合法性校验
 						verify: false,

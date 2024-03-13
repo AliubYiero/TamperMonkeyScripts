@@ -8,7 +8,9 @@
 import {
 	favouriteTitleConfig,
 } from './config/favouriteTitleConfig.ts';
-import { GMStorage } from '../../../lib';
+import {
+	GMStorageExtra,
+} from '../../../lib/Storage/GMStorageExtra.ts';
 
 /**
  * 在本地存储中设置收藏夹标题。
@@ -16,5 +18,5 @@ import { GMStorage } from '../../../lib';
  * @param {string} title - 要设置为收藏夹的标题。
  */
 export const setFavouriteTitle = ( title: string ) => {
-	GMStorage.setItem( favouriteTitleConfig.key, title );
+	GMStorageExtra.setItem( favouriteTitleConfig.key, title );
 };

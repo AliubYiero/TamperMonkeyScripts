@@ -6,7 +6,9 @@
  * */
 
 import { userUidConfig } from './config/userUidConfig.ts';
-import { GMStorage } from '../../../lib';
+import {
+	GMStorageExtra,
+} from '../../../lib/Storage/GMStorageExtra.ts';
 
 /**
  * 设置本地存储中的用户UID。
@@ -14,5 +16,5 @@ import { GMStorage } from '../../../lib';
  * @param {string} uid - 要存储的用户UID。
  */
 export const setUserUid = ( uid: string ) => {
-	GMStorage.setItem( userUidConfig.key, uid );
+	GMStorageExtra.setItem( userUidConfig.key, uid );
 };
