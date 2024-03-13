@@ -9,6 +9,7 @@ lerna-debug.log*
 
 # 资源根
 node_modules
+dist
 dist-ssr
 *.local
 
