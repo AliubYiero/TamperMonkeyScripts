@@ -8,3 +8,6 @@ export * from './GlobalScriptsConfigInterface';
 export * from './BuildConfigsInterface';
 export * from './GrantFunctionInterface';
 export * from './ScriptInfoOptions';
+
+export * from './UserConfigItemInterface';
+export * from './UserConfigGroupInterface';
