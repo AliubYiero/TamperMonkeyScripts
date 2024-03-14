@@ -18,6 +18,8 @@ import {
 } from './build';
 import replace from '@rollup/plugin-replace';
 import { resolve } from 'path';
+import { userConfigStringify } from './logs/build';
+import { UserConfigs } from './logs/config/UserConfigs';
 
 export default defineConfig( ( { mode } ) => {
 	/*
@@ -128,7 +130,9 @@ export default defineConfig( ( { mode } ) => {
 					* */
 					banner( {
 						content: () => {
-							return scriptInfoStringify( scriptInfoOptions );
+							const scriptInfo = scriptInfoStringify( scriptInfoOptions );
+							const userConfig = userConfigStringify( UserConfigs );
+							return `${ scriptInfo }\n\n${ userConfig }`;
 						},
 						// 关闭注释合法性校验
 						verify: false,
@@ -139,10 +143,13 @@ export default defineConfig( ( { mode } ) => {
 					* */
 					replace( {
 						preventAssignment: true,
-						values: removeConsoleLog ? {
-							// 生产环境移除log输出
-							'console.log': '(() => {})',
-						} : {},
+						/**
+						 * 在这里写要替换的代码/字符串
+						 * key: 要捕获的字符串
+						 * value: 捕获后要替换掉的字符串
+						 * @example {'console.log': '(() => {})'} 代码中所有的 console.log 就都会被替换成一个匿名箭头函数
+						 * */
+						values: {},
 						delimiters: [ '', '' ],
 					} ),
 				],

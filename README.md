@@ -11,6 +11,8 @@
 ├─config - 配置信息目录
 │     BuildConfigs.ts - 构建配置项 (提供一些打包时的特殊配置)
 │     ScriptInfoConfigs.ts - 脚本信息配置项 (脚本头部的 ==UserScript== 信息, 在打包时会自动添加到文件顶部) 
+|     PersonalScriptConfigs.ts - 个人信息配置项 (同样是脚本头部的 ==UserScript== 信息, 在打包时会自动添加到文件顶部) 
+|     UserConfigs.ts - ScriptCat 用户配置配置项
 │          
 ├─dist - 打包构建完成的文件目录
 │      Demo.dev.js - 开发环境打包的文件 ( `.dev.js` 后缀)
