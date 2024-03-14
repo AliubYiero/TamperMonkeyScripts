@@ -1,0 +1,26 @@
+name: 'Console Importer'
+'name:en': 'Console Importer'
+description: '通过控制台导入 JS / CSS 库'
+'description:en': 'Import JavaScript or CSS Library in browser developer tool.'
+author: Yiero
+version: 1.2.1
+match:
+    - 'https://*/*'
+license: GPL
+icon: 'https://bbs.tampermonkey.net.cn/favicon.ico'
+run-at: body
+grant:
+    - GM_addElement
+    - GM_xmlhttpRequest
+    - storage
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+connect:
+    - "cdnjs.cloudflare.com"
+    - "cdn.bootcdn.net"
+    - "api.bootcdn.cn"
+    - "cdn.jsdelivr.net"
+    - "data.jsdelivr.com"
+require:
+    - ""
+resource:
+    "": ""

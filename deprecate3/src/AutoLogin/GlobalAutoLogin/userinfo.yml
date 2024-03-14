@@ -1,0 +1,20 @@
+name: 通用自动登录
+'name:en': GlobalAutoLogin
+description: '通用自动登录. '
+'description:en': '通用自动登录. '
+author: Yiero
+version: beta_1.0.0
+match:
+    # 京东
+    - 'https://*/*'
+icon: 'https://tampermonkey.com/favicon.ico'
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+license: GPL
+run-at: document-idle
+grant: [ ]
+connect:
+    - ""
+require:
+    - ""
+resource:
+    "": ""

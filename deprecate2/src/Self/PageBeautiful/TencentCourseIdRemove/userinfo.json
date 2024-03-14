@@ -1,0 +1,20 @@
+{
+	"name": "TencentCourseIdRemove",
+	"description": "移除腾讯课堂登录后观看视频会出现的课堂Id",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://ke.qq.com/course/*"
+	],
+	"grant": [
+		"style"
+	],
+	"require": [
+		""
+	],
+	"resource": {},
+	"run-at": "",
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}

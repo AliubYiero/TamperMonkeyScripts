@@ -1,0 +1,22 @@
+doctype html
+html(lang="zh")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
+		title DialogTemplate
+		link(rel="stylesheet", href="./css/style.min.css")
+	body
+		div.dialog-container
+			aside.configs-choose-list
+
+			main.config-detail
+				span.close-icon
+				h1.config-title='直播间ID'
+				section.input-area
+					input.config-input(
+						placeholder='请输入直播间ID (直播间地址最后的数字码)'
+					)/
+					button.submit-config 确认
+				hr/
+
+		script(src="./js/index.js")

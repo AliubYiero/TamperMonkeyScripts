@@ -1,0 +1,25 @@
+name: 'AIC Report'
+'name:en': AICReport
+description: 自动填写AIC
+'description:en': 自动填写AIC.
+author: Yiero
+version: 1.0.0
+match:
+    - 'https://aic.gdkmxy.cn/*'
+license: GPL
+icon: 'https://aic.gdkmxy.cn/favicon.ico'
+run-at: document-start
+grant:
+    - GM_registerMenuCommand
+    - GM_setValue
+    - GM_getValue
+    - GM_deleteValue
+    - GM_listValues
+    - GM_addStyle
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+connect:
+    - ""
+require:
+    - "alert"
+resource:
+    "": ""

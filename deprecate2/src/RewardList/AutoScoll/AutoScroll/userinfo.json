@@ -1,0 +1,22 @@
+{
+	"name": "AutoScroll",
+	"description": "全平台自动滚动",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://*/*"
+	],
+	"grant": [
+		"style",
+		"menu",
+		"storage"
+	],
+	"require": [
+		""
+	],
+	"resource": {},
+	"run-at": "",
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}

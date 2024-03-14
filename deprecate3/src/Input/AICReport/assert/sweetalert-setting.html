@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script src="https://cdn.bootcdn.net/ajax/libs/sweetalert2/11.7.27/sweetalert2.all.min.js"></script>
+	<style>
+		.aic-setting-form {
+			width: 1200px;
+			display: flex;
+			flex-flow: column;
+			box-sizing: border-box;
+			padding: 0 20px;
+			gap: 10px;
+		}
+		
+		/* 教学周 */
+		.teacher-week {
+			display: flex;
+			justify-content: space-between;
+		}
+		
+		/* 教学评价 和 教学建议 */
+		.teaching-comment > label, .teaching-suggest > label {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+		
+		#teaching-comment, #teaching-suggest {
+			flex: 1;
+		}
+		
+		/* 标题 */
+		.aic-setting-title {
+			margin: 0;
+			padding: 10px 0;
+			text-align: center;
+		}
+		
+		.class-info-title {
+			border-top: 1px solid #a6a6a6;
+			margin: 10px 0 0 0;
+		}
+		
+		/* 课程信息 */
+		.class-info {
+			display: flex;
+			justify-content: space-between;
+		}
+		
+		.class-info-item {
+			display: flex;
+			gap: 10px;
+		}
+		
+		.aic-setting-add-btn {
+			width: 100px;
+		}
+	</style>
+</head>
+<body>
+<button class="show">show</button>
+
+<script>
+	const getToday = () => {
+		const today = new Date();
+		return `${ today.getFullYear() }-${ today.getMonth() + 1 }-${ today.getDate() }`;
+	}
+	
+	const parseStorageMap = () => {
+		const storageMap = new Map();
+		// 起始日期
+		storageMap.set( 'start-date', ( dateString ) => {
+			// 储存日期
+			localStorage.setItem( 'start-date', dateString );
+			// 更新当前周
+		} );
+		
+		// 总体评价
+		storageMap.set( 'overall-comment', () => {
+			// 储存总体评价
+			localStorage.setItem( 'overall-comment', e.target.value );
+		} );
+		
+		// 教学评价
+		storageMap.set( 'teaching-comment', () => {
+			// 储存教学评价
+			localStorage.setItem( 'teaching-comment', e.target.value );
+		} );
+		
+		// 教学建议
+		storageMap.set( 'teaching-suggest', () => {
+			// 储存教学建议
+			localStorage.setItem( 'teaching-suggest', e.target.value );
+		} );
+		
+		// 添加课程
+		storageMap.set( 'add-btn', () => {
+			// 储存添加课程
+			// const classInfoList = localStorage.getItem() || [];
+			// classInfoList.push( {
+			// 	id: classInfoList.length,
+			// 	className: '',
+			// 	teacher: '',
+			// 	comment: '正常',
+			// } );
+			// localStorage.setItem( 'class-info', classInfoList );
+			// console.log( 2 );
+			// Swal.update( {
+			// 	html: createPopupHTMLOption( getPopupHTMLOption() ),
+			// } );
+		} );
+		
+		return storageMap;
+	}
+	
+	const show = document.querySelector( '.show' );
+	
+	function createPopupHTMLOption( param ) {
+		const {
+			startDate,
+			currentWeek,
+			overallComment,
+			teachingComment,
+			teachingSuggest,
+			classInfoList
+		} = param;
+		return `
+            <form class="aic-setting-form">
+			    <h2 class="aic-setting aic-setting-title">反馈设置</h2>
+			    <section class="aic-setting teacher-week">
+			        <label for="start-date">
+			            <span>当前学期的起始周(周一日期): </span>
+			            <input type="date" id="start-date" value="${ startDate }" />
+			        </label>
+			        <!-- 当前周 -->
+			        <label for="current-week">
+			            <span>当前周: </span>
+			            <input type="number" id="current-week" min="1" value="${ currentWeek }"/>
+			        </label>
+			        <!-- 总体评价 -->
+			        <label for="overall-comment">
+			            <span>总体评价: </span>
+			            <select id="overall-comment">
+			                <option value="优秀" ${ overallComment === '优秀' ? 'selected' : '' }>优秀</option>
+			                <option value="良好" ${ overallComment === '良好' ? 'selected' : '' }>良好</option>
+			                <option value="中等" ${ overallComment === '中等' ? 'selected' : '' }>中等</option>
+			                <option value="较差" ${ overallComment === '较差' ? 'selected' : '' }>较差</option>
+			            </select>
+			        </label>
+			    </section>
+			    <section class="aic-setting teaching-comment">
+			        <label for="teaching-comment">
+			            <span>教学评价: </span>
+			            <textarea id="teaching-comment" style="resize: vertical;">${ teachingComment }</textarea>
+			        </label>
+			    </section>
+			    <section class="aic-setting teaching-suggest">
+			        <label for="teaching-suggest">
+			            <span>教学建议: </span>
+			            <textarea id="teaching-suggest" style="resize: vertical">${ teachingSuggest }</textarea>
+			        </label>
+			    </section>
+			    <h2 class="aic-setting aic-setting-title class-info-title">具体课程</h2>
+			    ${ classInfoList.map( createClassInfoHTMLString ) }
+			    <!-- 添加课程 -->
+			    <button class="aic-setting aic-setting-btn aic-setting-add-btn">添加课程</button>
+			</form>
+            `
+	}
+	
+	function createClassInfoHTMLString( classInfo ) {
+		return `<section class="aic-setting class-info" data-index="${ classInfo.id }">
+			        <label class="class-info-item" for="current-week-display">
+			            <span>当前周授课: </span>
+			            <input class="is-show" id="current-week-display" type="checkbox" checked/>
+			        </label>
+			        <!-- class name -->
+			        <label class="class-info-item" for="class-name-${ classInfo.id }">
+			            <span>课程名: </span>
+			            <input type="text" id="class-name-${ classInfo.id }" value="${ classInfo.className }" />
+			        </label>
+			        <!-- teacher -->
+			        <label class="class-info-item" for="teacher-${ classInfo.id }">
+			            <span>授课教师: </span>
+			            <input type="text" id="teacher-${ classInfo.id }" value="${ classInfo.teacher }" />
+			        </label>
+			        <!-- 评价 -->
+			        <label class="class-info-item" for="comment-${ classInfo.id }">
+			            <span>评价: </span>
+			            <input type="text" id="comment-${ classInfo.id }" value="${ classInfo.comment }"/>
+			        </label>
+			        <!-- 删除课程 -->
+			        <button class="delete-btn aic-setting-btn class-info-item">删除课程</button>
+			    </section>`
+	}
+	
+	function getPopupHTMLOption() {
+		const startDate = localStorage.getItem( 'start-date' ) || getToday();
+		const currentWeek = Math.floor( ( Date.now() - Date.parse( startDate ) ) / 1000 / 60 / 60 / 24 / 7 ) + 1
+		const overallComment = localStorage.getItem( 'overall-comment' ) || '良好';
+		const teachingComment = localStorage.getItem( 'teaching-comment' ) || '正常';
+		const teachingSuggest = localStorage.getItem( 'teaching-suggest' ) || '正常';
+		const classInfoList = localStorage.getItem( 'class-info' ) || [];
+		return {
+			startDate,
+			currentWeek,
+			overallComment,
+			teachingComment,
+			teachingSuggest,
+			classInfoList
+		};
+	}
+	
+	show.addEventListener( 'click', () => {
+		
+		Swal.fire( {
+			html: createPopupHTMLOption( getPopupHTMLOption() ),
+			width: 1300
+		} );
+		
+		const domList = {
+			from: document.querySelector( '.aic-setting-form' ),
+		}
+		
+		// 阻止表单提交
+		domList.form.addEventListener( 'submit', e => {
+			e.preventDefault();
+		} );
+		
+		// 输入事件映射
+		const storageMap = parseStorageMap();
+		
+		// 捕获事件冒泡 - 文本输入
+		domList.form.addEventListener( 'change', e => {
+			console.log( e.target, e );
+			
+			storageMap.get( e.target.id )( e.target.value );
+			
+		} );
+		
+		// 捕获事件冒泡 - 点击
+		// domList.form.addEventListener( 'click', e => {
+		// 	e.preventDefault();
+		// 	e.target.classList.contains( 'delete-btn' ) && storageMap.get( 'delete-btn' )();
+		// 	e.target.classList.contains( 'aic-setting-add-btn' ) && storageMap.get( 'add-btn' )();
+		// } )
+		
+	} );
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+	"name": "WeChatReadAutoScroll",
+	"name:en": "WeChatReadAutoScroll",
+	"description": "",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://weread.qq.com/web/reader/*"
+	],
+	"grant": [
+		"register"
+	],
+	"require": [
+		"https://cdn.jsdelivr.net/npm/sweetalert2@9"
+	],
+	"resource": {},
+	"run-at": "",
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}

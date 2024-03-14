@@ -1,0 +1,21 @@
+name: Flome便捷记录
+'name:en': 'Flome Quick Record'
+description: Flome便捷记录网页内容
+'description:en': Flome便捷记录网页内容.
+author: Yiero
+version: 1.0.0
+match:
+    - 'https://*/*'
+license: GPL
+icon: 'https://www.tampermonkey.net/favicon.ico'
+run-at: default
+grant:
+    - storage
+    - menu
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+connect:
+    - ""
+require:
+    - "https://cdn.jsdelivr.net/npm/sweetalert2@11.7.29/dist/sweetalert2.all.min.js"
+resource:
+    "AlertCss": "https://cdn.jsdelivr.net/npm/sweetalert2@11.7.29/dist/sweetalert2.min.css"

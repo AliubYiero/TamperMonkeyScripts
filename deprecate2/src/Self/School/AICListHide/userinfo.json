@@ -1,0 +1,20 @@
+{
+	"name": "AICListHide",
+	"description": "隐藏AIC中的多余信息",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://aic.gdkmxy.cn/xsgl/xs/default/Default.aspx"
+	],
+	"grant": [
+		"style"
+	],
+	"require": [
+		""
+	],
+	"resource": {},
+	"run-at": "",
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}

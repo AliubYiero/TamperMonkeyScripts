@@ -1,0 +1,24 @@
+name: 绅士仓库历史记录可视化
+'name:en': CangkuHistoryRecord
+description: '绅士仓库历史记录可视化. '
+'description:en': '绅士仓库历史记录可视化. '
+author: Yiero
+version: 2.5.2
+match:
+    - 'https://cangku.moe/*'
+icon: 'https://cangku.moe/favicon.ico'
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+license: GPL
+run-at: document-idle
+grant:
+    - GM_addStyle
+    - GM_setValue
+    - GM_getValue
+    - GM_addElement
+    - menu
+connect:
+    - ""
+require:
+    - ""
+resource:
+    "": ""

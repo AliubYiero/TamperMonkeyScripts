@@ -1,0 +1,280 @@
+/* 辅助样式: 隐藏容器 */
+.enable-display {
+	@mixin display {
+		display: none !important;
+	}
+	/* 设置布局容器: display */
+	@include display;
+}
+
+/* 主容器 */
+.dialog-container {
+	@mixin baseSize {
+		$height: 500px;
+		$width: $height+200px;
+		width: $width;
+		height: $height;
+	}
+	@mixin border {
+		border: 1px solid #000;
+		border-radius: 15px;
+	}
+	@mixin background {
+		background: pink;
+	}
+	@mixin position {
+		position: fixed;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+	@mixin display {
+		display: flex;
+		overflow-y: scroll;
+	}
+	/* 设置基础宽高: width & height */
+	@include baseSize;
+	/* 设置背景: background */
+	@include background;
+	/* 设置边框: border */
+	@include border;
+	/* 设置位置坐标: position */
+	@include position;
+	/* 设置布局容器: display */
+	@include display;
+	
+}
+
+/* 左侧不同配置选择框 */
+.configs-choose-list {
+	@mixin baseSize {
+		width: 200px;
+		height: 100%;
+	}
+	@mixin position {
+	
+	}
+	@mixin border {
+		border: 1px solid #000;
+	}
+	/* 设置基础宽高: width & height */
+	@include baseSize;
+	/* 设置位置坐标: position */
+	@include position;
+	/* 设置边框: border */
+	@include border;
+}
+
+/* 详细配置容器 */
+.config-detail {
+	@mixin baseSize {
+		$size: 100%;
+		width: $size;
+		height: $size;
+	}
+	@mixin border {
+		border: 1px solid #000;
+	}
+	@mixin display {
+		display: flex;
+		flex-flow: column;
+		align-items: center;
+	}
+	@mixin position {
+		position: relative;
+	}
+	/* 设置位置坐标: position */
+	@include position;
+	/* 设置布局容器: display */
+	@include display;
+	/* 设置边框: border */
+	@include border;
+	/* 设置基础宽高: width & height */
+	@include baseSize;
+	
+}
+
+/* 关闭图标选项 */
+.close-icon {
+	@mixin position {
+		position: absolute;
+		right: 10px;
+		top: 5px;
+	}
+	@mixin display {
+		display: block;
+	}
+	@mixin baseSize {
+		$size: 20px;
+		width: $size;
+		height: $size;
+	}
+	/* 设置基础宽高: width & height */
+	@include baseSize;
+	/* 设置布局容器: display */
+	@include display;
+	/* 设置位置坐标: position */
+	@include position;
+	
+	&::before {
+		@mixin content {
+			content: '';
+		}
+		@mixin background {
+			background: (
+					no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGNsYXNzPSJpb25pY29uIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIzMiIgZD0iTTM2OCAzNjhMMTQ0IDE0NE0zNjggMTQ0TDE0NCAzNjgiLz48L3N2Zz4=")
+			);
+		}
+		@mixin baseSize {
+			$size: 100%;
+			width: $size;
+			height: $size;
+		}
+		/* 设置基础宽高: width & height */
+		@include baseSize;
+		/* 设置伪元素文本内容: content */
+		@include content;
+		/* 设置布局容器: display */
+		@include display;
+		/* 设置背景: background */
+		@include background;
+	}
+}
+
+/* 输入框 */
+.input-area {
+	@mixin baseSize {
+		$width: 450px;
+		$height: 30px;
+		width: $width;
+		height: $height;
+	}
+	@mixin position {
+		position: relative;
+	}
+	/* 设置位置坐标: position */
+	@include position;
+	/* 设置基础宽高: width & height */
+	@include baseSize;
+}
+
+/* 输入框 - input */
+.config-input {
+	@mixin border {
+		border-radius: 15px;
+		border: none;
+		outline: none;
+		box-sizing: border-box;
+	}
+	@mixin position {
+		padding: 0 70px 0 20px;
+	}
+	@mixin baseSize {
+		$size: 100%;
+		width: $size;
+		height: $size;
+	}
+	@mixin font {
+		font-size: 18px;
+	}
+	/* 设置基础宽高: width & height */
+	@include baseSize;
+	/* 设置字体: font */
+	@include font;
+	/* 设置位置坐标: position */
+	@include position;
+	/* 设置基础宽高: width & height */
+	@include baseSize;
+	/* 设置边框: border */
+	@include border;
+}
+
+/* 输入框 - 提交按钮 */
+.submit-config {
+	@mixin position {
+		position: absolute;
+		right: 10px;
+		top: 2.5px;
+	}
+	@mixin baseSize {
+		$height: 25px;
+		$width: $height+25px;
+		width: $width;
+		height: $height;
+	}
+	@mixin border {
+		border: none;
+		border-radius: 15px;
+	}
+	@mixin font {
+		color: #757575;
+	}
+	/* 设置字体属性: font */
+	@include font;
+	/* 设置边框: border */
+	@include border;
+	/* 设置基础宽高: width & height */
+	@include baseSize;
+	/* 设置位置坐标: position */
+	@include position;
+}
+
+/* 分割线 */
+hr {
+	@mixin baseSize {
+		$width: 90%;
+		$height: 2px;
+		width: $width;
+		height: $height;
+	}
+	@mixin border {
+		border: none;
+	}
+	@mixin background {
+		background: #f8f8f8;
+	}
+	/* 设置背景: background */
+	@include background;
+	/* 设置边框: border */
+	@include border;
+	/* 设置基础宽高: width & height */
+	@include baseSize;
+}
+
+/* 配置项 */
+.config-item {
+	// 设置字体属性: font
+	@mixin font {
+		text-align: center;
+	}
+	// 设置位置坐标: position
+	@mixin position {
+		margin: 1px 0;
+	}
+	// 设置边框: border
+	@mixin border {
+		border-radius: 10px;
+		border: 1px solid #000;
+	}
+	// 设置背景: background
+	@mixin background {
+		background: #f8f8f8;
+	}
+	// 设置基础宽高: width & height
+	@mixin baseSize {
+		$width: 150px;
+		$height: null;
+		width: $width or auto;
+		height: $height or auto;
+	}
+	/* 设置字体属性: font */
+	@include font;
+	/* 设置基础宽高: width & height */
+	@include baseSize;
+	/* 设置背景: background */
+	@include background;
+	/* 设置边框: border */
+	@include border;
+	/* 设置位置坐标: position */
+	@include position;
+}

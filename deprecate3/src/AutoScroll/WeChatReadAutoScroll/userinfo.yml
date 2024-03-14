@@ -1,0 +1,20 @@
+name: 微信读书自动阅读
+'name:en': WeChatReadAutoScroll
+description: '微信读书阅读自动滚动, 触底自动翻页'
+version: 1.0.0
+match:
+    - 'https://weread.qq.com/web/reader/*'
+author: Yiero
+icon: 'https://weread.qq.com/favicon.ico'
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+license: GPL
+grant:
+    - storage
+    - menu
+connect:
+    - ""
+require:
+    - ""
+resource:
+    '': ''
+run-at: default

@@ -1,0 +1,22 @@
+name: GetQuestions
+'name:en': GetQuestions
+description: GetQuestions
+'description:en': GetQuestions.
+author: Yiero
+version: 1.0.0
+match:
+    - 'https://mooc1.chaoxing.com/mooc-ans/mooc2/work/*'
+    - 'https://www.haodaxue.net/test/jieguo?*'
+license: GPL
+icon: 'https://mooc1.chaoxing.com/favicon.ico'
+run-at: document-start
+grant:
+    - GM_registerMenuCommand
+    - GM_setClipboard
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+connect:
+    - ""
+require:
+    - ""
+resource:
+    "": ""

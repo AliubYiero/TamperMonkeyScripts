@@ -1,0 +1,21 @@
+{
+	"name": "CangkuHistoryDisplay",
+	"description": "仓库属性隐藏",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://cangku.moe/*"
+	],
+	"grant": [
+		"style",
+		"storage"
+	],
+	"require": [
+		""
+	],
+	"resource": {},
+	"run-at": "",
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}

@@ -1,0 +1,148 @@
+@charset "UTF-8";
+/* 辅助样式: 隐藏容器 */
+.enable-display {
+  /* 设置布局容器: display */
+  display: none !important;
+}
+
+/* 主容器 */
+.dialog-container {
+  /* 设置基础宽高: width & height */
+  width: 700px;
+  height: 500px;
+  /* 设置背景: background */
+  background: pink;
+  /* 设置边框: border */
+  border: 1px solid #000;
+  border-radius: 15px;
+  /* 设置位置坐标: position */
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* 设置布局容器: display */
+  display: flex;
+  overflow-y: scroll;
+}
+
+/* 左侧不同配置选择框 */
+.configs-choose-list {
+  /* 设置基础宽高: width & height */
+  width: 200px;
+  height: 100%;
+  /* 设置位置坐标: position */
+  /* 设置边框: border */
+  border: 1px solid #000;
+}
+
+/* 详细配置容器 */
+.config-detail {
+  /* 设置位置坐标: position */
+  position: relative;
+  /* 设置布局容器: display */
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  /* 设置边框: border */
+  border: 1px solid #000;
+  /* 设置基础宽高: width & height */
+  width: 100%;
+  height: 100%;
+}
+
+/* 关闭图标选项 */
+.close-icon {
+  /* 设置基础宽高: width & height */
+  width: 20px;
+  height: 20px;
+  /* 设置布局容器: display */
+  display: block;
+  /* 设置位置坐标: position */
+  position: absolute;
+  right: 10px;
+  top: 5px;
+}
+.close-icon::before {
+  /* 设置基础宽高: width & height */
+  width: 100%;
+  height: 100%;
+  /* 设置伪元素文本内容: content */
+  content: '';
+  /* 设置布局容器: display */
+  display: block;
+  /* 设置背景: background */
+  background: no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGNsYXNzPSJpb25pY29uIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIzMiIgZD0iTTM2OCAzNjhMMTQ0IDE0NE0zNjggMTQ0TDE0NCAzNjgiLz48L3N2Zz4=");
+}
+
+/* 输入框 */
+.input-area {
+  /* 设置位置坐标: position */
+  position: relative;
+  /* 设置基础宽高: width & height */
+  width: 450px;
+  height: 30px;
+}
+
+/* 输入框 - input */
+.config-input {
+  /* 设置基础宽高: width & height */
+  width: 100%;
+  height: 100%;
+  /* 设置字体: font */
+  font-size: 18px;
+  /* 设置位置坐标: position */
+  padding: 0 70px 0 20px;
+  /* 设置基础宽高: width & height */
+  width: 100%;
+  height: 100%;
+  /* 设置边框: border */
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* 输入框 - 提交按钮 */
+.submit-config {
+  /* 设置字体属性: font */
+  color: #757575;
+  /* 设置边框: border */
+  border: none;
+  border-radius: 15px;
+  /* 设置基础宽高: width & height */
+  width: 50px;
+  height: 25px;
+  /* 设置位置坐标: position */
+  position: absolute;
+  right: 10px;
+  top: 2.5px;
+}
+
+/* 分割线 */
+hr {
+  /* 设置背景: background */
+  background: #f8f8f8;
+  /* 设置边框: border */
+  border: none;
+  /* 设置基础宽高: width & height */
+  width: 90%;
+  height: 2px;
+}
+
+/* 配置项 */
+.config-item {
+  /* 设置字体属性: font */
+  text-align: center;
+  /* 设置基础宽高: width & height */
+  width: 150px;
+  height: auto;
+  /* 设置背景: background */
+  background: #f8f8f8;
+  /* 设置边框: border */
+  border-radius: 10px;
+  border: 1px solid #000;
+  /* 设置位置坐标: position */
+  margin: 1px 0;
+}
+
+/*# sourceMappingURL=style.css.map */

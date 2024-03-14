@@ -1,0 +1,33 @@
+#div_digg, #green_channel, #BlogPostCategory {
+    display: none;
+}
+
+/* 主体容器 */
+#container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* 文章内容框架 */
+#topics {
+    width: 80%;
+}
+
+/* 文章标题 */
+#topics .postTitle {
+    border: 0px;
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+
+/* 文章内容 */
+#topics .postBody {
+    font-size: 18px;
+}
+
+/* 作者内容 */
+#blog_post_info_block {
+    margin-top: 200px;
+}

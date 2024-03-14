@@ -1,0 +1,21 @@
+name: 仓库资源链接补全
+'name:en': CangkuLinkCompletion
+description: '智能识别仓库的资源链接, 补全提取码. '
+'description:en': '智能识别仓库的资源链接, 补全提取码. '
+author: Yiero
+version: beta_1.0.0
+match:
+    - 'https://cangku.moe/archives/*'
+    - 'https://pan.baidu.com/s/*'
+icon: 'https://cangku.moe/favicon.ico'
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+license: GPL
+run-at: default
+grant:
+    - element
+connect:
+    - ""
+require:
+    - ""
+resource:
+    "": ""

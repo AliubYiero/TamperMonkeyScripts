@@ -1,0 +1,22 @@
+name: 通用CSS配置
+'name:en': GlobalCSSConfiguration
+description: 通用CSS配置
+'description:en': 通用CSS配置.
+author: Yiero
+version: 1.0.0
+match:
+    - 'https://*/*'
+license: GPL
+icon: 'https://www.runoob.com/wp-content/uploads/2013/07/css-logo.png'
+run-at: document-start
+grant:
+    - GM_addStyle
+    - storage
+    - menu
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+connect:
+    - ""
+require:
+    - "alert"
+resource:
+    "": ""

@@ -1,0 +1,19 @@
+name: Quin动态直播间链接快捷跳转
+'name:en': BiliQuinDynamicLiveLinkJump
+description: Quin动态直播间链接快捷跳转
+'description:en': Quin动态直播间链接快捷跳转
+author: Yiero
+version: 1.0.1
+match:
+    - 'https://t.bilibili.com/*'
+icon: 'https://t.bilibili.com/favicon.ico'
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+license: GPL
+run-at: document-idle
+grant: [ ]
+connect:
+    - ""
+require:
+    - ""
+resource:
+    "": ""

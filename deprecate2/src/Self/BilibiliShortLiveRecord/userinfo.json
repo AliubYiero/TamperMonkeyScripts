@@ -1,0 +1,21 @@
+{
+	"name": "BilibiliShortLiveRecord",
+	"description": "B站直播自动录制短视频",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://live.bilibili.com/*"
+	],
+	"grant": [
+		"GM_addStyle"
+	],
+	"require": [
+		"https://cdn.bootcdn.net/ajax/libs/axios/1.3.6/axios.min.js"
+	],
+	"resource": [
+		""
+	],
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}

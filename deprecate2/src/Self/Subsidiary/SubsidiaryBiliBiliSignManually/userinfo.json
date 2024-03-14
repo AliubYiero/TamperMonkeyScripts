@@ -1,0 +1,20 @@
+{
+	"name": "SubsidiaryBiliBiliSignManually",
+	"description": "手动标记拓展",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"https://www.bilibili.com/video/*"
+	],
+	"grant": [
+		""
+	],
+	"require": [
+		""
+	],
+	"resource": {},
+	"run-at": "",
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}

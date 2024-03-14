@@ -1,0 +1,21 @@
+name: MenuController
+'name:en': MenuController
+description: 一个用于切换Menu状态的控制类
+'description:en': 一个用于切换Menu状态的控制类.
+author: Yiero
+version: 1.0.0
+match:
+    - 'https://*/*'
+license: GPL
+icon: 'https://www.tampermonkey.net/favicon.ico'
+run-at: document-start
+grant:
+    - GM_registerMenuCommand
+    - GM_unregisterMenuCommand
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+connect:
+    - ""
+require:
+    - ""
+resource:
+    "": ""

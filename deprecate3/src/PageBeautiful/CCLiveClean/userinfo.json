@@ -1,0 +1,25 @@
+{
+	"name": "CC直播间净化",
+	"name:en": "CCLiveClean",
+	"description": "隐藏CC直播页面中的大部分广告, 并且当直播结束跳转其他直播间时, 自动关闭页面",
+	"description:en": "Hide almost CC live Element. ",
+	"author": "Yiero",
+	"version": "1.1.1",
+	"match": [
+		"https://cc.163.com/*",
+		"https://act/m/daily/anchor_end_countdown/*"
+	],
+	"grant": [
+		"style",
+		"storage",
+		"menu"
+	],
+	"require": [
+		""
+	],
+	"resource": {},
+	"run-at": "body",
+	"icon": "https://cc.163.com/favicon.ico",
+	"namespace": "https://github.com/AliubYiero/TamperMonkeyScripts/",
+	"license": "GPL"
+}

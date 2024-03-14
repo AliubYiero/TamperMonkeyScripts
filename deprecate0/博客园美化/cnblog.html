@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>cnblog</title>
+</head>
+<body>
+
+
+
+<script>
+
+	const removeItemList = ['div_digg', 'blog_post_info']
+	removeItemList.forEach(idName => {
+		document.getElementById(idName).remove()
+	})
+
+	const topics = document.getElementById('topics')
+	const comment = document.getElementById('comment_form_container')
+	const body = document.querySelector("body")
+	body.innerHTML = '<div id="container"></div>'
+
+	const container = document.getElementById('container')
+	container.appendChild(topics)
+	container.appendChild(comment)
+
+</script>
+
+
+
+</body>
+</html>

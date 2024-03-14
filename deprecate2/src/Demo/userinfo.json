@@ -1,0 +1,23 @@
+{
+	"name": "Demo",
+	"description": "一个Demo脚本，用于本地测试",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"file:///*",
+		"http://localhost:63342/*"
+	],
+	"grant": [
+		"style",
+		"menu"
+	],
+	"require": [
+	],
+	"resource": {
+		"css": "https://cdn.staticfile.org/layui/2.8.11/css/layui.min.css"
+	},
+	"run-at": "",
+	"icon": "",
+	"namespace": "",
+	"license": ""
+}

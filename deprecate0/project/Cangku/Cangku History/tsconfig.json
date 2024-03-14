@@ -1,0 +1,32 @@
+{
+	/* 编译路径 */
+	"include": [
+		"./src/**/*"
+	],
+	/* 编译选项 */
+	"compilerOptions": {
+		/* 编译使用语法 */
+		"target": "es2015",
+		/* 编译模块使用语法 */
+		"module": "es2015",
+		/* 输出路径 */
+		"outDir": "./dist",
+		/* 编译后始终打开Js严格模式 */
+		"alwaysStrict": true,
+		/* 允许编译Js */
+		"allowJs": true,
+		/* 以Ts语法检查Js文件 */
+		"checkJs": true,
+		/* 编译后移除注释 */
+		"removeComments": false,
+		/* 报错后不编译 */
+		"noEmitOnError": true,
+		/* 编译时生成Map文件 */
+		"sourceMap": false,
+		/* 开启严格模式 */
+		"strict": true
+	},
+	"exclude": [
+		"node_modules"
+	]
+}

@@ -1,0 +1,21 @@
+name: 蜜柑计划下载助手
+'name:en': 'Mikan Download Assistant'
+description: 批量获取整个季度番剧的磁链
+'description:en': 批量获取整个季度番剧的磁链.
+author: Yiero
+version: 1.0.0
+match:
+    - 'https://cheny.asia/Home/Bangumi/*'
+license: GPL
+icon: 'https://cheny.asia/favicon.ico'
+run-at: default
+grant:
+    - element
+    - GM_setClipboard
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+connect:
+    - ""
+require:
+    - "alert"
+resource:
+    "": ""

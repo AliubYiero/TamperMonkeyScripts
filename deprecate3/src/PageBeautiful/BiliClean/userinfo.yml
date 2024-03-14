@@ -1,0 +1,20 @@
+name: Bilibili净化
+'name:en': BiliClean
+description: 'Bilibili净化多余元素. '
+'description:en': 'Bilibili净化多余元素. '
+author: Yiero
+match:
+    - 'https://*.bilibili.com/*'
+icon: 'https://www.bilibili.com/favicon.ico'
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+license: GPL
+run-at: body
+grant:
+    - GM_addStyle
+version: beta_1.0.0
+connect:
+    - ""
+require:
+    - ""
+resource:
+    "": ""

@@ -1,0 +1,26 @@
+name: 'Don''t play too much time and do more things'
+'name:en': AlertYou
+description: 'Don''t play too much time and do more things'
+'description:en': 'Don''t play too much time and do more things.'
+author: Yiero
+version: 1.0.0
+match:
+    - 'https://*/*'
+license: GPL
+icon: 'https://www.tampermonkey.net/favicon.ico'
+run-at: document-start
+grant:
+    - GM_registerMenuCommand
+    - GM_unregisterMenuCommand
+    - GM_notification
+    - GM_setValue
+    - GM_getValue
+    - GM_deleteValue
+    - GM_listValues
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+connect:
+    - ""
+require:
+    - ""
+resource:
+    "": ""

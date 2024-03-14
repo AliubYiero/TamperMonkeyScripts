@@ -1,0 +1,20 @@
+name: 'Warframe Market交易助手'
+'name:en': 'Warframe Market Manager'
+description: 'Warframe Market交易助手'
+'description:en': 'Warframe Market交易助手.'
+author: Yiero
+version: 1.0.1
+match:
+    - 'https://warframe.market/zh-hans/*'
+license: GPL
+icon: 'https://warframe.market/favicon.ico'
+run-at: document-idle
+grant:
+    - GM_addElement
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+connect:
+    - ""
+require:
+    - "alert"
+resource:
+    "": ""

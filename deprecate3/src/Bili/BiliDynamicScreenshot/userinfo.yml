@@ -1,0 +1,21 @@
+name: BiliDynamicScreenshot
+'name:en': BiliDynamicScreenshot
+description: BiliDynamicScreenshot
+'description:en': BiliDynamicScreenshot
+author: Yiero
+version: beta_1.0.0
+match:
+    - 'https://t.bilibili.com/*'
+icon: 'https://t.bilibili.com/favicon.ico'
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+license: GPL
+run-at: document-idle
+grant:
+    - GM_addStyle
+    - GM_addElement
+connect:
+    - ""
+require:
+    - "screenshot"
+resource:
+    "": ""

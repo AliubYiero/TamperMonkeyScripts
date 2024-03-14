@@ -1,0 +1,19 @@
+name: 绅士仓库自动签到
+'name:en': CangkuAutoAttendance
+description: 绅士仓库自动签到
+'description:en': 绅士仓库自动签到
+author: Yiero
+version: beta_1.0.0
+match:
+    - 'https://cangku.moe/'
+icon: 'https://cangku.moe/favicon.ico'
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+license: GPL
+run-at: document-idle
+grant: []
+connect:
+    - ""
+require:
+    - ""
+resource:
+    "": ""

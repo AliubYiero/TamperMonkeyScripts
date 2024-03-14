@@ -1,0 +1,14 @@
+name: 抖音直播间净化
+description: '抖音直播界面美化. '
+version: 1.0.5
+author: Yiero
+match:
+    - 'https://live.douyin.com/*'
+icon: 'https://live.douyin.com/favicon.ico'
+namespace: 'https://github.com/AliubYiero/TamperMonkeyScripts/'
+license: GPL
+require:
+    - ''
+run-at: document-start
+grant:
+    - GM_addStyle

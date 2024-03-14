@@ -1,0 +1,20 @@
+{
+	"name": "FlomoWriteEverywhere",
+	"description": "在任何地方书写Flomo笔记",
+	"author": "Yiero",
+	"version": "1.0.0",
+	"match": [
+		"*://*/*"
+	],
+	"grant": [
+		"style"
+	],
+	"require": [
+		""
+	],
+	"resource": {},
+	"run-at": "",
+	"icon": "https://v.flomoapp.com/favicon.ico",
+	"namespace": "",
+	"license": ""
+}
