@@ -1,23 +1,20 @@
-# TamperMonkeyScripts Template
+# Style Kaoshibao Beautify
 
-> 油猴构建模板, 基于 vite 搭建
+> 优化考试宝答题界面UI，增加按键绑定
 
-## 目录结构
 
-```plain
-.
-├─build - 构建工具/配置目录, 如无必要不需要更改 
-│          
-├─config - 配置信息目录
-│     BuildConfigs.ts - 构建配置项 (提供一些打包时的特殊配置)
-│     ScriptInfoConfigs.ts - 脚本信息配置项 (脚本头部的 ==UserScript== 信息, 在打包时会自动添加到文件顶部) 
-|     PersonalScriptConfigs.ts - 个人信息配置项 (同样是脚本头部的 ==UserScript== 信息, 在打包时会自动添加到文件顶部) 
-|     UserConfigs.ts - ScriptCat 用户配置配置项
-│          
-├─dist - 打包构建完成的文件目录
-│      Demo.dev.js - 开发环境打包的文件 ( `.dev.js` 后缀)
-│      Demo.user.js - 生产环境打包的文件 ( `.user.js` 后缀)
-│              
-└─src - 项目文件目录
-        main.ts - 项目的入口文件, 从该文件开始编写您的项目
-```
+## 按键绑定
+
+- 选择选项：
+    - `1`：选项A
+    - `2`：选项B
+    - `3`：选项C
+    - `4`：选项D
+    - `5 ~ 9`：选项E、F、G...
+- 下一题：`Enter`、`+`、`→`
+- 上一题：`-`、`←`
+- 多选题提交：
+    - 第一次`Enter`：提交答案
+    - 第二次`Enter`：下一题
+
+~~v2.0.0更新：解锁模拟考试随机选项功能。~~
