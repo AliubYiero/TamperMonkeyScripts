@@ -13,14 +13,14 @@ import {
 	getDefaultTerserOptions,
 	info,
 	parseScriptInfoOptions,
-	scriptInfoStringify,
+	scriptInfoStringify, userConfigStringify,
 	warn,
 } from './build';
 import replace from '@rollup/plugin-replace';
 import { resolve } from 'path';
-import { userConfigStringify } from './logs/build';
-import { UserConfigs } from './logs/config/UserConfigs';
+import { UserConfigs } from './config/UserConfigs';
 
+// noinspection JSUnusedGlobalSymbols
 export default defineConfig( ( { mode } ) => {
 	/*
 	* 获取当前的构建环境
@@ -79,6 +79,7 @@ export default defineConfig( ( { mode } ) => {
 	/*
 	* 返回vite配置对象
 	* */
+	// noinspection JSUnusedGlobalSymbols
 	return {
 		build: {
 			// 是否压缩混淆代码
