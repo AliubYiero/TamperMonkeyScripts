@@ -12,14 +12,12 @@ import { request } from '../request.ts';
  * @param {string} upUid - 用户ID。
  * @return {Promise} 请求的响应。
  */
-export const api_listAllFavorites = ( upUid: string ): Promise<any> => {
-	return request( '/x/v3/fav/folder/created/list-all', 'GET', {
+export const api_listAllFavorites = async ( upUid: string ): Promise<any> => {
+	const res = await request( '/x/v3/fav/folder/created/list-all', 'GET', {
 		up_mid: upUid,
-	} ).then( res => {
-		if ( res.code !== 0 ) {
-			throw new Error( res.message );
-		}
-		
-		return res.data.list;
 	} );
+	if ( res.code !== 0 ) {
+		throw new Error( res.message );
+	}
+	return res.data.list;
 };

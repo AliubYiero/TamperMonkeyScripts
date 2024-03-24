@@ -9,6 +9,7 @@ import {
 	checkScriptCatEnvironment,
 	getFavouriteTitle,
 	getUserUid,
+	sleep,
 } from './utils';
 import {
 	addVideoToFavorite,
@@ -17,10 +18,12 @@ import {
 	getReadFavouriteList,
 	getVideoAvId,
 	registerMenu,
+	sortOlderFavoritesToLast,
 } from './module';
 import { FavoriteInfo } from './interfaces';
 import { api_isFavorVideo } from './api/lib/api_isFavorVideo.ts';
 import { getElement } from './lib';
+
 
 const autoAddVideoToFavourites = async () => {
 	// 判断当前视频是否已经被收藏
@@ -73,6 +76,12 @@ const autoAddVideoToFavourites = async () => {
 		const latestFavouriteId = Number( latestFavourite.title.slice( favoriteTitle.length ) );
 		// 创建新收藏夹
 		await createNewFavorite( `${ favoriteTitle }${ latestFavouriteId + 1 }` );
+		
+		// 等待 1s , 防止网络响应延迟导致收藏夹仍未新建成功
+		await sleep( 1 );
+		
+		// 将已满收藏夹排序到收藏夹最后
+		await sortOlderFavoritesToLast( userUid );
 		
 		// 重新执行一遍添加收藏
 		await autoAddVideoToFavourites();

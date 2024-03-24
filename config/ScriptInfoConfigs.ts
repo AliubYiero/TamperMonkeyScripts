@@ -18,7 +18,7 @@ export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 	/* 脚本简介 */
 	description: '进入视频页面后, 自动添加视频到收藏夹中. ',
 	/* 脚本当前版本号 */
-	version: '0.3.3',
+	version: '0.4.0',
 	/* 脚本作用域 (脚本作用网站) */
 	match: [
 		'https://www.bilibili.com/video/*',
