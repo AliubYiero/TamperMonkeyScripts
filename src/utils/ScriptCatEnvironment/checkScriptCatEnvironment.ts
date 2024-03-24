@@ -9,14 +9,5 @@
  * 检查当前的环境是否是脚本猫环境
  * */
 export const checkScriptCatEnvironment = () => {
-	let isScriptCatEnvironment: boolean;
-	try {
-		// @ts-ignore 忽略未引入的 CAT_userConfig 函数
-		CAT_userConfig.toString();
-		isScriptCatEnvironment = true;
-	}
-	catch ( e ) {
-		isScriptCatEnvironment = false;
-	}
-	return isScriptCatEnvironment;
+	return GM_info.scriptHandler === 'Tampermonkey';
 };

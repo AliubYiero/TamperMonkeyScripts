@@ -18,7 +18,7 @@ export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 	/* 脚本简介 */
 	description: '进入视频页面后, 自动添加视频到收藏夹中. ',
 	/* 脚本当前版本号 */
-	version: '0.3.1',
+	version: '0.3.2',
 	/* 脚本作用域 (脚本作用网站) */
 	match: [
 		'https://www.bilibili.com/video/*',
@@ -37,7 +37,7 @@ export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 		'GM_setValue',
 		'GM_registerMenuCommand',
 		'GM_unregisterMenuCommand',
-		'CAT_userConfig',
+		'GM_info',
 	],
 	/* 授权跨域域名 */
 	connect: [
