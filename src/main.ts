@@ -72,7 +72,7 @@ const autoAddVideoToFavourites = async () => {
 		// 获取最新一个收藏夹的编号
 		const latestFavouriteId = Number( latestFavourite.title.slice( favoriteTitle.length ) );
 		// 创建新收藏夹
-		await createNewFavorite( favoriteTitle + latestFavouriteId + 1 );
+		await createNewFavorite( `${ favoriteTitle }${ latestFavouriteId + 1 }` );
 		
 		// 重新执行一遍添加收藏
 		await autoAddVideoToFavourites();
