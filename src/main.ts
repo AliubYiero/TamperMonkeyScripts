@@ -7,6 +7,7 @@
 
 import {
 	checkScriptCatEnvironment,
+	freshListenerPushState,
 	getFavouriteTitle,
 	getUserUid,
 	sleep,
@@ -112,3 +113,6 @@ const autoAddVideoToFavourites = async () => {
 
 // 自动添加视频到收藏夹
 autoAddVideoToFavourites();
+
+// 页面刷新是重新进行一次收藏生命周期
+freshListenerPushState( autoAddVideoToFavourites );
