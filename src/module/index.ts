@@ -11,4 +11,6 @@ export * from './checkFavoriteIsFull/checkFavoriteIsFull.ts';
 export * from './getVideoAvId/getVideoAvId.ts';
 export * from './addVideoToFavorite/addVideoToFavorite.ts';
 export * from './createNewFavorite/createNewFavorite.ts';
-export * from './sortOlderFavoritesToLast/sortOlderFavoritesToLast.ts';
+export *
+	from './sortOlderFavoritesToLast/sortOlderFavoritesToLast.ts';
+export * from './autoAddVideoToFavourites/autoAddVideoToFavourites.ts';
