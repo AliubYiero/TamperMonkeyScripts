@@ -7,3 +7,4 @@
 
 export * from './observeVideoCardLoad/observeVideoCardLoad.ts';
 export * from './observeContainerLoad/observeContainerLoad.ts';
+export * from './listenVideoCardLoad/listenVideoCardLoad.ts';

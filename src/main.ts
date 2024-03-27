@@ -6,16 +6,10 @@
  * */
 
 import {
+	listenVideoCardLoad,
 	observeContainerLoad,
 	observeVideoCardLoad,
 } from './module';
-import { EventListener } from './utils';
-
-const listenVideoCardLoad = () => {
-	EventListener.listen( ( element ) => {
-		console.log( element );
-	} );
-};
 
 // 初始化
 const init = async () => {
