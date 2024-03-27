@@ -1,4 +1,4 @@
-import { ElementWaiterOptions } from './elementWaiterOptions.ts';
+import { ElementWaiterOptions } from '../elementWaiterOptions.ts';
 
 /**
  * 元素等待器, 等待元素加载

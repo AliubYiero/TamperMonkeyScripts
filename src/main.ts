@@ -5,19 +5,34 @@
  * @author  Yiero
  * */
 
-import { elementWaiter } from './elementWaiter.ts';
+import {
+	observeContainerLoad,
+	observeVideoCardLoad,
+} from './module';
+import { EventListener } from './utils';
 
-// 监听页面的元素
-const observeContainerLoad = async () => {
-	const containerSelector = '.recommended-container_floor-aside > .container';
-	
-	const element = await elementWaiter( containerSelector );
-	console.log( element );
+const listenVideoCardLoad = () => {
+	EventListener.listen( ( element ) => {
+		console.log( element );
+	} );
 };
 
 // 初始化
 const init = async () => {
-	await observeContainerLoad();
+	// 监听页面加载完成
+	const element = await observeContainerLoad();
+	// console.log( 'container loaded', element );
+	
+	// 声明视频卡片加载回调 (先声明回调, 再监听元素加载)
+	listenVideoCardLoad();
+	
+	// 监听视频卡片加载
+	observeVideoCardLoad( <HTMLElement> element );
 };
 
-init();
+/*
+* 启动项目
+* */
+( async () => {
+	await init();
+} )();
