@@ -33,8 +33,8 @@ export class useReadVideoStore {
 	 * */
 	compare( bvId: `BV1${ string }` ) {
 		const { firstAlpha, fullAlpha } = this.splitVideoId( bvId );
-		this.localData[ firstAlpha ] ||= [];
-		return this.localData[ firstAlpha ].includes( fullAlpha );
+		const localDataSet = this.localData.get( firstAlpha ) || new Set();
+		return localDataSet.has( fullAlpha );
 	}
 	
 	/**
@@ -60,21 +60,29 @@ export class useReadVideoStore {
 		}
 		
 		// 储存到本地数据中
-		this.localData[ firstAlpha ] ||= [];
-		this.localData[ firstAlpha ].push( fullAlpha );
+		if ( !this.localData.has( firstAlpha ) ) {
+			this.localData.set( firstAlpha, new Set() );
+		}
+		this.localData.get( firstAlpha )?.add( fullAlpha );
 		
 		/*
 		* 再存储到数据库中
 		* */
-		GM_setValue( this.STORE_NAME, this.localData );
+		this.setToDatabase();
 		return true;
 	}
 	
 	/**
 	 * 展示当前的所有数据
 	 * */
-	show(): ReadVideoData {
-		return this.localData;
+	show(): [ string, string[] ][] {
+		return Array.from( this.localData ).map( ( [ key, set ] ) => {
+			return [ key, Array.from( set ) ] as const;
+		} );
+	}
+	
+	private setToDatabase() {
+		GM_setValue( this.STORE_NAME, this.show() );
 	}
 	
 	/**
@@ -97,6 +105,14 @@ export class useReadVideoStore {
 	 * @returns {ReadVideoData}
 	 * */
 	private getFromDatabase(): ReadVideoData {
-		return GM_getValue( this.STORE_NAME, {} );
+		const data = GM_getValue( this.STORE_NAME, [] ) as { [ propName: string ]: any } | Array<[ string, Set<string> ]>;
+		
+		// [兼容] 如果数据库储存的是对象, 将其转换成 Map
+		if ( !Array.isArray( data ) ) {
+			return new Map( Object.entries( data ).map( ( [ key, array ] ) => [ key, new Set( array ) ] ) );
+		}
+		
+		// 如果数据库储存的是数组, 将其转换成 Map
+		return new Map( data.map( ( [ key, array ] ) => [ key, new Set( array ) ] ) );
 	}
 }

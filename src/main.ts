@@ -29,10 +29,13 @@ const init = async () => {
 * 启动项目
 * */
 ( async () => {
+	// test 清除数据库
+	// useReadVideoStore.getInstance().delete();
+	
 	console.info(
 		'[bilibili-index-video-filter] 当前已看视频数据库 (size: %sKB): ',
 		Math.ceil( JSON.stringify( useReadVideoStore.getInstance().show() ).length / 1024 ),
-		{ ...useReadVideoStore.getInstance().show() },
+		useReadVideoStore.getInstance().show(),
 	);
 	await init();
 } )();

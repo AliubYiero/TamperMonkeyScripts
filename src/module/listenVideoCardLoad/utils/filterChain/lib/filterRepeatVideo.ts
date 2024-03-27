@@ -15,9 +15,6 @@ export const filterRepeatVideo = ( videoInfo: VideoInfo ): boolean => {
 	
 	const existVideoId = readVideoStore.compare( bvid );
 	
-	console.log( '当前数据库: ', { ...useReadVideoStore.getInstance().show() }
-		[ bvid.slice( 3, 4 ) ]
-		.filter( item => item.startsWith( bvid.slice( 3, 5 ) ) && item.endsWith( bvid.slice( -1 ) ) ) );
 	console.log( '比对结果: ', existVideoId, bvid.slice( 3 ) );
 	
 	// 2.1 如果不同则将当前视频bv号添加到数据库中
