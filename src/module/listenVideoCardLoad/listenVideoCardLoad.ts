@@ -1,6 +1,8 @@
-import { EventListener } from '../../utils';
+import { ElementDisplay, EventListener } from '../../utils';
 import { getVideoBvId } from './utils';
 import { api_GetVideoInfo } from '../../api';
+import { VideoInfo } from '../../api/interfaces/VideoInfo.ts';
+import { checkFilterChain } from './utils/filterChain/filterChain.ts';
 
 export const listenVideoCardLoad = () => {
 	EventListener.listen( async ( element ) => {
@@ -15,13 +17,18 @@ export const listenVideoCardLoad = () => {
 		/*
 		* 发送网络请求, 获取视频信息
 		* */
-		const videoInfo = await api_GetVideoInfo( videoId );
+		const videoInfo: VideoInfo = await api_GetVideoInfo( videoId );
+		// console.log(
+		// 	videoId, '\n',
+		// 	element, '\n',
+		// 	videoInfo.title, '\n',
+		// 	videoInfo, '\n',
+		// );
 		
-		console.log(
-			videoId, '\n',
-			element, '\n',
-			videoInfo.title, '\n',
-			videoInfo, '\n',
-		);
+		// 如果满足条件, 那么隐藏元素
+		if ( checkFilterChain( videoInfo ) ) {
+			console.log( '满足条件, 隐藏元素', element );
+			ElementDisplay.hide( element );
+		}
 	} );
 };

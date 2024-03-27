@@ -6,4 +6,4 @@
  * */
 
 
-export * from './getVideoBvId.ts';
+export * from './getVideoBvId/getVideoBvId.ts';

@@ -4,3 +4,4 @@
  * @file 接口入口文件
  * @author  Yiero
  * */
+export * from './lib/displayMode.ts';
