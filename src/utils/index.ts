@@ -8,3 +8,4 @@
 export * from './elementWaiter/elementWaiterOptions.ts';
 export * from './eventListener/eventListener.ts';
 export * from './ElementDisplay/ElementDisplay.ts';
+export * from './debounce/debounce.ts';

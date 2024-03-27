@@ -1,4 +1,5 @@
 import { ReadVideoData } from '../../interface';
+import { debounce } from '../../utils';
 
 /**
  * 已经读取的视频存储
@@ -13,6 +14,7 @@ export class useReadVideoStore {
 	private localData: ReadVideoData;
 	/** 储存库的名 */
 	private STORE_NAME = 'ReadVideoIdList';
+	private setToDatabase = debounce( GM_setValue, 3 ) as ( ( STORE_NAME: string, value: [ string, string[] ][] ) => void );
 	
 	private constructor() {
 		this.localData = this.getFromDatabase();
@@ -68,7 +70,7 @@ export class useReadVideoStore {
 		/*
 		* 再存储到数据库中
 		* */
-		this.setToDatabase();
+		this.setToDatabase( this.STORE_NAME, this.show() );
 		return true;
 	}
 	
@@ -79,10 +81,6 @@ export class useReadVideoStore {
 		return Array.from( this.localData ).map( ( [ key, set ] ) => {
 			return [ key, Array.from( set ) ] as const;
 		} );
-	}
-	
-	private setToDatabase() {
-		GM_setValue( this.STORE_NAME, this.show() );
 	}
 	
 	/**
