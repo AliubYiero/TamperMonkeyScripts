@@ -34,6 +34,7 @@ export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 		'GM_addStyle',
 		'GM_setValue',
 		'GM_getValue',
+		'GM_deleteValue',
 	],
 	/* 脚本载入时机 */
 	'run-at': 'document-idle',

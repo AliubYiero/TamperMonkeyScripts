@@ -5,7 +5,11 @@ import { EventListener } from '../../utils';
  * */
 export const observeVideoCardLoad = ( videoContainer: HTMLElement ) => {
 	// 视频卡片的 Token 标识列表
-	const videoCardTokenValueList = [ 'feed-card', 'bili-video-card is-rcmd' ];
+	const videoCardTokenValueList = [
+		// `.feed-card` 元素和下面的元素会出现重复
+		// 'feed-card',
+		'bili-video-card is-rcmd',
+	];
 	
 	// 监听已经存在的视频卡片 (如果有)
 	const videoCardList = videoCardTokenValueList.map( token => {

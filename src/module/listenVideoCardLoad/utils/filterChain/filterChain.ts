@@ -1,9 +1,13 @@
 import { VideoInfo } from '../../../../api/interfaces/VideoInfo.ts';
+import { filterRepeatVideo } from './lib/filterRepeatVideo.ts';
 
 /**
  * 过滤器链
  * */
-const filterChain: ( ( videoInfo: VideoInfo ) => boolean )[] = [];
+const filterChain: ( ( videoInfo: VideoInfo ) => boolean )[] = [
+	// 过滤重复视频
+	filterRepeatVideo,
+];
 
 
 /**

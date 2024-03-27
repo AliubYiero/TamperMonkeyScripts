@@ -18,6 +18,7 @@ export const listenVideoCardLoad = () => {
 		* 发送网络请求, 获取视频信息
 		* */
 		const videoInfo: VideoInfo = await api_GetVideoInfo( videoId );
+		// console.log( `[${ videoId }] ${ videoInfo.title }` );
 		// console.log(
 		// 	videoId, '\n',
 		// 	element, '\n',
@@ -27,7 +28,7 @@ export const listenVideoCardLoad = () => {
 		
 		// 如果满足条件, 那么隐藏元素
 		if ( checkFilterChain( videoInfo ) ) {
-			console.log( '满足条件, 隐藏元素', element );
+			console.info( '[bilibili-index-video-filter] 满足条件, 隐藏元素', element );
 			ElementDisplay.hide( element );
 		}
 	} );
