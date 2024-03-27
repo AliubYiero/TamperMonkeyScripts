@@ -18,7 +18,7 @@ export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 	/* 脚本简介 */
 	description: '过滤首页已推荐视频, 指定UP主/关键词/营销号屏蔽. ',
 	/* 脚本当前版本号 */
-	version: '1.0.0',
+	version: '0.1.3',
 	/* 脚本作用域 (脚本作用网站) */
 	match: [
 		'https://www.bilibili.com/',
