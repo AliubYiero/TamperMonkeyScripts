@@ -19,5 +19,12 @@ export const UserConfigs: UserConfigGroupInterface = {
 			default: 1,
 			min: 0,
 		},
+		reachedBottomPauseTime: {
+			title: '页面触底暂停时间',
+			description: '修改页面触底暂停时间',
+			type: 'number',
+			default: 3,
+			min: 0,
+		},
 	},
 };

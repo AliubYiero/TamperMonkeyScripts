@@ -1,4 +1,5 @@
 import { ScrollSpeedStorage } from '../Storage/ScrollSpeed.ts';
+import { PageReachedBottomEvent } from '../../module';
 
 /**
  * 滚动控制类
@@ -78,13 +79,21 @@ export class Scroll {
 			addFrame();
 			// 注意. scrollBy 只能移动整数位(向下取整), 所以小数位需要额外计算
 			// 这里采用的只有滚动帧才进行滚动的方法, 滚动帧由上面的方法计算得来
-			!frameCounter && window.scrollBy( {
-				top: scrollDistance,
-				left: 0,
-				behavior: 'smooth',
-			} );
-			// 输出移动信息
-			// console.log( `滚动距离(px/${ scrollFrameStep }帧): `, scrollDistance );
+			const isScrollFrame = !frameCounter;
+			if ( isScrollFrame ) {
+				// 进行滚动
+				window.scrollBy( {
+					top: scrollDistance,
+					left: 0,
+					behavior: 'smooth',
+				} );
+				
+				// 监听滚动到底部事件
+				PageReachedBottomEvent.listen();
+				
+				// 输出移动信息
+				// console.log( `滚动距离(px/${ scrollFrameStep }帧): `, scrollDistance );
+			}
 			
 			// 如果滚动还处于开启状态, 则继续帧循环
 			this.isScroll && requestAnimationFrame( step );
