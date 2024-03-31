@@ -34,6 +34,7 @@ export const handlePageLoad = () => {
 				
 				e.preventDefault();
 				clearTimeout( scrollWaiterTimer );
+				window.removeEventListener( 'keydown', closeScrollWaiter );
 				Scroll.close();
 			}
 		},
