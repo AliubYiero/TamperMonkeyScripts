@@ -2,9 +2,10 @@ import {
 	isReachedPageBottom,
 	ReachedBottomPauseTimeStorage,
 	Scroll,
-	ScrollSpeedStorage,
 } from '../../utils';
 import { switchNextPage } from './utils/switchNextPage.ts';
+import { observePageFresh } from './utils/ObservePageFresh.ts';
+import { handlePageLoad } from './utils/HandlePageLoad.ts';
 
 /**
  * 页面触底事件类
@@ -43,57 +44,3 @@ export class PageReachedBottomEvent {
 		}, ReachedBottomPauseTimeStorage.get() * 1000 );
 	}
 }
-
-/**
- * 监听页面刷新
- * */
-const observePageFresh = () => {
-	const observer = new MutationObserver( ( mutationRecordList ) => {
-		for ( let mutationRecord of mutationRecordList ) {
-			for ( let addedNode of mutationRecord.addedNodes ) {
-				if ( addedNode.nodeType !== Node.ELEMENT_NODE ) {
-					return;
-				}
-				
-				// 如果新增了 readerContentHeader 类的元素, 则说明新章节已经加载完成
-				if ( ( <HTMLElement> addedNode ).classList.contains( 'readerContentHeader' ) ) {
-					// 关闭监听器
-					observer.disconnect();
-					
-					// 发送时间, 表示页面加载完成
-					setTimeout( () => {
-						window.dispatchEvent( new Event( 'PageLoad' ) );
-					}, 0.4 * 1000 );
-					
-					return true;
-				}
-			}
-		}
-	} );
-	
-	observer.observe( <HTMLElement> document.querySelector( '.app_content' ), {
-		childList: true,
-	} );
-};
-
-
-/**
- * 接收页面加载完成回调
- * */
-const handlePageLoad = () => {
-	let scrollWaiterTimer: number = 0;
-	window.addEventListener( 'PageLoad', () => {
-			// 跳转到章节名处
-			window.scrollTo( 0, 90 );
-			
-			
-			// 暂停页面时间后再开始滚动
-			const waitTime = window.innerHeight / ( ScrollSpeedStorage.get() / 5 * 60 );
-			clearTimeout( scrollWaiterTimer );
-			scrollWaiterTimer = window.setTimeout( () => {
-				// 打开滚动
-				Scroll.open();
-			}, waitTime * 1000 );
-		},
-	);
-};

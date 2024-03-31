@@ -10,3 +10,9 @@ export * from './bindArrowEvent/bindArrowEvent.ts';
 export * from './addPageBottomBlankStyle/addPageBottomBlankStyle.ts';
 export *
 	from './listenPageReachedBottomEvent/PageReachedBottomEvent.ts';
+export {
+	observePageFresh,
+} from './listenPageReachedBottomEvent/utils/ObservePageFresh.ts';
+export {
+	handlePageLoad,
+} from './listenPageReachedBottomEvent/utils/HandlePageLoad.ts';
