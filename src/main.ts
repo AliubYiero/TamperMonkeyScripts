@@ -11,6 +11,7 @@ import {
 	observeVideoCardLoad,
 } from './module';
 import { useReadVideoStore } from './store';
+import { Dialog } from './utils/dialog/dialog.ts';
 
 // 初始化
 const init = async () => {
@@ -23,6 +24,9 @@ const init = async () => {
 	
 	// 监听视频卡片加载
 	observeVideoCardLoad( <HTMLElement> element );
+	
+	// 添加UI
+	Dialog.getInstance().show();
 };
 
 /*

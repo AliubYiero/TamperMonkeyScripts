@@ -21,7 +21,7 @@ export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 	version: '0.1.3',
 	/* 脚本作用域 (脚本作用网站) */
 	match: [
-		'https://www.bilibili.com/',
+		'https://www.bilibili.com/*',
 	],
 	/* 脚本图标 (不输入默认使用 match 的域名下的图标, 如果无法识别 match 域名, 则使用油猴默认图标) */
 	icon: '',
@@ -35,6 +35,7 @@ export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 		'GM_setValue',
 		'GM_getValue',
 		'GM_deleteValue',
+		'GM_addElement',
 	],
 	/* 脚本载入时机 */
 	'run-at': 'document-idle',

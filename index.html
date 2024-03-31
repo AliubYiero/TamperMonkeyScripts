@@ -5,9 +5,77 @@
 	<meta content="width=device-width, initial-scale=1.0"
 	      name="viewport"/>
 	<title>Vite + TS</title>
+	
+	<style>
+		#index-filter-container {
+			border: 1px solid #333;
+			border-radius: 5px;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			width: 50%;
+			height: 50%;
+			transform: translate(-50%, -50%);
+			
+			display: flex;
+			flex-flow: column;
+		}
+		
+		.index-filter-header {
+			border: 1px solid red;
+			
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+		}
+		
+		.index-filter-tab {
+			/*border: none;*/
+			/*border-right: 1px solid #333;*/
+			background-color: #fff;
+			height: 100%;
+		}
+	</style>
 </head>
 <body>
-<div id="app"></div>
-<script src="/src/main.ts" type="module"></script>
+<div id="app">
+	<dialog id="index-filter-container">
+		<header class="index-filter-header">
+			<button class="index-filter-tab" data-index="0">点击
+			</button>
+			<button class="index-filter-tab" data-index="1">点击
+			</button>
+			<button class="index-filter-tab" data-index="2">点击
+			</button>
+			<button class="index-filter-tab" data-index="3">点击
+			</button>
+		</header>
+		
+		<main class="index-filter-body">
+			<form class="index-filter-form">
+				1
+			</form>
+		</main>
+	</dialog>
+</div>
+<!-- <script src="/src/main.ts" type="module"></script> -->
+<script>
+	const domList = {
+		dialog: document.querySelector( '#index-filter-container' ),
+	};
+	domList.dialog.showModal();
+	domList.dialog.addEventListener( ( e ) => {
+		e.preventDefault();
+		
+		if ( !e.target.classList.contains( 'index-filter-tab' ) ) {
+			return;
+		}
+		
+	} );
+	const addButton = () => {
+	
+	};
+	addButton.apply( domList );
+</script>
 </body>
 </html>
