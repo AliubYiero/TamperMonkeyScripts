@@ -14,14 +14,14 @@ import { GlobalScriptsConfigInterface } from './interfaces';
  * */
 export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 	/* 脚本名 */
-	name: '',
+	name: '微信读书自动阅读助手',
 	/* 脚本简介 */
-	description: '',
+	description: '微信读书自动滚动, 自动翻页. ',
 	/* 脚本当前版本号 */
 	version: '1.0.0',
 	/* 脚本作用域 (脚本作用网站) */
 	match: [
-		'https://*/*',
+		'https://weread.qq.com/*',
 	],
 	/* 脚本图标 (不输入默认使用 match 的域名下的图标, 如果无法识别 match 域名, 则使用油猴默认图标) */
 	icon: '',
@@ -30,7 +30,9 @@ export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 	/* 脚本依赖的第三份资源库 */
 	resource: [],
 	/* 脚本授权的GM函数 */
-	grant: [],
+	grant: [
+		'GM_addStyle',
+	],
 	/* 脚本载入时机 */
 	'run-at': 'document-idle',
 };
