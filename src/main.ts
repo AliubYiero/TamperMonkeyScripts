@@ -20,5 +20,4 @@ import {
 	
 	// 3. 向页面添加尾部空白
 	addPageBottomBlankStyle();
-	
 } )();
