@@ -1,9 +1,9 @@
-import { Scroll } from '../../utils/Scroll/Scroll.ts';
+import { Scroll } from '../../utils';
 
 /**
  * 开启本脚本后自动绑定空格键为开启键
  * */
-export const bindSpace = () => {
+export const bindSpaceEvent = () => {
 	window.addEventListener( 'keydown', ( e ) => {
 		if ( e.code !== 'Space' ) {
 			return;

@@ -6,3 +6,5 @@
  * */
 
 export * from './Scroll/Scroll.ts';
+export * from './Storage/ScrollSpeed.ts';
+export * from './PageBottomBlankStyle/pageBottomBlankStyle.ts';

@@ -1,3 +1,5 @@
+import { ScrollSpeedStorage } from '../Storage/ScrollSpeed.ts';
+
 /**
  * 滚动控制类
  * */
@@ -22,7 +24,7 @@ export class Scroll {
 		this.scroll();
 		
 		// @todo 提示开启滚动
-		console.log( '开启滚动, 当前的滚动速度是: ', 1 );
+		console.log( '开启滚动, 当前的滚动速度是: ', ScrollSpeedStorage.get() );
 	}
 	
 	/**
@@ -51,32 +53,40 @@ export class Scroll {
 	 * 滚动
 	 * */
 	private static scroll() {
-		// 动画上一帧的时间
-		// let latestTime: number;
+		/*
+		* 进行帧计数, 每10帧执行一次滚动操作
+		* */
+		let frameCounter = -1;
+		let scrollFrameStep = 5;
+		/**
+		 * 添加帧操作
+		 * */
+		const addFrame = () => {
+			frameCounter++;
+			frameCounter = frameCounter % scrollFrameStep;
+		};
 		
 		const step = () => {
-			// // 初始化上一帧的时间
-			// if ( !latestTime ) {
-			// 	latestTime = e;
-			// }
-			//
-			// // 获取当前帧的时间
-			// const currentTime = e;
-			//
-			// // 计算帧步长
-			// const deltaTime = currentTime - latestTime;
-			//
-			// // 计算每一帧的滚动距离
-			// const scrollDistance = deltaTime;
-			//
-			// // 更新上一帧的时间
-			// latestTime = currentTime;
+			// 获取滚动距离
+			const scrollDistance = ScrollSpeedStorage.get();
 			
-			// 进行滚动
-			window.scrollBy( 0, 1 );
-			console.log( 'scrollDistance', 1 );
+			/*
+			* 进行滚动
+			* */
+			// 当前帧计数不为0, 则表示当前不属于滚动帧
+			// 添加帧
+			addFrame();
+			// 注意. scrollBy 只能移动整数位(向下取整), 所以小数位需要额外计算
+			// 这里采用的只有滚动帧才进行滚动的方法, 滚动帧由上面的方法计算得来
+			!frameCounter && window.scrollBy( {
+				top: scrollDistance,
+				left: 0,
+				behavior: 'smooth',
+			} );
+			// 输出移动信息
+			// console.log( `滚动距离(px/${ scrollFrameStep }帧): `, scrollDistance );
 			
-			// 继续帧循环
+			// 如果滚动还处于开启状态, 则继续帧循环
 			this.isScroll && requestAnimationFrame( step );
 		};
 		

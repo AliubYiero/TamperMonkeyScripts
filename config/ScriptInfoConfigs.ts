@@ -32,6 +32,9 @@ export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 	/* 脚本授权的GM函数 */
 	grant: [
 		'GM_addStyle',
+		'GM_getValue',
+		'GM_setValue',
+		'GM_addElement',
 	],
 	/* 脚本载入时机 */
 	'run-at': 'document-idle',

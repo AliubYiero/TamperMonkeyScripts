@@ -12,17 +12,12 @@ import { UserConfigGroupInterface } from './interfaces';
 export const UserConfigs: UserConfigGroupInterface = {
 	/* 分组1 */
 	'配置项': {
-		favouriteTitle: {
-			title: '指定收藏夹标题',
-			description: '更改指定收藏夹标题',
-			type: 'text',
-			default: 'fun',
-		},
-		userUid: {
-			title: '用户uid',
-			description: '设置用户uid',
-			type: 'text',
-			default: '',
+		scrollSpeed: {
+			title: '滚动速度',
+			description: '修改页面滚动速度',
+			type: 'number',
+			default: 1,
+			min: 0,
 		},
 	},
 };

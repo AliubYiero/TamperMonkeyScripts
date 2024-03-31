@@ -5,4 +5,6 @@
  * @author  Yiero
  * */
 
-export * from './bindSpace/bindSpace.ts';
+export * from './bindSpaceEvent/bindSpaceEvent.ts';
+export * from './bindArrowEvent/bindArrowEvent.ts';
+export * from './addPageBottomBlankStyle/addPageBottomBlankStyle.ts';
