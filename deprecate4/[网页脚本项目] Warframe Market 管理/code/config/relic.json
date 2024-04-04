@@ -1,0 +1,842 @@
+[
+	{
+		"relic_name": "古纪 N14 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "盗贼双枪 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "豪猪 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "布莱顿 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "帕里斯 Prime 上弓臂",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "噬蛇弩 Prime 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "古纪 W3 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "凯瑞斯双刀 Prime 刀刃",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Hildryn Prime 系统 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "黑鸦 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "翠雀 Prime 枪托",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Wisp Prime 机体 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "古纪 G8 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "狼牙 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "黑鸦 Prime 枪机",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "雷霆 Prime 枪托",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "伯斯顿 Prime 枪管",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Grendel Prime 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "古纪 T10 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "幻离子 Prime 枪机",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "伯斯顿 Prime 枪托",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "野马 Prime 枪管",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "凯瑞斯双刀 Prime 握柄",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "龙辰 Prime 握柄",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "古纪 R4 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "Khora Prime 系统 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "野马双枪 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "布莱顿 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Garuda Prime 机体 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "席尔火枪 Prime 枪机",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Revenant Prime 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "古纪 H9 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "Garuda Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "盗贼双枪 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "帕里斯 Prime 弓弦",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "雷霆 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "豪猪 Prime 枪机",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "古纪 C10 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "Garuda Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "咀嚼金棒 Prime 握柄",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "噬蛇弩 Prime 枪机",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Khora Prime 机体 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "眼镜蛇 & 鹤 Prime 护手",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "前纪 P14 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "Baruuk Prime 系统 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "雷克斯 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Garuda Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "阴影 Prime 系统",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Hildryn Prime 头部神经光元 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "幻离子 Prime 枪托",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "前纪 G5 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "帕里斯 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "黑鸦 Prime 枪托",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Khora Prime 系统 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "幻离子 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "噬蛇弩 Prime 枪托",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "军扇 Prime 刀刃",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "前纪 M4 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "凯瑞斯双刀 Prime 刀刃",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "雷克斯 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "翠雀 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "狼牙 Prime 握柄",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "咀嚼金棒 Prime 刀刃",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "前纪 P13 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "雷克斯 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "雷霆 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "布莱顿 Prime 枪托",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Garuda Prime 机体 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "野马双枪 Prime 连接器",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "幻离子 Prime 枪管",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "前纪 B8 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "帕里斯 Prime 弓弦",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Grendel Prime 头部神经光元 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "黑鸦 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "龙辰 Prime 刀刃",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Baruuk Prime 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "前纪 W3 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "豪猪 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "幻离子 Prime 枪机",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "翠雀 Prime 枪托",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "欧特鲁斯 Prime 刀刃",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Wisp Prime 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "前纪 C9 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "Hildryn Prime 系统 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "帕里斯 Prime 下弓臂",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Revenant Prime 系统 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "布莱顿 Prime 枪托",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "黑鸦 Prime 枪管",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "中纪 F2 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "阴影 Prime 头部",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "布莱顿 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "噬蛇弩 Prime 枪机",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "眼镜蛇 & 鹤 Prime 刀刃",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "雷霆 Prime 枪机",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "中纪 Z10 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "盗贼双枪 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "军扇 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "幻离子 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Revenant Prime 头部神经光元 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "席尔火枪 Prime 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "中纪 D8 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "龙辰 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "噬蛇弩 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "雷克斯 Prime 枪机",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "翠雀 Prime 枪机",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "凯瑞斯双刀 Prime 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "中纪 S18 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "Hildryn Prime 系统 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "龙辰 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "眼镜蛇 & 鹤 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Grendel Prime 机体 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "阴影 Prime 外壳",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "中纪 K6 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "眼镜蛇 & 鹤 Prime 握柄",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "野马 Prime 枪机",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "狼牙 Prime 握柄",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "豪猪 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Wisp Prime 头部神经光元 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Khora Prime 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "中纪 K7 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "雷霆 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "伯斯顿 Prime 枪机",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Baruuk Prime 机体 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "军扇 Prime 握柄",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Khora Prime 头部神经光元 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "中纪 N23 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "伯斯顿 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "狼牙 Prime 刀刃",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Revenant Prime 机体 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Baruuk Prime 机体 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "帕里斯 Prime 弓身",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "噬蛇弩 Prime 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "后纪 H6 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "Garuda Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "眼镜蛇 & 鹤 Prime 握柄",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "帕里斯 Prime 上弓臂",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "布莱顿 Prime 枪机",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Hildryn Prime 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "后纪 G11 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "阴影 Prime 头部",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "欧特鲁斯 Prime 握柄",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "盗贼双枪 Prime 连接器",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "布莱顿 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Grendel Prime 系统 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "后纪 G10 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "欧特鲁斯 Prime 握柄",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "黑鸦 Prime 枪机",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "豪猪 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "翠雀 Prime 枪机",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Garuda Prime 系统 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "后纪 B6 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "盗贼双枪 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "雷克斯 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Garuda Prime 机体 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "阴影 Prime 系统",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Baruuk Prime 头部神经光元 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "后纪 G12 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "伯斯顿 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "野马 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Revenant Prime 机体 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "咀嚼金棒 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Garuda Prime 头部神经光元 蓝图",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "后纪 L6 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "帕里斯 Prime 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "席尔火枪 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "狼牙 Prime 刀刃",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "眼镜蛇 & 鹤 Prime 刀刃",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "Hildryn Prime 机体 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "翠雀 Prime 枪管",
+				"item_drop_chance": "gold"
+			}
+		]
+	},
+	{
+		"relic_name": "后纪 A17 遗物",
+		"relic_state": "open",
+		"items": [
+			{
+				"item_name": "布莱顿 Prime 枪管",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Forma 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "Wisp Prime 系统 蓝图",
+				"item_drop_chance": "copper"
+			},
+			{
+				"item_name": "阴影 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "欧特鲁斯 Prime 蓝图",
+				"item_drop_chance": "silver"
+			},
+			{
+				"item_name": "盗贼双枪 Prime 枪机",
+				"item_drop_chance": "gold"
+			}
+		]
+	}
+]

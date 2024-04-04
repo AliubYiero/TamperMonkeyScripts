@@ -1,0 +1,6 @@
+## Start
+
+```bat
+npm i 
+```
+
