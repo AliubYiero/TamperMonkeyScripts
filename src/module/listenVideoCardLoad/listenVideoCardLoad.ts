@@ -26,6 +26,19 @@ export const listenVideoCardLoad = () => {
 		// 	videoInfo, '\n',
 		// );
 		
+		/*
+		* 元素选择器.
+		* 
+		* 存在两种视频元素,
+		* `.bili-video-card.is-rcmd`
+		* 和包含 `.bili-video-card.is-rcmd` 元素的 `.feed-card` 元素,
+		* 需要根据实际情况进行选择
+		* */
+		const fatherDom = element.parentElement;
+		if ( fatherDom && fatherDom.classList.contains( 'feed-card' ) ) {
+			element = fatherDom;
+		}
+		
 		// 如果满足条件, 那么隐藏元素
 		if ( checkFilterChain( videoInfo ) ) {
 			console.info( '[bilibili-index-video-filter] 满足条件, 隐藏元素', element );
