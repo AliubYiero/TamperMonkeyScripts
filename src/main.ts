@@ -6,10 +6,13 @@
  * */
 
 
-import { checkURL, useWatchedVideoIdListStorage } from './utils';
+import { checkURL, handleParseWatchedVideoIdList } from './utils';
 import { listenIndex, listenVideo } from './modules';
 
 ( async () => {
+	// 删除日期, 进行初始化
+	// useRuntimeDateStorage.remove();
+	
 	// 判断当前处于哪个模块
 	const currentUrl = checkURL();
 	if ( !currentUrl ) {
@@ -19,7 +22,7 @@ import { listenIndex, listenVideo } from './modules';
 	/*
 	* 初始化数据库
 	* */
-	await useWatchedVideoIdListStorage.getInstance().init();
+	await handleParseWatchedVideoIdList.getInstance().init();
 	/*
 	* 目标模块回调隐射
 	* */

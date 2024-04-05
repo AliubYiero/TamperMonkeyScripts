@@ -7,6 +7,6 @@ import { selectorConfig } from '../config/config.ts';
 export const handleWaitVideoTitleLoad = async () => {
 	const selector = selectorConfig.titleSelector;
 	return await elementWaiter( selector, {
-		delayPerSecond: .3,
+		delayPerSecond: 1.3,
 	} );
 };

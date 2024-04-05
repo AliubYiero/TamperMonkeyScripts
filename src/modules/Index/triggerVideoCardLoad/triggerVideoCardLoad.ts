@@ -1,6 +1,6 @@
 import {
 	EventListener,
-	useWatchedVideoIdListStorage,
+	handleParseWatchedVideoIdList,
 } from '../../../utils';
 
 /**
@@ -76,7 +76,7 @@ export const triggerVideoCardLoad = () => {
 		const bvId = linkDom.href.split( '/' ).find( item => item.startsWith( 'BV1' ) ) as `BV1${ string }`;
 		
 		// 判断当前元素是否已看
-		const isWatched = useWatchedVideoIdListStorage.getInstance().existVideoId( bvId );
+		const isWatched = handleParseWatchedVideoIdList.getInstance().existVideoId( bvId );
 		
 		// 根据比对结果给当前元素添加已看样式或未看样式
 		element.classList.add( isWatched ? 'is-watched' : 'is-not-watched' );

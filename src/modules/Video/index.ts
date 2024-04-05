@@ -17,6 +17,9 @@ import {
 } from './CurrentVideo/handleWaitVideoTitleLoad.ts';
 import { markCurrentVideo } from './CurrentVideo/markCurrentVideo.ts';
 import { selectorConfig } from './config/config.ts';
+import {
+	addVideoToStorage,
+} from './CurrentVideo/addVideoToStorage.ts';
 
 /**
  * 添加样式
@@ -51,5 +54,9 @@ export const listenVideo = async () => {
 	// 等待视频标题加载, 已看/观看中标签将挂载在标题后面
 	const videoTitleDom = await handleWaitVideoTitleLoad() as HTMLElement;
 	
+	// 标记视频
 	await markCurrentVideo( videoTitleDom );
+	
+	// 将当前视频添加到本地储存
+	addVideoToStorage();
 };
