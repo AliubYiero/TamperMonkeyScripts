@@ -5,8 +5,8 @@
  * @author  Yiero
  * */
 import {
-	observeContainerLoad,
-} from './observeContainerLoad/observeContainerLoad.ts';
+	handleWaitContainerLoad,
+} from './handleWaitContainerLoad/handleWaitContainerLoad.ts';
 import {
 	observeIndexVideoCardLoad,
 } from './observeIndexVideoCardLoad/observeIndexVideoCardLoad.ts';
@@ -17,7 +17,7 @@ import {
 /** 监听首页 */
 export const listenIndex = async () => {
 	// 等待首页容器加载完成
-	const videoContainer = await observeContainerLoad() as HTMLElement;
+	const videoContainer = await handleWaitContainerLoad() as HTMLElement;
 	
 	// 触发元素加载回调
 	triggerVideoCardLoad();

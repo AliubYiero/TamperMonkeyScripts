@@ -59,10 +59,22 @@ export const triggerVideoCardLoad = () => {
 	EventListener.listen( async ( element ) => {
 		// 绑定元素点击事件
 		element.addEventListener( 'mousedown', ( e ) => {
-			if ( e.button === 2 ) {
+			const containerDom = e.target as HTMLElement;
+			// console.log( containerDom );
+			if (
+				// 右键点击不触发
+				e.button === 2
+				// 如果点击空白区域, 不触发
+				|| (
+					containerDom.classList.contains( 'bili-video-card__info--tit' )
+					|| containerDom.classList.contains( 'bili-video-card__info--bottom' )
+					|| containerDom.classList.contains( 'bili-video-card__info--icon-text' )
+				)
+			) {
 				return;
 			}
-			handleClickVideoCard( <HTMLElement> e.target );
+			
+			handleClickVideoCard( containerDom );
 		} );
 		
 		// 给所有元素添加 `watched-item` 类
