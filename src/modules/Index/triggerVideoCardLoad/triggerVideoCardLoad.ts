@@ -1,7 +1,39 @@
 import {
 	EventListener,
-	useReadVideoIdListStorage,
+	useWatchedVideoIdListStorage,
 } from '../../../utils';
+
+/**
+ * 添加已看/未看样式
+ * */
+const addWatchedStyle = () => {
+	// 添加样式
+	GM_addStyle( `
+.bili-video-card.is-rcmd.is-watched {
+	opacity: .5
+}
+.bili-video-card.is-rcmd.watched-item::after {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	
+	font-size: 13px;
+	padding: 3px 8px;
+	color: #fff;
+	font-weight: 700;
+	border-radius: 4px;
+	z-index: 20;
+}
+.bili-video-card.is-rcmd.is-watched::after {
+	content: "已看";
+	background-color: hsla(0, 0%, 60%, .77);
+}
+.bili-video-card.is-rcmd.is-not-watched::after {
+	content: "未看";
+	background-color: rgba(3, 169, 244, .77);
+}
+` );
+};
 
 /**
  * 触发元素加载回调
@@ -15,41 +47,16 @@ export const triggerVideoCardLoad = () => {
 		}
 		
 		// 如果当前视频未看, 则变成已看样式
-		if ( element.classList.contains( 'is-not-read' ) ) {
-			element.classList.remove( 'is-not-read' );
-			element.classList.add( 'is-read' );
+		if ( element.classList.contains( 'is-not-watched' ) ) {
+			element.classList.remove( 'is-not-watched' );
+			element.classList.add( 'is-watched' );
 		}
 	};
 	
-	// 添加样式
-	GM_addStyle( `
-.bili-video-card.is-rcmd.is-read {
-\topacity: .5
-}
-.bili-video-card.is-rcmd.read-item::after {
-\tposition: absolute;
-\ttop: 5px;
-\tleft: 5px;
-\t
-\tfont-size: 13px;
-\tpadding: 3px 8px;
-\tcolor: #fff;
-\tfont-weight: 700;
-\tborder-radius: 4px;
-\tz-index: 20;
-}
-.bili-video-card.is-rcmd.is-read::after {
-\tcontent: "已看";
-\tbackground-color: hsla(0, 0%, 60%, .77);
-}
-.bili-video-card.is-rcmd.is-not-read::after {
-\tcontent: "未看";
-\tbackground-color: rgba(3, 169, 244, .77);
-}
-` );
+	// 添加已看/未看样式
+	addWatchedStyle();
 	
-	
-	EventListener.listen( ( element ) => {
+	EventListener.listen( async ( element ) => {
 		// 绑定元素点击事件
 		element.addEventListener( 'mousedown', ( e ) => {
 			if ( e.button === 2 ) {
@@ -58,8 +65,8 @@ export const triggerVideoCardLoad = () => {
 			handleClickVideoCard( <HTMLElement> e.target );
 		} );
 		
-		// 给所有元素添加 `read-item` 类
-		element.classList.add( 'read-item' );
+		// 给所有元素添加 `watched-item` 类
+		element.classList.add( 'watched-item' );
 		
 		// 获取当前视频BV号
 		const linkDom = element.querySelector( 'a[href^="https://www.bilibili.com/video/BV1"]' ) as HTMLLinkElement | null;
@@ -69,9 +76,9 @@ export const triggerVideoCardLoad = () => {
 		const bvId = linkDom.href.split( '/' ).find( item => item.startsWith( 'BV1' ) ) as `BV1${ string }`;
 		
 		// 判断当前元素是否已看
-		const isRead = useReadVideoIdListStorage.getInstance().existVideoId( bvId );
+		const isWatched = useWatchedVideoIdListStorage.getInstance().existVideoId( bvId );
 		
 		// 根据比对结果给当前元素添加已看样式或未看样式
-		element.classList.add( isRead ? 'is-read' : 'is-not-read' );
+		element.classList.add( isWatched ? 'is-watched' : 'is-not-watched' );
 	} );
 };

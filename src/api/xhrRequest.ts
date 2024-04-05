@@ -12,7 +12,7 @@ import { requestConfig } from './config/requestConfig.ts';
  *
  * @param {string} url - 将请求发送到的URL。
  * @param {'GET'|'POST'} method - 用于请求的HTTP方法。
- * @param {any} data - 与请求一起发送的数据。
+ * @param option
  * @return {Promise<any>} 如果成功，则解析为响应数据的Promise。
  *
  * @tutorial https://github.com/the1812/Bilibili-Evolved/blob/8a4e422612a7bd0b42da9aa50c21c7bf3ea401b8/src/core/ajax.ts#L5
@@ -21,7 +21,10 @@ import { requestConfig } from './config/requestConfig.ts';
 export const xhrRequest = (
 	url: `http://${ string }` | `https://${ string }` | `/${ string }`,
 	method: 'GET' | 'POST',
-	data: any,
+	option: {
+		parma?: any,
+		data?: any,
+	} = {},
 ): Promise<any> => {
 	/*
 	* 判断传入的URL是否为完整URL, 若不是则添加上基础URL
@@ -29,6 +32,7 @@ export const xhrRequest = (
 	if ( !url.startsWith( 'http' ) ) {
 		url = requestConfig.baseURL + url;
 	}
+	option.parma && ( url += '?' + new URLSearchParams( option.parma ).toString() );
 	
 	const xhr = new XMLHttpRequest();
 	xhr.open( method, url );
@@ -49,6 +53,6 @@ export const xhrRequest = (
 		xhr.addEventListener( 'error', () => reject( xhr.status ) );
 		
 		// send http request
-		xhr.send( new URLSearchParams( data ) );
+		xhr.send( new URLSearchParams( option.data ).toString() );
 	} );
 };

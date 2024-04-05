@@ -9,23 +9,29 @@ import {
 	getAllFavoriteVideoIdList,
 } from '../getAllFavoriteVideoIdList/getAllFavoriteVideoIdList.ts';
 
-export class useReadVideoIdListStorage {
-	static instance: useReadVideoIdListStorage;
+export class useWatchedVideoIdListStorage {
+	private static instance: useWatchedVideoIdListStorage;
 	private videoIdMap: VideoIdMap = new Map();
 	
 	private constructor() {
-		this.init();
 	}
 	
 	/**
 	 * 获取唯一实例
 	 * */
-	static getInstance(): useReadVideoIdListStorage {
+	static getInstance(): useWatchedVideoIdListStorage {
 		if ( !this.instance ) {
-			this.instance = new useReadVideoIdListStorage();
+			this.instance = new useWatchedVideoIdListStorage();
 		}
 		
 		return this.instance;
+	}
+	
+	/**
+	 * 输出当前收藏中所有的视频列表
+	 * */
+	show(): VideoIdMap {
+		return this.videoIdMap;
 	}
 	
 	/**
@@ -45,6 +51,7 @@ export class useReadVideoIdListStorage {
 		// 如果存在Map但是不在Set中, 则说明不存在, 返回 false
 		// 如果存在, 返回 true
 		const videoSet = this.videoIdMap.get( videoIdPrefix ) as Set<string>;
+		console.log( videoSet );
 		return videoSet.has( videoId );
 	}
 	
@@ -68,6 +75,13 @@ export class useReadVideoIdListStorage {
 	}
 	
 	/**
+	 * 初始化获取已经收藏过的所有视频id
+	 * */
+	async init() {
+		this.videoIdMap = await getAllFavoriteVideoIdList();
+	}
+	
+	/**
 	 * 处理BV1前缀
 	 * */
 	private handleVideoIdPrefix( videoId: `BV1${ string }` ): {
@@ -75,16 +89,8 @@ export class useReadVideoIdListStorage {
 		videoIdPrefix: string;
 	} {
 		return {
-			videoId: videoId.slice( 2 ),
-			videoIdPrefix: videoId.slice( 2, 4 ),
+			videoId: videoId.slice( 3 ),
+			videoIdPrefix: videoId.slice( 3, 4 ),
 		};
-	}
-	
-	
-	/**
-	 * 初始化获取已经收藏过的所有视频id
-	 * */
-	private async init() {
-		this.videoIdMap = await getAllFavoriteVideoIdList();
 	}
 }

@@ -6,8 +6,8 @@
  * */
 
 
-import { checkURL } from './utils';
-import { listenIndex } from './modules';
+import { checkURL, useWatchedVideoIdListStorage } from './utils';
+import { listenIndex, listenVideo } from './modules';
 
 ( async () => {
 	// 判断当前处于哪个模块
@@ -16,7 +16,31 @@ import { listenIndex } from './modules';
 		return;
 	}
 	
-	if ( currentUrl === 'index' ) {
-		await listenIndex();
+	/*
+	* 初始化数据库
+	* */
+	await useWatchedVideoIdListStorage.getInstance().init();
+	/*
+	* 目标模块回调隐射
+	* */
+	const urlCallbackMapper: {
+		[ module: string ]: () => Promise<void>;
+	} = {
+		'index': listenIndex.bind( null ),
+		'video': listenVideo.bind( null ),
+	};
+	
+	/*
+	* 查找对应模块
+	* */
+	for ( let urlCallbackMapperKey in urlCallbackMapper ) {
+		// 如果没找到, 则直接跳过
+		if ( urlCallbackMapperKey !== currentUrl ) {
+			continue;
+		}
+		
+		// 找到了, 执行回调
+		await urlCallbackMapper[ <string> urlCallbackMapperKey ]();
+		return;
 	}
 } )();

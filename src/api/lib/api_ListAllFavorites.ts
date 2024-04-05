@@ -13,12 +13,11 @@ import { FavoriteInfo } from '../interfaces/FavoriteInfo.ts';
  * @param {string} upUid - 用户ID。
  * @return {Promise} 请求的响应。
  */
-export const api_ListAllFavorites = async ( upUid: string ): Promise<FavoriteInfo[]> => {
+export const api_ListAllFavorites = async ( upUid: number ): Promise<FavoriteInfo[]> => {
 	const res = await xhrRequest( '/x/v3/fav/folder/created/list-all', 'GET', {
-		up_mid: upUid,
+		parma: {
+			up_mid: upUid,
+		},
 	} );
-	if ( res.code !== 0 ) {
-		throw new Error( res.message );
-	}
-	return res.data.list;
+	return res.list;
 };

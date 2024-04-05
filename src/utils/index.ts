@@ -6,7 +6,7 @@
  * */
 
 export * from './getUserId/getUserId.ts';
-export * from './Storage/useReadVideoIdListStorage.ts';
+export * from './Storage/useWatchedVideoIdListStorage.ts';
 export * from './checkURL/checkURL.ts';
 export *
 	from './getAllFavoriteVideoIdList/getAllFavoriteVideoIdList.ts';

@@ -10,7 +10,7 @@ export const getAllFavoriteVideoIdList = async (): Promise<VideoIdMap> => {
 	const userId = getUserId();
 	
 	// 获取当前用户所有的收藏夹的mlid
-	const favoriteMlidList = await api_ListAllFavorites( String( userId ) ).then( res => {
+	const favoriteMlidList = await api_ListAllFavorites( userId ).then( res => {
 		return res.map( item => item.id );
 	} );
 	

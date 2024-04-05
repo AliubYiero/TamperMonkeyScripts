@@ -6,3 +6,4 @@
  * */
 
 export * from './Index/index.ts';
+export * from './Video/index.ts';

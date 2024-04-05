@@ -15,12 +15,9 @@ import { FavoriteIdInfo } from '../interfaces/FavoriteIdInfo.ts';
  * */
 export const api_GetFavoriteIds = ( media_id: number ): Promise<FavoriteIdInfo[]> => {
 	return xhrRequest( '/x/v3/fav/resource/ids', 'GET', {
-		media_id,
-		platform: 'web',
-	} ).then( res => {
-		if ( res.code !== 0 ) {
-			throw new Error( res.message );
-		}
-		return res.data;
+		parma: {
+			media_id,
+			platform: 'web',
+		},
 	} );
 };

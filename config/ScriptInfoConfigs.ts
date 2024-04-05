@@ -18,11 +18,13 @@ export const ScriptInfoConfigs: Partial<GlobalScriptsConfigInterface> = {
 	/* 脚本简介 */
 	description: '通过收藏夹中的视频判断视频是否已看',
 	/* 脚本当前版本号 */
-	version: '0.1.0-b',
+	version: '0.2.0-b',
 	/* 脚本作用域 (脚本作用网站) */
 	match: [
 		// 首页 (包括其它子区域)
 		'https://www.bilibili.com/*',
+		// 视频页
+		'https://www.bilibili.com/video/*',
 	],
 	/* 脚本图标 (不输入默认使用 match 的域名下的图标, 如果无法识别 match 域名, 则使用油猴默认图标) */
 	icon: '',
