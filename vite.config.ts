@@ -83,6 +83,10 @@ export default defineConfig( ( { mode } ) => {
 	* */
 	// noinspection JSUnusedGlobalSymbols
 	return {
+		test: {
+			globals: true,
+			environment: 'jsdom',
+		},
 		build: {
 			// 是否压缩混淆代码
 			minify: isMinifyCode
