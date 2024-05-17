@@ -17,5 +17,8 @@
 		"vite": "^5.1.4",
 		"vite-plugin-banner": "^0.7.1",
 		"yamljs": "^0.3.0"
+	},
+	"dependencies": {
+		"radash": "^12.1.0"
 	}
 }

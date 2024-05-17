@@ -3,3 +3,20 @@
  * @file 项目入口文件
  * @author  Yiero
  * */
+
+import { chain } from 'radash';
+import { findAimWeb } from './modules/findAimWeb.ts';
+import { isLimitTime } from './modules/isLimitTime.ts';
+import { closeWeb } from './modules/closeWeb.ts';
+
+const closeWebChain = chain(
+	findAimWeb,
+	isLimitTime,
+	closeWeb,
+);
+/*
+* Main Entry
+* */
+;( () => {
+	closeWebChain( document.URL );
+} )();
