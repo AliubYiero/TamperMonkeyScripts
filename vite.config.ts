@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 /**
  * vite.config.ts
  * created by 2024/3/5
@@ -13,7 +14,8 @@ import {
 	getDefaultTerserOptions,
 	info,
 	parseScriptInfoOptions,
-	scriptInfoStringify, userConfigStringify,
+	scriptInfoStringify,
+	userConfigStringify,
 	warn,
 } from './build';
 import replace from '@rollup/plugin-replace';
@@ -81,6 +83,10 @@ export default defineConfig( ( { mode } ) => {
 	* */
 	// noinspection JSUnusedGlobalSymbols
 	return {
+		test: {
+			globals: true,
+			environment: 'jsdom',
+		},
 		build: {
 			// 是否压缩混淆代码
 			minify: isMinifyCode

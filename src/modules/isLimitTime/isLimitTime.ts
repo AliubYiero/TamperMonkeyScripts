@@ -1,12 +1,12 @@
 // 判断当前是否为为目标网站限定时间
-import { LimitTime, LimitWay } from './findAimWeb.ts';
+import { LimitTime, LimitWay } from '../findAimWeb/findAimWeb.ts';
 
 export const isLimitTime = ( aimWeb: LimitTime | undefined ): boolean => {
 	if ( !aimWeb ) {
 		return false;
 	}
 	
-	console.log( 'aimWeb', aimWeb );
+	// console.log( 'aimWeb', aimWeb );
 	
 	// 获取当前的时间
 	const todayDate = new Date();

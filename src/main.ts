@@ -5,9 +5,9 @@
  * */
 
 import { chain } from 'radash';
-import { findAimWeb } from './modules/findAimWeb.ts';
-import { isLimitTime } from './modules/isLimitTime.ts';
-import { closeWeb } from './modules/closeWeb.ts';
+import { findAimWeb } from './modules/findAimWeb/findAimWeb.ts';
+import { isLimitTime } from './modules/isLimitTime/isLimitTime.ts';
+import { closeWeb } from './modules/closeWeb/closeWeb.ts';
 
 const closeWebChain = chain(
 	findAimWeb,

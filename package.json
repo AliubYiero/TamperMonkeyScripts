@@ -5,17 +5,22 @@
 	"type": "module",
 	"scripts": {
 		"dev": "tsc && vite build --mode development",
-		"build": "tsc && vite build --mode production"
+		"build": "tsc && vite build --mode production",
+		"test": "vitest",
+		"coverage": "vitest run --coverage"
 	},
 	"devDependencies": {
 		"@rollup/plugin-replace": "^5.0.5",
 		"@types/node": "^20.11.24",
 		"@types/tampermonkey": "^5.0.2",
 		"@types/yamljs": "^0.2.34",
+		"@vitest/coverage-v8": "^1.6.0",
+		"jsdom": "^24.0.0",
 		"terser": "^5.29.1",
 		"typescript": "^5.2.2",
 		"vite": "^5.1.4",
 		"vite-plugin-banner": "^0.7.1",
+		"vitest": "^1.6.0",
 		"yamljs": "^0.3.0"
 	},
 	"dependencies": {
